@@ -642,6 +642,43 @@
   .profileBadge.equilibrado { background: rgba(99,102,241,0.15); color: var(--accent-light); }
   .profileBadge.irregular { background: rgba(249,115,22,0.15); color: var(--orange); }
 
+  /* ---------- PARTICIPANT CARDS ---------- */
+  .participantGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 3rem auto 0;
+  }
+  .pCard {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.4rem 1.2rem;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .pCard:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .pCard .pName {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+  }
+  .pCard .pProject {
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-light), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .pCard .pDesc {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
 </style>
 </head>
 <body>
@@ -682,6 +719,79 @@
   </div>
 </section>
 
+<!-- ========== PARTICIPANTS ========== -->
+<section class="recap" id="participants">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Os 12 builders</span>
+    <h2 class="section-title reveal delay-1">Quem construiu tudo isso</h2>
+
+    <div class="participantGrid">
+      <div class="pCard reveal delay-1">
+        <div class="pName">João Malheiros</div>
+        <div class="pProject">helo</div>
+        <div class="pDesc">Assistente de negócios com AI — agendamento, chat e link page</div>
+      </div>
+      <div class="pCard reveal delay-1">
+        <div class="pName">Samuel Flores</div>
+        <div class="pProject">flowxide</div>
+        <div class="pDesc">Automação visual de workflows em Rust — canvas infinito com WASM</div>
+      </div>
+      <div class="pCard reveal delay-1">
+        <div class="pName">Bruno Viveiros</div>
+        <div class="pProject">meritus</div>
+        <div class="pDesc">Badges e conquistas automáticas pra devs via GitHub</div>
+      </div>
+      <div class="pCard reveal delay-2">
+        <div class="pName">Gabriel Quaresma</div>
+        <div class="pProject">fight-club</div>
+        <div class="pDesc">Gestão de artes marciais com privacidade e AI</div>
+      </div>
+      <div class="pCard reveal delay-2">
+        <div class="pName">Jeferson Brito</div>
+        <div class="pProject">sunlight</div>
+        <div class="pDesc">Micro-wellness PWA que encontra pausas no seu calendário</div>
+      </div>
+      <div class="pCard reveal delay-2">
+        <div class="pName">Miguel Marcondes</div>
+        <div class="pProject">mother</div>
+        <div class="pDesc">Gates de compreensão pra PRs — entenda antes de dar merge</div>
+      </div>
+      <div class="pCard reveal delay-3">
+        <div class="pName">Antonio Paulino</div>
+        <div class="pProject">gabaritai</div>
+        <div class="pDesc">Prep pro ENEM com correção de provas por Vision AI</div>
+      </div>
+      <div class="pCard reveal delay-3">
+        <div class="pName">Felipe Richter</div>
+        <div class="pProject">piano-man</div>
+        <div class="pDesc">Jogo rítmico pixel-art com músicas geradas por ML</div>
+      </div>
+      <div class="pCard reveal delay-3">
+        <div class="pName">Rafael Martins</div>
+        <div class="pProject">SDR-Radar</div>
+        <div class="pDesc">Radar de aviação ADS-B caseiro com dongle SDR e driver C</div>
+      </div>
+      <div class="pCard reveal delay-4">
+        <div class="pName">Luan Gonçalves</div>
+        <div class="pProject">alexandria</div>
+        <div class="pDesc">Gerenciador de assets RPG com classificação por Claude Vision</div>
+      </div>
+      <div class="pCard reveal delay-4">
+        <div class="pName">Marcio Flavio</div>
+        <div class="pProject">compound</div>
+        <div class="pDesc">Análise fundamentalista com AI pra investidores brasileiros</div>
+      </div>
+      <div class="pCard reveal delay-4">
+        <div class="pName">Marcelo Alexandre</div>
+        <div class="pProject">lenu</div>
+        <div class="pDesc">Companheiro criativo com AI pra desenvolver ideias de conteúdo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
 <!-- ========== SCENE 1 — TOTAL DE COMMITS ========== -->
 <section class="recap alt" id="commits-total">
   <div class="container">
@@ -714,18 +824,18 @@
     <p class="subline reveal delay-2">Commits no branch <code>main</code> (sem contar feature branches descartadas).</p>
 
     <div class="ranking reveal delay-3">
-      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">helo<small>Rails 8 · Phlex · Gemini</small></span><div class="rk-track"><div class="rk-fill" data-width="100">589</div></div></div>
-      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">flowxide<small>Rust workspace</small></span><div class="rk-track"><div class="rk-fill" data-width="68.1">401</div></div></div>
-      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">meritus<small>TS · Turborepo</small></span><div class="rk-track"><div class="rk-fill" data-width="48.7">287</div></div></div>
-      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">fight-club<small>AdonisJS · React</small></span><div class="rk-track"><div class="rk-fill" data-width="31.2">184</div></div></div>
-      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>Nuxt 4 · PWA</small></span><div class="rk-track"><div class="rk-fill" data-width="21.7">128</div></div></div>
-      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">mother<small>Next.js · Anthropic</small></span><div class="rk-track"><div class="rk-fill" data-width="21.7">128</div></div></div>
-      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">gabaritai<small>Rails 8 · PG</small></span><div class="rk-track"><div class="rk-fill" data-width="15.4">91</div></div></div>
-      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>React · PixiJS</small></span><div class="rk-track"><div class="rk-fill" data-width="14.8">87</div></div></div>
-      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>Node + C/N-API</small></span><div class="rk-track"><div class="rk-fill" data-width="13.9">82</div></div></div>
-      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>Next.js · Prisma</small></span><div class="rk-track"><div class="rk-fill" data-width="9.0">53</div></div></div>
-      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">compound<small>Rails 8 · Hotwire</small></span><div class="rk-track"><div class="rk-fill" data-width="8.5">50</div></div></div>
-      <div class="rk-row"><span class="rk-rank">12</span><span class="rk-label">lenu<small>Rails 8 · Phlex</small></span><div class="rk-track"><div class="rk-fill" data-width="5.8">34</div></div></div>
+      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">helo<small>João Malheiros · Rails 8</small></span><div class="rk-track"><div class="rk-fill" data-width="100">589</div></div></div>
+      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">flowxide<small>Samuel Flores · Rust</small></span><div class="rk-track"><div class="rk-fill" data-width="68.1">401</div></div></div>
+      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">meritus<small>Bruno Viveiros · TS</small></span><div class="rk-track"><div class="rk-fill" data-width="48.7">287</div></div></div>
+      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">fight-club<small>Gabriel Quaresma · TS</small></span><div class="rk-track"><div class="rk-fill" data-width="31.2">184</div></div></div>
+      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>Jeferson Brito · Nuxt</small></span><div class="rk-track"><div class="rk-fill" data-width="21.7">128</div></div></div>
+      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">mother<small>Miguel Marcondes · Next.js</small></span><div class="rk-track"><div class="rk-fill" data-width="21.7">128</div></div></div>
+      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">gabaritai<small>Antonio Paulino · Rails 8</small></span><div class="rk-track"><div class="rk-fill" data-width="15.4">91</div></div></div>
+      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>Felipe Richter · React</small></span><div class="rk-track"><div class="rk-fill" data-width="14.8">87</div></div></div>
+      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>Rafael Martins · Node + C</small></span><div class="rk-track"><div class="rk-fill" data-width="13.9">82</div></div></div>
+      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>Luan Gonçalves · Next.js</small></span><div class="rk-track"><div class="rk-fill" data-width="9.0">53</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">compound<small>Marcio Flavio · Rails 8</small></span><div class="rk-track"><div class="rk-fill" data-width="8.5">50</div></div></div>
+      <div class="rk-row"><span class="rk-rank">12</span><span class="rk-label">lenu<small>Marcelo Alexandre · Rails 8</small></span><div class="rk-track"><div class="rk-fill" data-width="5.8">34</div></div></div>
     </div>
 
     <div class="insightGrid">
@@ -1204,18 +1314,18 @@
     <p class="subline reveal delay-2">Proporção de linhas de teste vs linhas de produção — indica o investimento em testes, não cobertura real.</p>
 
     <div class="ranking reveal delay-3" style="margin-top: 3rem;">
-      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">meritus<small>7.655 / 8.946 linhas</small></span><div class="rk-track"><div class="rk-fill" data-width="100">85,6%</div></div></div>
-      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">fight-club<small>18.027 / 21.554</small></span><div class="rk-track"><div class="rk-fill" data-width="98">83,6%</div></div></div>
-      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">compound<small>4.098 / 5.741</small></span><div class="rk-track"><div class="rk-fill" data-width="83">71,4%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">gabaritai<small>4.757 / 7.036</small></span><div class="rk-track"><div class="rk-fill" data-width="79">67,6%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>2.713 / 4.397</small></span><div class="rk-track"><div class="rk-fill" data-width="72">61,7%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">mother<small>16.167 / 26.730</small></span><div class="rk-track"><div class="rk-fill" data-width="71">60,5%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">lenu<small>2.540 / 4.523</small></span><div class="rk-track"><div class="rk-fill" data-width="66">56,2%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>2.400 / 6.724</small></span><div class="rk-track"><div class="rk-fill" data-width="42">35,7%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>4.462 / 13.062</small></span><div class="rk-track"><div class="rk-fill" data-width="40">34,2%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">helo<small>8.126 / 24.902</small></span><div class="rk-track"><div class="rk-fill" data-width="38">32,6%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">alexandria<small>1.281 / 7.481</small></span><div class="rk-track"><div class="rk-fill" data-width="20">17,1%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">12</span><span class="rk-label">flowxide<small>2.334 / 17.763</small></span><div class="rk-track"><div class="rk-fill" data-width="15">13,1%</div></div></div>
+      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">meritus<small>Bruno Viveiros · 7.655 / 8.946</small></span><div class="rk-track"><div class="rk-fill" data-width="100">85,6%</div></div></div>
+      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">fight-club<small>Gabriel Quaresma · 18.027 / 21.554</small></span><div class="rk-track"><div class="rk-fill" data-width="98">83,6%</div></div></div>
+      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">compound<small>Marcio Flavio · 4.098 / 5.741</small></span><div class="rk-track"><div class="rk-fill" data-width="83">71,4%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">gabaritai<small>Antonio Paulino · 4.757 / 7.036</small></span><div class="rk-track"><div class="rk-fill" data-width="79">67,6%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>Jeferson Brito · 2.713 / 4.397</small></span><div class="rk-track"><div class="rk-fill" data-width="72">61,7%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">mother<small>Miguel Marcondes · 16.167 / 26.730</small></span><div class="rk-track"><div class="rk-fill" data-width="71">60,5%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">lenu<small>Marcelo Alexandre · 2.540 / 4.523</small></span><div class="rk-track"><div class="rk-fill" data-width="66">56,2%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>Felipe Richter · 2.400 / 6.724</small></span><div class="rk-track"><div class="rk-fill" data-width="42">35,7%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>Rafael Martins · 4.462 / 13.062</small></span><div class="rk-track"><div class="rk-fill" data-width="40">34,2%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">helo<small>João Malheiros · 8.126 / 24.902</small></span><div class="rk-track"><div class="rk-fill" data-width="38">32,6%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">alexandria<small>Luan Gonçalves · 1.281 / 7.481</small></span><div class="rk-track"><div class="rk-fill" data-width="20">17,1%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">12</span><span class="rk-label">flowxide<small>Samuel Flores · 2.334 / 17.763</small></span><div class="rk-track"><div class="rk-fill" data-width="15">13,1%</div></div></div>
     </div>
 
     <div class="twoCol">
