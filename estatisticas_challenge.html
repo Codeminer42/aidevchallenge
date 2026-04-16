@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Dev Challenge — Wrapped 2026</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg-alt: #1a1d27;
+    --card-bg: #1a1d27;
+    --card-border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --gold: #f59e0b;
+    --silver: #94a3b8;
+    --bronze: #d97706;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f97316;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --violet: #8b5cf6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(at 20% 15%, rgba(99,102,241,0.10) 0px, transparent 50%),
+      radial-gradient(at 80% 85%, rgba(236,72,153,0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 60%, rgba(6,182,212,0.06) 0px, transparent 60%);
+  }
+
+  /* ---------- BLOCK / SECTION ---------- */
+  section.recap {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    position: relative;
+    text-align: center;
+  }
+  section.recap.alt { background: var(--bg-alt); }
+  section.recap.tall { min-height: 100vh; }
+
+  .container { max-width: 1100px; width: 100%; margin: 0 auto; }
+
+  /* ---------- TYPOGRAPHY ---------- */
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+  }
+  .eyebrow .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    margin-right: 0.6rem;
+    vertical-align: middle;
+    box-shadow: 0 0 12px var(--accent-light);
+  }
+
+  .megaNumber {
+    font-size: clamp(4.5rem, 14vw, 11rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--accent-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 1rem 0;
+  }
+  .megaNumber.cyan-green { background: linear-gradient(135deg, var(--cyan), var(--green)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .megaNumber.pink-violet { background: linear-gradient(135deg, var(--pink), var(--violet)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .megaNumber.orange-gold { background: linear-gradient(135deg, var(--orange), var(--gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .megaNumber.green-cyan { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+  .impactPhrase {
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    letter-spacing: -0.02em;
+  }
+  .subline {
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 1rem auto 0;
+    line-height: 1.6;
+  }
+
+  h2.section-title {
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff, var(--text-muted));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ---------- ANIMATION ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 0.15s; }
+  .reveal.delay-2 { transition-delay: 0.30s; }
+  .reveal.delay-3 { transition-delay: 0.45s; }
+  .reveal.delay-4 { transition-delay: 0.60s; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 70%, rgba(236,72,153,0.10) 0%, transparent 60%);
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--pink) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  .hero .tagline {
+    font-size: clamp(1rem, 1.6vw, 1.4rem);
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero .scrollHint {
+    margin-top: 3rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .hero .scrollHint .arrow {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    animation: bounce 2.2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  .heroStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .heroStats .item .num {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-light), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .heroStats .item .label {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+  }
+  @media (max-width: 600px) {
+    .heroStats { grid-template-columns: 1fr; gap: 1rem; }
+  }
+
+  /* ---------- STAT CARDS GRID (RECAP) ---------- */
+  .recapGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem auto 1rem;
+    max-width: 1000px;
+  }
+  .recapStat {
+    background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(236,72,153,0.04));
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 16px;
+    padding: 2rem 1.2rem;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .recapStat:hover { transform: translateY(-3px); border-color: var(--accent-light); }
+  .recapStat .num {
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent-light), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .recapStat .label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+  }
+
+  /* ---------- HEATMAP / VELOCITY ---------- */
+  .velocity {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin: 2rem auto;
+    max-width: 1100px;
+    overflow-x: auto;
+  }
+  .heatmap-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    min-width: 700px;
+  }
+  .heatmap-row .proj-label {
+    width: 170px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: right;
+    color: var(--text);
+    flex-shrink: 0;
+    padding-right: 0.6rem;
+  }
+  .heatmap-row .proj-label small {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 1px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .heatmap-cells {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    flex: 1;
+  }
+  .cell {
+    aspect-ratio: 1 / 1;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    transition: transform 0.15s;
+    position: relative;
+    cursor: default;
+  }
+  .cell:hover { transform: scale(1.4); z-index: 5; }
+  .cell[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .cell.l0 { background: rgba(255,255,255,0.04); }
+  .cell.l1 { background: rgba(99,102,241,0.32); }
+  .cell.l2 { background: rgba(99,102,241,0.55); }
+  .cell.l3 { background: rgba(245,158,11,0.65); }
+  .cell.l4 { background: linear-gradient(135deg, var(--orange), var(--pink)); box-shadow: 0 0 8px rgba(236,72,153,0.5); }
+  .cell.l5 { background: linear-gradient(135deg, var(--pink), var(--violet)); box-shadow: 0 0 12px rgba(139,92,246,0.7); }
+  .heatmap-header {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    margin-left: 178px;
+    margin-bottom: 0.6rem;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    text-align: center;
+    min-width: calc(700px - 178px);
+  }
+  .heatmap-header span:nth-child(7n) { font-weight: 700; color: var(--text-muted); }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+  .heatmap-legend .swatch {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+
+  /* ---------- BAR CHART (RANKING) ---------- */
+  .ranking {
+    max-width: 900px;
+    margin: 2rem auto;
+  }
+  .rk-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    font-size: 0.95rem;
+  }
+  .rk-row .rk-rank {
+    width: 32px;
+    text-align: right;
+    font-weight: 900;
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+  .rk-row .rk-label {
+    width: 200px;
+    font-weight: 700;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .rk-row .rk-label small {
+    display: block;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.75rem;
+    margin-top: 1px;
+  }
+  .rk-row .rk-track {
+    flex: 1;
+    height: 38px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .rk-row .rk-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    width: 0;
+    transition: width 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s;
+  }
+  .rk-row.gold .rk-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); color: #000; }
+  .rk-row.silver .rk-fill { background: linear-gradient(90deg, #475569, var(--silver)); }
+  .rk-row.bronze .rk-fill { background: linear-gradient(90deg, #92400e, var(--bronze)); }
+  .rk-row.cyan .rk-fill { background: linear-gradient(90deg, var(--cyan), #67e8f9); color: #000; }
+  .rk-row.pink .rk-fill { background: linear-gradient(90deg, var(--pink), var(--violet)); }
+  .rk-row.green .rk-fill { background: linear-gradient(90deg, var(--green), #86efac); color: #000; }
+
+  @media (max-width: 700px) {
+    .rk-row { font-size: 0.8rem; gap: 0.5rem; }
+    .rk-row .rk-label { width: 110px; font-size: 0.8rem; }
+    .rk-row .rk-fill { padding-right: 0.5rem; font-size: 0.75rem; }
+  }
+
+  /* ---------- INSIGHT CARDS ---------- */
+  .insightGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem auto 0;
+    max-width: 1000px;
+  }
+  .insight {
+    background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(0,0,0,0));
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.8rem 1.5rem;
+    text-align: left;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .insight:hover { transform: translateY(-3px); border-color: var(--accent-light); }
+  .insight.gold { background: linear-gradient(135deg, rgba(245,158,11,0.10), rgba(0,0,0,0)); border-color: rgba(245,158,11,0.35); }
+  .insight.cyan { background: linear-gradient(135deg, rgba(6,182,212,0.10), rgba(0,0,0,0)); border-color: rgba(6,182,212,0.35); }
+  .insight.pink { background: linear-gradient(135deg, rgba(236,72,153,0.10), rgba(0,0,0,0)); border-color: rgba(236,72,153,0.35); }
+  .insight.green { background: linear-gradient(135deg, rgba(34,197,94,0.10), rgba(0,0,0,0)); border-color: rgba(34,197,94,0.35); }
+
+  .insight .icon {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    line-height: 1;
+  }
+  .insight .title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
+  .insight .body {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .insight .body strong { color: var(--text); }
+
+  /* ---------- LANGUAGE BARS ---------- */
+  .langBars { max-width: 720px; margin: 0 auto; }
+  .lang-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+  .lang-row .lang-name {
+    width: 130px;
+    text-align: right;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .lang-row .lang-track {
+    flex: 1;
+    height: 24px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .lang-row .lang-fill {
+    height: 100%;
+    border-radius: 6px;
+    width: 0;
+    transition: width 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.7rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+  .lang-row.ts .lang-fill { background: linear-gradient(90deg, #2563eb, #3178c6); }
+  .lang-row.ruby .lang-fill { background: linear-gradient(90deg, #b91c1c, #cc342d); }
+  .lang-row.rust .lang-fill { background: linear-gradient(90deg, #92400e, #f97316); }
+  .lang-row.erb .lang-fill { background: linear-gradient(90deg, #7f1d1d, #b45309); }
+  .lang-row.c .lang-fill { background: linear-gradient(90deg, #1e3a8a, #475569); }
+  .lang-row.vue .lang-fill { background: linear-gradient(90deg, #15803d, #4ade80); color: #000; }
+  .lang-row.js .lang-fill { background: linear-gradient(90deg, #ca8a04, #fde047); color: #000; }
+  .lang-row.py .lang-fill { background: linear-gradient(90deg, #1e40af, #60a5fa); }
+
+  /* ---------- BOLD STACKS CARDS ---------- */
+  .boldGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem auto 0;
+    max-width: 1100px;
+  }
+  .boldCard {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: left;
+    position: relative;
+  }
+  .boldCard.first { border: 2px solid var(--gold); background: linear-gradient(135deg, rgba(245,158,11,0.10), rgba(0,0,0,0)); }
+  .boldCard.second { border: 2px solid var(--silver); background: linear-gradient(135deg, rgba(148,163,184,0.10), rgba(0,0,0,0)); }
+  .boldCard.third { border: 2px solid var(--bronze); background: linear-gradient(135deg, rgba(217,119,6,0.10), rgba(0,0,0,0)); }
+
+  .boldCard .medal { font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .boldCard .name { font-size: 1.4rem; font-weight: 900; margin-bottom: 0.5rem; }
+  .boldCard .stack { color: var(--accent-light); font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 0.02em; }
+  .boldCard .why { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+  .boldCard .why strong { color: var(--text); }
+
+  /* ---------- TABLE ---------- */
+  .tableWrap {
+    max-width: 1100px;
+    margin: 2rem auto;
+    overflow-x: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1rem;
+  }
+  table.bigTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+  table.bigTable th {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    padding: 0.8rem 0.6rem;
+    border-bottom: 2px solid var(--card-border);
+    white-space: nowrap;
+  }
+  table.bigTable td {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  table.bigTable tr:hover td { background: rgba(99,102,241,0.04); }
+  table.bigTable td.proj { font-weight: 700; }
+  table.bigTable td.center { text-align: center; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+  .pill-claude { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .pill-copilot { background: rgba(99,102,241,0.15); color: var(--accent-light); }
+  .pill-opencode { background: rgba(6,182,212,0.15); color: var(--cyan); }
+  .pill-anthropic { background: rgba(245,158,11,0.10); color: var(--gold); }
+  .pill-gemini { background: rgba(34,197,94,0.15); color: var(--green); }
+  .pill-groq { background: rgba(236,72,153,0.15); color: var(--pink); }
+  .pill-openai { background: rgba(139,92,246,0.15); color: var(--violet); }
+  .pill-bedrock { background: rgba(217,119,6,0.15); color: var(--bronze); }
+  .pill-no { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+
+  /* ---------- DIVIDER ---------- */
+  .pageDivider {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem 6rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    background: var(--bg-alt);
+  }
+  footer a { color: var(--accent-light); }
+
+  /* ---------- BADGE ---------- */
+  .topBadge {
+    display: inline-block;
+    padding: 0.3rem 0.9rem;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 30px;
+    color: var(--accent-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ---------- TWO COLUMN ---------- */
+  .twoCol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1100px;
+    margin: 3rem auto 0;
+    text-align: left;
+  }
+  @media (max-width: 760px) { .twoCol { grid-template-columns: 1fr; gap: 2rem; } }
+  .twoCol h3 {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  .twoCol .winner {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+  .twoCol .winner.gold { color: var(--gold); }
+  .twoCol .winner.cyan { color: var(--cyan); }
+  .twoCol .winner.pink { color: var(--pink); }
+  .twoCol .winner.green { color: var(--green); }
+  .twoCol .why { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  /* ---------- TIMELINE PROFILE BADGES ---------- */
+  .profileBadge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .profileBadge.consistente { background: rgba(34,197,94,0.15); color: var(--green); }
+  .profileBadge.sprint { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .profileBadge.explosivo { background: rgba(236,72,153,0.15); color: var(--pink); }
+  .profileBadge.equilibrado { background: rgba(99,102,241,0.15); color: var(--accent-light); }
+  .profileBadge.irregular { background: rgba(249,115,22,0.15); color: var(--orange); }
+
+</style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<section class="recap hero" id="hero">
+  <div class="container">
+    <div class="reveal visible">
+      <span class="topBadge">AI Dev Challenge &middot; Edição Abr/2026</span>
+    </div>
+    <h1 class="reveal visible">
+      O <span class="gradient">Wrapped</span><br>
+      do Challenge.
+    </h1>
+    <p class="tagline reveal visible">
+      Duas semanas. 11 projetos. Centenas de horas vibradas em commits. Esta é a história — em números.
+    </p>
+
+    <div class="heroStats">
+      <div class="item reveal delay-1">
+        <div class="num" data-counter="11">11</div>
+        <div class="label">Projetos</div>
+      </div>
+      <div class="item reveal delay-2">
+        <div class="num" data-counter="1525">1.525</div>
+        <div class="label">Commits no main</div>
+      </div>
+      <div class="item reveal delay-3">
+        <div class="num" data-counter="12">12</div>
+        <div class="label">Dias de batalha</div>
+      </div>
+    </div>
+
+    <div class="scrollHint reveal delay-4">
+      role pra começar
+      <span class="arrow">&darr;</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCENE 1 — TOTAL DE COMMITS ========== -->
+<section class="recap alt" id="commits-total">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 01 &middot; Commits</span>
+    <div class="reveal delay-1">
+      <div class="megaNumber" data-counter="1525">1.525</div>
+    </div>
+    <h2 class="impactPhrase reveal delay-2">commits no main em 12 dias</h2>
+    <p class="subline reveal delay-3">
+      Somando todas as branches, foram <strong>1.978 commits</strong> — uma média de
+      <strong>138,6 commits por projeto</strong> entregues no main, ou um commit a cada
+      <strong>11 minutos</strong> de janela útil de trabalho.
+    </p>
+
+    <div class="recapGrid">
+      <div class="recapStat reveal delay-1"><div class="num" data-counter="401">401</div><div class="label">Mais commits — flowxide</div></div>
+      <div class="recapStat reveal delay-2"><div class="num" data-counter="34">34</div><div class="label">Menos commits — lenu</div></div>
+      <div class="recapStat reveal delay-3"><div class="num">12&times;</div><div class="label">Distância entre o 1º e o último</div></div>
+      <div class="recapStat reveal delay-4"><div class="num" data-counter="139">138,6</div><div class="label">Média por projeto</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 2 — RANKING DE COMMITS ========== -->
+<section class="recap" id="ranking-commits">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 02 &middot; Ranking</span>
+    <h2 class="section-title reveal delay-1">Quem mais commitou</h2>
+    <p class="subline reveal delay-2">Commits no branch <code>main</code> (sem contar feature branches descartadas).</p>
+
+    <div class="ranking reveal delay-3">
+      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">flowxide<small>Rust workspace</small></span><div class="rk-track"><div class="rk-fill" data-width="100">401</div></div></div>
+      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">meritus<small>TS · Turborepo</small></span><div class="rk-track"><div class="rk-fill" data-width="71.6">287</div></div></div>
+      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">fight-club<small>AdonisJS · React</small></span><div class="rk-track"><div class="rk-fill" data-width="45.9">184</div></div></div>
+      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">sunlight<small>Nuxt 4 · PWA</small></span><div class="rk-track"><div class="rk-fill" data-width="31.9">128</div></div></div>
+      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">mother<small>Next.js · Anthropic</small></span><div class="rk-track"><div class="rk-fill" data-width="31.9">128</div></div></div>
+      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">gabaritai<small>Rails 8 · PG</small></span><div class="rk-track"><div class="rk-fill" data-width="22.7">91</div></div></div>
+      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">piano-man<small>React · PixiJS</small></span><div class="rk-track"><div class="rk-fill" data-width="21.7">87</div></div></div>
+      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">SDR-Radar<small>Node + C/N-API</small></span><div class="rk-track"><div class="rk-fill" data-width="20.4">82</div></div></div>
+      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">alexandria<small>Next.js · Prisma</small></span><div class="rk-track"><div class="rk-fill" data-width="13.2">53</div></div></div>
+      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">compound<small>Rails 8 · Hotwire</small></span><div class="rk-track"><div class="rk-fill" data-width="12.5">50</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">lenu<small>Rails 8 · Phlex</small></span><div class="rk-track"><div class="rk-fill" data-width="8.5">34</div></div></div>
+    </div>
+
+    <div class="insightGrid">
+      <div class="insight gold reveal delay-1">
+        <div class="icon">🥇</div>
+        <div class="title">Maratonista do challenge</div>
+        <div class="body"><strong>flowxide</strong> entregou 401 commits no main e <strong>12/12 dias ativos</strong> — sem um único dia parado. Em Rust. Com WASM. Com Terraform. Sem dó.</div>
+      </div>
+      <div class="insight pink reveal delay-2">
+        <div class="icon">🌪️</div>
+        <div class="title">Quem mais usou branches</div>
+        <div class="body"><strong>mother</strong> tem 128 commits no main mas <strong>456 commits no total</strong> e <strong>33 branches</strong> — fluxo PR-driven puxado, não comita direto no main.</div>
+      </div>
+      <div class="insight cyan reveal delay-3">
+        <div class="icon">🐢</div>
+        <div class="title">Tartaruga zen</div>
+        <div class="body"><strong>lenu</strong> fechou com 34 commits no main — o menor número, mas com <strong>56% de cobertura por testes</strong> e zero merge tumultuado.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 3 — APROFUNDAMENTO COMMITS ========== -->
+<section class="recap alt" id="commit-deep">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 03 &middot; Aprofundamento</span>
+    <h2 class="section-title reveal delay-1">A anatomia dos commits</h2>
+
+    <div class="recapGrid">
+      <div class="recapStat reveal delay-1"><div class="num">15h</div><div class="label">Hora mais quente</div></div>
+      <div class="recapStat reveal delay-2"><div class="num">36%</div><div class="label">Commits à noite (18-23)</div></div>
+      <div class="recapStat reveal delay-3"><div class="num">8%</div><div class="label">Commits de madrugada</div></div>
+      <div class="recapStat reveal delay-4"><div class="num">10%</div><div class="label">Foram em finais de semana</div></div>
+    </div>
+
+    <div class="twoCol">
+      <div class="reveal delay-2">
+        <h3>Maior consistência</h3>
+        <div class="winner cyan">compound</div>
+        <p class="why">9 dos 12 dias com commits, com a <strong>menor variância</strong> da turma (cv 0,48). Não teve pico, não teve apagão — só um Rails sólido sendo construído todo dia, devagar e sempre.</p>
+      </div>
+      <div class="reveal delay-3">
+        <h3>Maior concentração no prazo final</h3>
+        <div class="winner gold">gabaritai</div>
+        <p class="why"><strong>60% dos commits</strong> caíram nos 3 últimos dias. Em 10/04 sozinho foram <strong>32 commits</strong>. Sprint final clássico — ENEM da vida real.</p>
+      </div>
+      <div class="reveal delay-2">
+        <h3>Mais explosivo no início</h3>
+        <div class="winner pink">mother</div>
+        <p class="why"><strong>77% dos commits</strong> nos 3 primeiros dias — incluindo 52 commits só em 30/03. Quem chegou pronto foi mother.</p>
+      </div>
+      <div class="reveal delay-3">
+        <h3>O guerreiro do fim de semana</h3>
+        <div class="winner green">fight-club</div>
+        <p class="why"><strong>28% de todos os commits</strong> caíram em sábado/domingo. Seguido de sunlight (19%) e flowxide (15%). O resto da turma respeita o final de semana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCENE 4 — TAMANHO DOS COMMITS ========== -->
+<section class="recap" id="commit-size">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 04 &middot; Diff Size</span>
+    <h2 class="section-title reveal delay-1">Granularidade dos commits</h2>
+    <p class="subline reveal delay-2">
+      Mediana de linhas alteradas por commit — quanto menor, mais granular o trabalho. Acima de 200 linhas/commit começa a ficar difícil de revisar.
+    </p>
+
+    <div class="ranking reveal delay-3" style="margin-top: 2rem;">
+      <div class="rk-row green"><span class="rk-rank">1</span><span class="rk-label">fight-club<small>mediana de 29 linhas</small></span><div class="rk-track"><div class="rk-fill" data-width="10">29</div></div></div>
+      <div class="rk-row green"><span class="rk-rank">2</span><span class="rk-label">compound<small>mediana de 41</small></span><div class="rk-track"><div class="rk-fill" data-width="14">41</div></div></div>
+      <div class="rk-row green"><span class="rk-rank">3</span><span class="rk-label">meritus<small>mediana de 43</small></span><div class="rk-track"><div class="rk-fill" data-width="15">43</div></div></div>
+      <div class="rk-row cyan"><span class="rk-rank">4</span><span class="rk-label">flowxide<small>mediana de 52</small></span><div class="rk-track"><div class="rk-fill" data-width="18">52</div></div></div>
+      <div class="rk-row cyan"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>mediana de 70</small></span><div class="rk-track"><div class="rk-fill" data-width="24">70</div></div></div>
+      <div class="rk-row cyan"><span class="rk-rank">6</span><span class="rk-label">mother<small>mediana de 88</small></span><div class="rk-track"><div class="rk-fill" data-width="30">88</div></div></div>
+      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">lenu<small>mediana de 108</small></span><div class="rk-track"><div class="rk-fill" data-width="37">108</div></div></div>
+      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">gabaritai<small>mediana de 123</small></span><div class="rk-track"><div class="rk-fill" data-width="42">123</div></div></div>
+      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">piano-man<small>mediana de 130</small></span><div class="rk-track"><div class="rk-fill" data-width="44">130</div></div></div>
+      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>mediana de 186</small></span><div class="rk-track"><div class="rk-fill" data-width="63">186</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">SDR-Radar<small>mediana de 290</small></span><div class="rk-track"><div class="rk-fill" data-width="100">290</div></div></div>
+    </div>
+
+    <div class="insightGrid" style="margin-top: 3rem;">
+      <div class="insight green reveal delay-1">
+        <div class="icon">✂️</div>
+        <div class="title">Granularidade campeã</div>
+        <div class="body"><strong>fight-club</strong> com mediana de 29 linhas/commit — o que se espera de quem trabalha PR-driven. Bom para code review.</div>
+      </div>
+      <div class="insight gold reveal delay-2">
+        <div class="icon">📦</div>
+        <div class="title">Commits gigantes</div>
+        <div class="body"><strong>SDR-Radar</strong> com mediana de 290 e <strong>média de 4.784 linhas/commit</strong> — sinal de "salvar o dia" em vez de "salvar o passo". Comum quando o foco é hardware/baixo nível.</div>
+      </div>
+      <div class="insight cyan reveal delay-3">
+        <div class="icon">⚖️</div>
+        <div class="title">O equilíbrio do meio</div>
+        <div class="body"><strong>flowxide, sunlight, mother</strong> ficaram entre 50 e 90 linhas/commit — granularidade saudável mesmo com volume alto.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 5 — VELOCITY HEATMAP ========== -->
+<section class="recap alt tall" id="velocity">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 05 &middot; Timeline</span>
+    <h2 class="section-title reveal delay-1">Velocity de cada projeto</h2>
+    <p class="subline reveal delay-2">
+      Heatmap de commits por dia — de <strong>30/03 (segunda)</strong> a <strong>10/04 (sexta)</strong>. Cada quadradinho é um dia. Cores mais intensas, mais commits.
+    </p>
+
+    <div class="velocity reveal delay-3">
+      <div class="heatmap-header">
+        <span>30/3</span><span>31/3</span><span>1/4</span><span>2/4</span><span>3/4</span><span>4/4</span><span>5/4</span><span>6/4</span><span>7/4</span><span>8/4</span><span>9/4</span><span>10/4</span>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">flowxide<small>354 commits · <span class="profileBadge explosivo">Explosivo no início</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l5" data-tip="30/3: 37 commits"></div><div class="cell l3" data-tip="31/3: 17 commits"></div><div class="cell l5" data-tip="1/4: 88 commits"></div><div class="cell l5" data-tip="2/4: 61 commits"></div><div class="cell l5" data-tip="3/4: 41 commits"></div><div class="cell l4" data-tip="4/4: 33 commits"></div><div class="cell l4" data-tip="5/4: 21 commits"></div><div class="cell l3" data-tip="6/4: 20 commits"></div><div class="cell l1" data-tip="7/4: 4 commits"></div><div class="cell l3" data-tip="8/4: 13 commits"></div><div class="cell l3" data-tip="9/4: 14 commits"></div><div class="cell l1" data-tip="10/4: 5 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">meritus<small>216 commits · <span class="profileBadge consistente">Consistente</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l0" data-tip="30/3: zero"></div><div class="cell l2" data-tip="31/3: 11 commits"></div><div class="cell l1" data-tip="1/4: 1 commits"></div><div class="cell l4" data-tip="2/4: 33 commits"></div><div class="cell l5" data-tip="3/4: 51 commits"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l3" data-tip="6/4: 17 commits"></div><div class="cell l2" data-tip="7/4: 12 commits"></div><div class="cell l2" data-tip="8/4: 10 commits"></div><div class="cell l5" data-tip="9/4: 46 commits"></div><div class="cell l4" data-tip="10/4: 35 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">fight-club<small>159 commits · <span class="profileBadge consistente">Consistente</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l0" data-tip="30/3: zero"></div><div class="cell l0" data-tip="31/3: zero"></div><div class="cell l0" data-tip="1/4: zero"></div><div class="cell l0" data-tip="2/4: zero"></div><div class="cell l4" data-tip="3/4: 29 commits"></div><div class="cell l4" data-tip="4/4: 28 commits"></div><div class="cell l3" data-tip="5/4: 16 commits"></div><div class="cell l3" data-tip="6/4: 15 commits"></div><div class="cell l4" data-tip="7/4: 31 commits"></div><div class="cell l1" data-tip="8/4: 1 commits"></div><div class="cell l4" data-tip="9/4: 22 commits"></div><div class="cell l3" data-tip="10/4: 17 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">sunlight<small>128 commits · <span class="profileBadge sprint">Sprint Final</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l0" data-tip="30/3: zero"></div><div class="cell l0" data-tip="31/3: zero"></div><div class="cell l1" data-tip="1/4: 1 commits"></div><div class="cell l2" data-tip="2/4: 10 commits"></div><div class="cell l0" data-tip="3/4: zero"></div><div class="cell l2" data-tip="4/4: 8 commits"></div><div class="cell l3" data-tip="5/4: 16 commits"></div><div class="cell l4" data-tip="6/4: 31 commits"></div><div class="cell l1" data-tip="7/4: 4 commits"></div><div class="cell l3" data-tip="8/4: 19 commits"></div><div class="cell l4" data-tip="9/4: 25 commits"></div><div class="cell l3" data-tip="10/4: 14 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">mother<small>122 commits · <span class="profileBadge explosivo">Explosivo no início</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l5" data-tip="30/3: 52 commits"></div><div class="cell l1" data-tip="31/3: 4 commits"></div><div class="cell l5" data-tip="1/4: 38 commits"></div><div class="cell l1" data-tip="2/4: 2 commits"></div><div class="cell l1" data-tip="3/4: 5 commits"></div><div class="cell l1" data-tip="4/4: 5 commits"></div><div class="cell l1" data-tip="5/4: 3 commits"></div><div class="cell l1" data-tip="6/4: 2 commits"></div><div class="cell l1" data-tip="7/4: 5 commits"></div><div class="cell l1" data-tip="8/4: 1 commits"></div><div class="cell l1" data-tip="9/4: 1 commits"></div><div class="cell l1" data-tip="10/4: 4 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">gabaritai<small>91 commits · <span class="profileBadge sprint">Sprint Final</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l0" data-tip="30/3: zero"></div><div class="cell l0" data-tip="31/3: zero"></div><div class="cell l2" data-tip="1/4: 11 commits"></div><div class="cell l3" data-tip="2/4: 19 commits"></div><div class="cell l2" data-tip="3/4: 6 commits"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l0" data-tip="6/4: zero"></div><div class="cell l0" data-tip="7/4: zero"></div><div class="cell l1" data-tip="8/4: 5 commits"></div><div class="cell l3" data-tip="9/4: 18 commits"></div><div class="cell l4" data-tip="10/4: 32 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">SDR-Radar<small>82 commits · <span class="profileBadge sprint">Sprint Final</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l2" data-tip="30/3: 8 commits"></div><div class="cell l0" data-tip="31/3: zero"></div><div class="cell l3" data-tip="1/4: 16 commits"></div><div class="cell l2" data-tip="2/4: 7 commits"></div><div class="cell l0" data-tip="3/4: zero"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l1" data-tip="6/4: 1 commits"></div><div class="cell l2" data-tip="7/4: 8 commits"></div><div class="cell l4" data-tip="8/4: 21 commits"></div><div class="cell l2" data-tip="9/4: 7 commits"></div><div class="cell l3" data-tip="10/4: 14 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">piano-man<small>74 commits · <span class="profileBadge sprint">Sprint Final</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l1" data-tip="30/3: 1 commits"></div><div class="cell l2" data-tip="31/3: 10 commits"></div><div class="cell l1" data-tip="1/4: 3 commits"></div><div class="cell l0" data-tip="2/4: zero"></div><div class="cell l2" data-tip="3/4: 6 commits"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l2" data-tip="6/4: 11 commits"></div><div class="cell l2" data-tip="7/4: 6 commits"></div><div class="cell l2" data-tip="8/4: 7 commits"></div><div class="cell l1" data-tip="9/4: 5 commits"></div><div class="cell l4" data-tip="10/4: 25 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">alexandria<small>53 commits · <span class="profileBadge explosivo">Explosivo no início</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l3" data-tip="30/3: 14 commits"></div><div class="cell l1" data-tip="31/3: 3 commits"></div><div class="cell l1" data-tip="1/4: 5 commits"></div><div class="cell l0" data-tip="2/4: zero"></div><div class="cell l0" data-tip="3/4: zero"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l2" data-tip="6/4: 8 commits"></div><div class="cell l1" data-tip="7/4: 4 commits"></div><div class="cell l3" data-tip="8/4: 14 commits"></div><div class="cell l1" data-tip="9/4: 5 commits"></div><div class="cell l0" data-tip="10/4: zero"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">compound<small>48 commits · <span class="profileBadge sprint">Sprint Final</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l2" data-tip="30/3: 6 commits"></div><div class="cell l1" data-tip="31/3: 5 commits"></div><div class="cell l0" data-tip="1/4: zero"></div><div class="cell l1" data-tip="2/4: 5 commits"></div><div class="cell l0" data-tip="3/4: zero"></div><div class="cell l1" data-tip="4/4: 2 commits"></div><div class="cell l0" data-tip="5/4: zero"></div><div class="cell l1" data-tip="6/4: 4 commits"></div><div class="cell l1" data-tip="7/4: 4 commits"></div><div class="cell l1" data-tip="8/4: 4 commits"></div><div class="cell l2" data-tip="9/4: 7 commits"></div><div class="cell l2" data-tip="10/4: 11 commits"></div>
+        </div>
+      </div>
+      <div class="heatmap-row">
+        <span class="proj-label">lenu<small>33 commits · <span class="profileBadge explosivo">Explosivo no início</span></small></span>
+        <div class="heatmap-cells">
+          <div class="cell l1" data-tip="30/3: 1 commits"></div><div class="cell l1" data-tip="31/3: 1 commits"></div><div class="cell l3" data-tip="1/4: 18 commits"></div><div class="cell l1" data-tip="2/4: 3 commits"></div><div class="cell l0" data-tip="3/4: zero"></div><div class="cell l0" data-tip="4/4: zero"></div><div class="cell l1" data-tip="5/4: 1 commits"></div><div class="cell l1" data-tip="6/4: 4 commits"></div><div class="cell l1" data-tip="7/4: 2 commits"></div><div class="cell l0" data-tip="8/4: zero"></div><div class="cell l1" data-tip="9/4: 3 commits"></div><div class="cell l0" data-tip="10/4: zero"></div>
+        </div>
+      </div>
+
+      <div class="heatmap-legend">
+        <span>menos</span>
+        <span class="swatch l0"></span>
+        <span class="swatch l1"></span>
+        <span class="swatch l2"></span>
+        <span class="swatch l3"></span>
+        <span class="swatch l4"></span>
+        <span class="swatch l5"></span>
+        <span>mais</span>
+      </div>
+    </div>
+
+    <div class="insightGrid">
+      <div class="insight green reveal delay-1">
+        <div class="icon">📈</div>
+        <div class="title">Consistente</div>
+        <div class="body"><strong>fight-club</strong>, <strong>meritus</strong> — cadência espalhada, sem buracos longos. Trabalho diário com pico moderado.</div>
+      </div>
+      <div class="insight gold reveal delay-2">
+        <div class="icon">🏁</div>
+        <div class="title">Sprint Final</div>
+        <div class="body"><strong>gabaritai</strong> (60% no fim), <strong>SDR-Radar</strong>, <strong>compound</strong>, <strong>piano-man</strong>, <strong>sunlight</strong> — aceleraram nos últimos 3 dias.</div>
+      </div>
+      <div class="insight pink reveal delay-3">
+        <div class="icon">💥</div>
+        <div class="title">Explosivo no início</div>
+        <div class="body"><strong>mother</strong> (77% nos 3 primeiros), <strong>lenu</strong> (61%), <strong>flowxide</strong> (40%), <strong>alexandria</strong> (42%) — chegaram com tudo no D1.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 6 — STACKS RANKING ========== -->
+<section class="recap" id="stacks">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 06 &middot; Linguagens</span>
+    <h2 class="section-title reveal delay-1">A stack do challenge</h2>
+    <p class="subline reveal delay-2">Ranking por linhas de código (excluindo testes/dependências).</p>
+
+    <div class="langBars reveal delay-3" style="margin-top: 3rem;">
+      <div class="lang-row ts"><span class="lang-name">TypeScript</span><div class="lang-track"><div class="lang-fill" data-width="100">70,9% &middot; 7 projetos</div></div></div>
+      <div class="lang-row ruby"><span class="lang-name">Ruby</span><div class="lang-track"><div class="lang-fill" data-width="17">11,9% &middot; 3 projetos</div></div></div>
+      <div class="lang-row rust"><span class="lang-name">Rust</span><div class="lang-track"><div class="lang-fill" data-width="15">10,5% &middot; 1 projeto</div></div></div>
+      <div class="lang-row erb"><span class="lang-name">Ruby (ERB)</span><div class="lang-track"><div class="lang-fill" data-width="4">2,6%</div></div></div>
+      <div class="lang-row c"><span class="lang-name">C</span><div class="lang-track"><div class="lang-fill" data-width="2">1,1% &middot; SDR-Radar</div></div></div>
+      <div class="lang-row vue"><span class="lang-name">Vue</span><div class="lang-track"><div class="lang-fill" data-width="2">1,0% &middot; sunlight</div></div></div>
+      <div class="lang-row js"><span class="lang-name">JavaScript</span><div class="lang-track"><div class="lang-fill" data-width="2">1,0%</div></div></div>
+      <div class="lang-row py"><span class="lang-name">Python</span><div class="lang-track"><div class="lang-fill" data-width="2">0,8% &middot; scripts</div></div></div>
+    </div>
+
+    <div class="twoCol">
+      <div class="reveal delay-2">
+        <h3>Frontend favorito</h3>
+        <div class="winner cyan">React + Next.js</div>
+        <p class="why">3 projetos foram com Next.js 16 (alexandria, mother, meritus) e mais 3 com React puro (fight-club, piano-man, SDR-Radar). <strong>6 projetos = mais da metade.</strong> Hotwire (compound, gabaritai), Phlex (lenu), Nuxt 4 (sunlight) e Leptos WASM (flowxide) completam a lista.</p>
+      </div>
+      <div class="reveal delay-3">
+        <h3>Backend favorito</h3>
+        <div class="winner gold">Rails 8 &amp; Next.js</div>
+        <p class="why">Empate técnico: <strong>Rails 8</strong> (compound, gabaritai, lenu — 3) com Next.js server actions (alexandria, mother, meritus se contar API ao lado). <strong>Fastify</strong> em meritus e SDR-Radar, <strong>AdonisJS</strong> em fight-club, <strong>Actix-web</strong> em flowxide.</p>
+      </div>
+      <div class="reveal delay-2">
+        <h3>Banco mais usado</h3>
+        <div class="winner pink">PostgreSQL</div>
+        <p class="why"><strong>7 dos 11 projetos</strong> rodam em PostgreSQL — alexandria, fight-club, flowxide, gabaritai, mother, meritus, SDR-Radar (este último em <strong>TimescaleDB</strong>!). compound e lenu ficaram no SQLite. sunlight é PWA local-first com <strong>IndexedDB (Dexie)</strong>.</p>
+      </div>
+      <div class="reveal delay-3">
+        <h3>Frameworks que apareceram só uma vez</h3>
+        <div class="winner green">Leptos · Phlex · Nuxt 4</div>
+        <p class="why">Cada um desses foi escolha solo: <strong>Leptos</strong> (Rust no front via WASM, flowxide), <strong>Phlex</strong> (componentes Ruby puros, lenu), <strong>Nuxt 4</strong> (Vue 3 fullstack, sunlight). Apostas mais fora da curva.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 7 — STACKS OUSADAS ========== -->
+<section class="recap alt" id="bold-stacks">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 07 &middot; Apostas técnicas</span>
+    <h2 class="section-title reveal delay-1">As stacks mais ousadas</h2>
+    <p class="subline reveal delay-2">Quem decidiu sair da zona de conforto e foi atrás de uma combinação que poucos teriam coragem de defender em standup.</p>
+
+    <div class="boldGrid">
+      <div class="boldCard first reveal delay-1">
+        <div class="medal">🥇</div>
+        <div class="name">flowxide</div>
+        <div class="stack">RUST WORKSPACE · LEPTOS WASM · ACTIX-WEB · TERRAFORM AWS · BEDROCK</div>
+        <div class="why">
+          A coragem completa: <strong>backend, executor de jobs, frontend canvas e shared types</strong> — tudo Rust, em workspace de 4 crates. O front é <strong>WASM compilado com Trunk</strong> usando Leptos. Infra em <strong>Terraform</strong> com módulos para CDN, RDS e systemd. AI via <strong>AWS Bedrock</strong> (claude-haiku-4-5). Zero "stack confortável", do começo ao fim. <strong>401 commits</strong> em 12 dias — ninguém entregou tanto código quanto este projeto.
+        </div>
+      </div>
+
+      <div class="boldCard second reveal delay-2">
+        <div class="medal">🥈</div>
+        <div class="name">SDR-Radar</div>
+        <div class="stack">C + N-API · LIBUSB · TIMESCALEDB · GRAPHQL · WEBSOCKETS · LEAFLET</div>
+        <div class="why">
+          Construir um <strong>radar de aviação ADS-B em 1090 MHz</strong> usando um <strong>dongle SDR físico</strong>, com driver C escrito do zero falando direto em <strong>libusb</strong>, exposto via <strong>N-API</strong> para Node, decodificado em tempo real, persistido em <strong>TimescaleDB</strong>, transmitido via <strong>WebSocket + GraphQL</strong> e plotado num mapa Leaflet. Tem inclusive um <strong>diary</strong> contando o debug do tuner R820T vs R828D no I²C. Hardware-software de verdade, num challenge de software.
+        </div>
+      </div>
+
+      <div class="boldCard third reveal delay-3">
+        <div class="medal">🥉</div>
+        <div class="name">lenu</div>
+        <div class="stack">RAILS 8 · PHLEX · ACTIVERECORD-TENANTED · RUBY_LLM</div>
+        <div class="why">
+          Apostou num conjunto pouco trilhado de Rails: <strong>Phlex</strong> em vez de ERB, <strong>activerecord-tenanted</strong> para isolar cada usuário em <strong>banco SQLite próprio</strong>, e <strong>ruby_llm</strong> para abstrair o provider de LLM. É Rails 8, mas com escolhas que poucos tomam — multitenancy físico, views como classes Ruby puras, e uma camada LLM idiomática.
+        </div>
+      </div>
+    </div>
+
+    <p class="subline reveal delay-4" style="margin-top: 2.5rem;">
+      Menções honrosas: <strong>sunlight</strong> (Nuxt 4 + Cloudflare Workers + Web Push + Dexie offline-first PWA), <strong>mother</strong> (Inngest + Better Auth + GitHub App + AI Provider swappable).
+    </p>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 8 — PADRÕES DOMINANTES ========== -->
+<section class="recap" id="patterns">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 08 &middot; Padrões</span>
+    <h2 class="section-title reveal delay-1">Como esse pessoal organiza código</h2>
+
+    <div class="recapGrid">
+      <div class="recapStat reveal delay-1"><div class="num">9</div><div class="label">Com Docker / Containerização</div></div>
+      <div class="recapStat reveal delay-2"><div class="num">8</div><div class="label">Com CI/CD configurado</div></div>
+      <div class="recapStat reveal delay-3"><div class="num">10</div><div class="label">Com lint/format configurado</div></div>
+      <div class="recapStat reveal delay-4"><div class="num">5</div><div class="label">Com E2E (Playwright)</div></div>
+    </div>
+
+    <div class="twoCol">
+      <div class="reveal delay-1">
+        <h3>Arquiteturas mais vistas</h3>
+        <ul style="list-style:none; padding:0; color: var(--text-muted); font-size: 0.95rem; line-height: 2;">
+          <li>📐 <strong style="color:var(--text)">Clean / Hexagonal</strong> — alexandria (domain/application/infrastructure)</li>
+          <li>📐 <strong style="color:var(--text)">Layered Service Objects</strong> — compound, gabaritai, lenu, fight-club</li>
+          <li>📐 <strong style="color:var(--text)">Workspace / Monorepo</strong> — flowxide (cargo), meritus (turbo), SDR-Radar (npm)</li>
+          <li>📐 <strong style="color:var(--text)">Next App Router padrão</strong> — mother, alexandria, meritus/web</li>
+          <li>📐 <strong style="color:var(--text)">Rails MVC clássico</strong> — compound, gabaritai (com ViewComponent + Pundit)</li>
+        </ul>
+      </div>
+      <div class="reveal delay-2">
+        <h3>O fundamental que (quase) todos fizeram</h3>
+        <ul style="list-style:none; padding:0; color: var(--text-muted); font-size: 0.95rem; line-height: 2;">
+          <li>🐳 <strong style="color:var(--text)">Docker</strong> — 9/11 (faltou flowxide e sunlight)</li>
+          <li>🤖 <strong style="color:var(--text)">CI/CD GitHub Actions</strong> — 8/11 (faltou meritus, piano-man, sunlight)</li>
+          <li>🎨 <strong style="color:var(--text)">Lint / Format</strong> — 10/11 (apenas SDR-Radar tem só prettier)</li>
+          <li>🗄️ <strong style="color:var(--text)">ORM em vez de SQL raw</strong> — 10/11 (Prisma, Drizzle, Active Record, sqlx)</li>
+          <li>📚 <strong style="color:var(--text)">README detalhado</strong> — 11/11 (todos)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insightGrid">
+      <div class="insight pink reveal delay-1">
+        <div class="icon">🪨</div>
+        <div class="title">SQL raw vs ORM</div>
+        <div class="body">Apenas <strong>SDR-Radar</strong> usa SQL com mais frequência — pelo lado do TimescaleDB e Drizzle como query builder. Todo o resto usa ORMs maduros (<strong>Prisma</strong>, <strong>Active Record</strong>, <strong>Drizzle</strong>, <strong>SQLx</strong>).</div>
+      </div>
+      <div class="insight cyan reveal delay-2">
+        <div class="icon">🧪</div>
+        <div class="title">E2E e Playwright</div>
+        <div class="body"><strong>fight-club, meritus, piano-man, sunlight</strong> e o frontend de <strong>SDR-Radar</strong> rodam Playwright. piano-man tem mais E2E que muitos backends têm de unitários.</div>
+      </div>
+      <div class="insight gold reveal delay-3">
+        <div class="icon">🛠️</div>
+        <div class="title">Linters fora da curva</div>
+        <div class="body"><strong>sunlight</strong> usa <strong>oxlint + oxfmt</strong> (linter Rust-based, ~50× mais rápido que ESLint). compound usa <strong>rubocop-rails-omakase + brakeman + bundler-audit</strong> — toolchain de segurança completa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 9 — AI PROVIDERS ========== -->
+<section class="recap alt" id="ai-providers">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 09 &middot; AI · Dev Tools</span>
+    <h2 class="section-title reveal delay-1">Quem usou qual AI pra codar</h2>
+
+    <div class="recapGrid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="recapStat reveal delay-1"><div class="num cyan-green" data-counter="9">9</div><div class="label">Projetos com Claude Code</div></div>
+      <div class="recapStat reveal delay-2"><div class="num pink-violet" data-counter="2">2</div><div class="label">Com GitHub Copilot</div></div>
+      <div class="recapStat reveal delay-3"><div class="num orange-gold" data-counter="1">1</div><div class="label">Com OpenCode</div></div>
+      <div class="recapStat reveal delay-4"><div class="num green-cyan" data-counter="982">982</div><div class="label">Co-authored-by AI</div></div>
+    </div>
+
+    <p class="subline reveal" style="margin-top: 2.5rem;">
+      <strong>Claude Code</strong> dominou: <strong>9 dos 11 projetos</strong> têm CLAUDE.md ou .claude/ no repo,
+      e os modelos mais citados foram <strong>Opus 4.6 (1M context)</strong> e <strong>Sonnet 4.6</strong>.
+      <strong>mother</strong> usou Claude Code <em>e</em> Copilot (31 menções de "copilot" nos commits e
+      <strong>769 co-authored-by</strong>). <strong>flowxide</strong> foi todo Copilot.
+      <strong>SDR-Radar</strong> usou <strong>OpenCode</strong> (.opencode/skills, AGENTS.md por package).
+    </p>
+
+    <div style="margin-top: 3rem;" class="reveal delay-2">
+      <h3 style="font-size:1rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom: 1rem;">AI no produto final</h3>
+    </div>
+
+    <div class="tableWrap reveal delay-3">
+      <table class="bigTable">
+        <thead>
+          <tr>
+            <th>Projeto</th>
+            <th>Ferramenta de Dev</th>
+            <th>AI no produto</th>
+            <th>Modelo / Provider</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="proj">alexandria</td>
+            <td><span class="pill pill-claude">Claude Code · Sonnet 4.6</span></td>
+            <td><span class="pill pill-anthropic">Anthropic</span></td>
+            <td>claude-haiku-4-5 (Vision)</td>
+          </tr>
+          <tr>
+            <td class="proj">compound</td>
+            <td><span class="pill pill-claude">Claude Code</span></td>
+            <td><span class="pill pill-groq">Groq</span></td>
+            <td>llama-3.3-70b-versatile (+ Ollama dev)</td>
+          </tr>
+          <tr>
+            <td class="proj">fight-club</td>
+            <td><span class="pill pill-claude">Claude Code · Haiku/Opus/Sonnet 4.6</span></td>
+            <td><span class="pill pill-anthropic">Anthropic</span></td>
+            <td>claude-sonnet-4-6</td>
+          </tr>
+          <tr>
+            <td class="proj">flowxide</td>
+            <td><span class="pill pill-copilot">GitHub Copilot</span></td>
+            <td><span class="pill pill-bedrock">AWS Bedrock</span></td>
+            <td>claude-haiku-4-5 (via Bedrock)</td>
+          </tr>
+          <tr>
+            <td class="proj">gabaritai</td>
+            <td><span class="pill pill-claude">Claude Code</span></td>
+            <td><span class="pill pill-gemini">Google</span></td>
+            <td>gemini-3.1-flash-lite (+ Ollama)</td>
+          </tr>
+          <tr>
+            <td class="proj">lenu</td>
+            <td><span class="pill pill-claude">Claude Code · Opus 4.6</span></td>
+            <td><span class="pill pill-anthropic">Anthropic</span></td>
+            <td>via ruby_llm (configurável)</td>
+          </tr>
+          <tr>
+            <td class="proj">meritus</td>
+            <td><span class="pill pill-claude">Claude Code</span></td>
+            <td><span class="pill pill-openai">OpenAI + OpenRouter</span></td>
+            <td>flux-1.1-pro (Black Forest Labs)</td>
+          </tr>
+          <tr>
+            <td class="proj">mother</td>
+            <td><span class="pill pill-claude">Claude Code · Opus 4.6</span> + <span class="pill pill-copilot">Copilot</span></td>
+            <td><span class="pill pill-anthropic">Anthropic</span></td>
+            <td>claude-sonnet-4-20250514 (swappable)</td>
+          </tr>
+          <tr>
+            <td class="proj">piano-man</td>
+            <td><span class="pill pill-claude">Claude Code · Opus + Sonnet 4.6</span></td>
+            <td><span class="pill pill-no">— sem AI no produto</span></td>
+            <td>n/a (jogo rítmico)</td>
+          </tr>
+          <tr>
+            <td class="proj">SDR-Radar</td>
+            <td><span class="pill pill-opencode">OpenCode</span></td>
+            <td><span class="pill pill-no">— sem AI no produto</span></td>
+            <td>n/a (radar ADS-B)</td>
+          </tr>
+          <tr>
+            <td class="proj">sunlight</td>
+            <td><span class="pill pill-claude">Claude Code · Opus + Sonnet 4.6</span></td>
+            <td><span class="pill pill-gemini">Google</span></td>
+            <td>gemini-2.5-flash</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insightGrid" style="margin-top: 3rem;">
+      <div class="insight gold reveal delay-1">
+        <div class="icon">🤖</div>
+        <div class="title">Anthropic dominou no produto</div>
+        <div class="body"><strong>5 projetos</strong> usaram Claude no produto: alexandria, fight-club, flowxide (via Bedrock), lenu e mother — quase metade da turma.</div>
+      </div>
+      <div class="insight green reveal delay-2">
+        <div class="icon">💎</div>
+        <div class="title">Gemini também apareceu</div>
+        <div class="body"><strong>gabaritai</strong> (gemini-3.1-flash-lite, com fallback local via Ollama) e <strong>sunlight</strong> (gemini-2.5-flash, opt-in para insights pessoais).</div>
+      </div>
+      <div class="insight pink reveal delay-3">
+        <div class="icon">🎨</div>
+        <div class="title">O único usando AI pra imagem</div>
+        <div class="body"><strong>meritus</strong> usou <strong>Flux 1.1 Pro</strong> via OpenRouter para gerar a arte das medalhas — única aposta em geração de imagem.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 10 — TESTES VS PROD ========== -->
+<section class="recap" id="tests">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 10 &middot; Testes</span>
+    <h2 class="section-title reveal delay-1">Quem testou e quem rezou</h2>
+    <p class="subline reveal delay-2">Linhas de teste em relação às linhas de produção. <strong>Acima de 60% é considerado robusto.</strong></p>
+
+    <div class="ranking reveal delay-3" style="margin-top: 3rem;">
+      <div class="rk-row gold"><span class="rk-rank">1</span><span class="rk-label">meritus<small>7.655 / 8.946 linhas</small></span><div class="rk-track"><div class="rk-fill" data-width="100">85,6%</div></div></div>
+      <div class="rk-row silver"><span class="rk-rank">2</span><span class="rk-label">fight-club<small>18.027 / 21.554</small></span><div class="rk-track"><div class="rk-fill" data-width="98">83,6%</div></div></div>
+      <div class="rk-row bronze"><span class="rk-rank">3</span><span class="rk-label">compound<small>4.098 / 5.741</small></span><div class="rk-track"><div class="rk-fill" data-width="83">71,4%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">4</span><span class="rk-label">gabaritai<small>4.757 / 7.036</small></span><div class="rk-track"><div class="rk-fill" data-width="79">67,6%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>2.713 / 4.397</small></span><div class="rk-track"><div class="rk-fill" data-width="72">61,7%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">6</span><span class="rk-label">mother<small>16.167 / 26.730</small></span><div class="rk-track"><div class="rk-fill" data-width="71">60,5%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">lenu<small>2.540 / 4.523</small></span><div class="rk-track"><div class="rk-fill" data-width="66">56,2%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>2.400 / 6.724</small></span><div class="rk-track"><div class="rk-fill" data-width="42">35,7%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>4.462 / 13.062</small></span><div class="rk-track"><div class="rk-fill" data-width="40">34,2%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>1.281 / 7.481</small></span><div class="rk-track"><div class="rk-fill" data-width="20">17,1%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">flowxide<small>103 / 20.158</small></span><div class="rk-track"><div class="rk-fill" data-width="1">0,5%</div></div></div>
+    </div>
+
+    <div class="twoCol">
+      <div class="reveal delay-1">
+        <h3>Melhor proporção</h3>
+        <div class="winner gold">meritus</div>
+        <p class="why"><strong>85,6%</strong> de cobertura por linhas. 7.655 linhas de teste para 8.946 de produção — basicamente um teste pra cada linha. Vitest no API, Playwright no web, MSW pra mockar HTTP. Mostra disciplina.</p>
+      </div>
+      <div class="reveal delay-2">
+        <h3>Pior proporção</h3>
+        <div class="winner pink">flowxide</div>
+        <p class="why"><strong>0,5%</strong>. 103 linhas de teste pra 20.158 de produção. Foi tudo no impulso: 401 commits em Rust em 12 dias, sem freio. Era o trade-off conhecido — velocidade ou cobertura — e o pessoal escolheu velocidade.</p>
+      </div>
+      <div class="reveal delay-3">
+        <h3>Média do grupo</h3>
+        <div class="winner cyan">53,6%</div>
+        <p class="why">A média ponderada do challenge — bem acima do que se vê em projetos pessoais típicos. <strong>6 projetos</strong> ficaram acima de 60% (faixa profissional saudável).</p>
+      </div>
+      <div class="reveal delay-4">
+        <h3>Total de linhas de teste</h3>
+        <div class="winner green">63.303</div>
+        <p class="why">Somando todos os projetos. Equivale a <strong>1.265 linhas de teste por dia</strong> de challenge — bom indicador da seriedade técnica do grupo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pageDivider"></div>
+
+<!-- ========== SCENE 11 — CURIOSIDADES ========== -->
+<section class="recap alt" id="curiosidades">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 11 &middot; Você sabia?</span>
+    <h2 class="section-title reveal delay-1">As curiosidades do challenge</h2>
+
+    <div class="insightGrid" style="margin-top: 3rem;">
+      <div class="insight gold reveal delay-1">
+        <div class="icon">🌅</div>
+        <div class="title">Quem comitou de madrugada?</div>
+        <div class="body"><strong>fight-club</strong> teve <strong>23 commits entre 00h e 02h</strong> nos dias 04 e 05/04 (sábado e domingo). flowxide também teve <strong>30+ commits noturnos</strong>. piano-man, alexandria e SDR-Radar dormiram cedo — zero madrugada.</div>
+      </div>
+      <div class="insight cyan reveal delay-2">
+        <div class="icon">📅</div>
+        <div class="title">O dia mais agitado do challenge</div>
+        <div class="body">Foi <strong>1º de abril</strong> (quarta-feira) com <strong>181 commits</strong> somando todos os projetos. Curiosamente o segundo dia geral. flowxide sozinho fez 88 nesse dia.</div>
+      </div>
+      <div class="insight pink reveal delay-3">
+        <div class="icon">⏰</div>
+        <div class="title">A hora preferida pra commitar</div>
+        <div class="body"><strong>15h</strong> foi o pico (112 commits) — pós-almoço da galera. Em segundo, <strong>21h</strong> com 103 commits — o segundo turno informal.</div>
+      </div>
+      <div class="insight green reveal delay-1">
+        <div class="icon">🏗️</div>
+        <div class="title">O projeto com mais código de produção</div>
+        <div class="body"><strong>mother</strong> com <strong>26.730 linhas</strong>, seguido de <strong>fight-club</strong> (21.554) e <strong>flowxide</strong> (20.158 de Rust). Os Rails ficaram entre 4.500 e 8.700 linhas — Hotwire/Phlex compactam mesmo.</div>
+      </div>
+      <div class="insight gold reveal delay-2">
+        <div class="icon">🌳</div>
+        <div class="title">O rei das branches</div>
+        <div class="body"><strong>meritus</strong> abriu <strong>71 branches</strong>, seguido por <strong>compound</strong> (45) e <strong>mother</strong> (33). Esses três trabalharam PR-driven puro. O resto comitou direto no main.</div>
+      </div>
+      <div class="insight cyan reveal delay-3">
+        <div class="icon">📜</div>
+        <div class="title">Os co-authored-by recordistas</div>
+        <div class="body"><strong>mother</strong> teve <strong>769 commits "Co-Authored-By: Claude"</strong> — quase 6× mais que o segundo (piano-man, 69). É a assinatura do Claude Code rodando full automation.</div>
+      </div>
+      <div class="insight pink reveal delay-1">
+        <div class="icon">🇧🇷</div>
+        <div class="title">i18n nativo</div>
+        <div class="body"><strong>compound</strong> e <strong>fight-club</strong> shipparam com <strong>i18n PT-BR + EN</strong> de saída — não como afterthought. compound vai além e mantém pt-BR como default.</div>
+      </div>
+      <div class="insight green reveal delay-2">
+        <div class="icon">🔒</div>
+        <div class="title">Quem levou segurança a sério?</div>
+        <div class="body"><strong>fight-club</strong> com <strong>AES at-rest, opaque tokens, audit logs e GDPR</strong> completo. <strong>compound</strong> com <strong>WebAuthn/Passkey</strong>. <strong>mother</strong> com Better Auth. Não foi pouca coisa pra 12 dias.</div>
+      </div>
+      <div class="insight gold reveal delay-3">
+        <div class="icon">📓</div>
+        <div class="title">O único com diary</div>
+        <div class="body"><strong>SDR-Radar</strong> manteve uma pasta <code>diary/</code> com 3 entradas detalhadas — narrando hardware, debug do tuner R820T/R828D e processamento de sinal. Engenharia documentada como literatura.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FINAL ========== -->
+<section class="recap" id="final">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>FIM</span>
+    <div class="reveal delay-1">
+      <div class="megaNumber pink-violet">obrigado.</div>
+    </div>
+    <h2 class="impactPhrase reveal delay-2">11 projetos · 12 dias · um único objetivo:<br>provar que dá pra construir grande, com AI ao lado.</h2>
+    <p class="subline reveal delay-3">
+      Uma turma que escreveu <strong>200.000+ linhas de código</strong>, abriu <strong>225 branches</strong>,
+      criou <strong>63.000+ linhas de teste</strong>, configurou <strong>9 Dockerfiles</strong>,
+      testou em <strong>5 ferramentas E2E</strong>, e provou que duas semanas de challenge
+      podem render produto de verdade. Até a próxima edição. 🚀
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>AI Dev Challenge &middot; Estatísticas geradas em 15/04/2026</p>
+  <p style="margin-top: 0.5rem;">Veja também: <a href="resultado_challenge.html">Resultado da Avaliação</a></p>
+</footer>
+
+<script>
+  // ============================================
+  // 1. INTERSECTION OBSERVER FOR REVEALS
+  // ============================================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Trigger any number counters inside this element
+        const counters = entry.target.querySelectorAll('[data-counter]:not(.counted)');
+        counters.forEach(el => animateCounter(el));
+        // Trigger bar fill widths inside this element
+        const fills = entry.target.querySelectorAll('[data-width]:not(.filled)');
+        fills.forEach(el => {
+          const w = el.getAttribute('data-width');
+          el.style.width = w + '%';
+          el.classList.add('filled');
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // also observe sections themselves so counters/fills inside them trigger
+  document.querySelectorAll('section.recap').forEach(s => observer.observe(s));
+
+  // ============================================
+  // 2. ANIMATED COUNTERS
+  // ============================================
+  function animateCounter(el) {
+    if (el.classList.contains('counted')) return;
+    el.classList.add('counted');
+    const target = parseInt(el.getAttribute('data-counter'), 10);
+    if (isNaN(target)) return;
+    const duration = 1300;
+    const start = performance.now();
+    const startVal = 0;
+    function step(ts) {
+      const t = Math.min((ts - start) / duration, 1);
+      // ease out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.floor(startVal + (target - startVal) * eased);
+      el.textContent = val.toLocaleString('pt-BR');
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('pt-BR');
+    }
+    requestAnimationFrame(step);
+  }
+</script>
+
+</body>
+</html>

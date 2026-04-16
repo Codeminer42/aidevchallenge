@@ -1,0 +1,16 @@
+# Each challenge submission has its own git history — ignore them here
+alexandria/
+compound/
+fight-club/
+flowxide/
+gabaritai/
+lenu/
+meritus/
+mother/
+piano-man/
+SDR-Radar-Chanllenge/
+sunlight/
+
+# OS junk
+.DS_Store
+Thumbs.db

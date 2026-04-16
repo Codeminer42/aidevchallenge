@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Dev Challenge — Resultado da Avaliacao</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card-bg: #1a1d27;
+    --card-border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-muted: #9ca3af;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --gold: #f59e0b;
+    --silver: #94a3b8;
+    --bronze: #d97706;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f97316;
+    --cyan: #06b6d4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+  h2 {
+    font-size: 1.5rem; margin: 2.5rem 0 1rem; color: var(--accent-light);
+    border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;
+  }
+  h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+
+  .project-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.5rem 1.5rem 1rem; margin-bottom: 2rem; transition: border-color 0.2s;
+  }
+  .project-card:hover { border-color: var(--accent); }
+  .project-card.rank-1 { border-left: 4px solid var(--gold); }
+  .project-card.rank-2 { border-left: 4px solid var(--silver); }
+  .project-card.rank-3 { border-left: 4px solid var(--bronze); }
+  .project-card.disqualified { border-left: 4px solid var(--red); opacity: 0.88; }
+
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .card-header .project-name { font-size: 1.3rem; font-weight: 700; }
+  .badge { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+  .badge-gold { background: var(--gold); color: #000; }
+  .badge-silver { background: var(--silver); color: #000; }
+  .badge-bronze { background: var(--bronze); color: #000; }
+  .badge-avg { background: var(--accent); color: #fff; font-size: 1rem; padding: 0.3rem 0.9rem; }
+  .badge-disqualified { background: var(--red); color: #fff; }
+  .badge-level { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+
+  .card-meta { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.5rem; }
+  .card-desc { margin-bottom: 1rem; font-size: 0.93rem; line-height: 1.7; }
+
+  .score-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.88rem; }
+  .score-table th, .score-table td { padding: 0.45rem 0.6rem; text-align: left; border-bottom: 1px solid var(--card-border); }
+  .score-table th { color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .score-table td:nth-child(2) { font-weight: 700; width: 55px; text-align: center; }
+  .score-table td:nth-child(3) { color: var(--text-muted); font-size: 0.83rem; }
+
+  .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } }
+
+  .detail-box { padding: 0.75rem; border-radius: 8px; font-size: 0.88rem; }
+  .detail-box ul { margin: 0.25rem 0 0 1.1rem; }
+  .detail-box li { margin-bottom: 0.2rem; }
+  .box-strong { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+  .box-weak { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2); }
+  .box-tech { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); }
+  .box-dev { background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.2); }
+  .box-label { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .box-strong .box-label { color: var(--green); }
+  .box-weak .box-label { color: var(--orange); }
+  .box-tech .box-label { color: var(--accent-light); }
+  .box-dev .box-label { color: var(--cyan); }
+
+  .chart-container { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 0.7rem; gap: 0.75rem; }
+  .bar-label { width: 140px; text-align: right; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 30px; background: rgba(255,255,255,0.04); border-radius: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.7rem; font-size: 0.82rem; font-weight: 700; color: #fff; min-width: 42px; }
+  .bar-fill.gold { background: linear-gradient(90deg, var(--gold), #fbbf24); }
+  .bar-fill.silver { background: linear-gradient(90deg, #64748b, var(--silver)); }
+  .bar-fill.bronze { background: linear-gradient(90deg, #b45309, var(--bronze)); }
+  .bar-fill.normal { background: linear-gradient(90deg, #4338ca, var(--accent)); }
+  .bar-fill.disq { background: linear-gradient(90deg, #7f1d1d, #991b1b); }
+
+  .ranking-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .ranking-table th, .ranking-table td { padding: 0.55rem 0.4rem; text-align: center; border-bottom: 1px solid var(--card-border); }
+  .ranking-table th { color: var(--text-muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(99,102,241,0.08); }
+  .ranking-table td:first-child { font-weight: 700; }
+  .ranking-table td:nth-child(2) { text-align: left; font-weight: 600; }
+  .ranking-table td:last-child { font-weight: 700; color: var(--accent-light); }
+  .ranking-table tr.rank-1 td { background: rgba(245,158,11,0.07); }
+  .ranking-table tr.rank-2 td { background: rgba(148,163,184,0.07); }
+  .ranking-table tr.rank-3 td { background: rgba(217,119,6,0.07); }
+  .ranking-table tr.disqualified td { opacity: 0.55; }
+
+  .finalist-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .finalist-card .medal { font-size: 1.5rem; margin-right: 0.5rem; }
+  .finalist-card .name { font-weight: 700; font-size: 1.1rem; }
+  .finalist-card .reason { color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.7; }
+
+  .disq-card { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .disq-card .name { font-weight: 700; color: var(--red); }
+  .disq-card .reason { color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.7; }
+
+  .note-box { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+  .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem; text-align: center; }
+  .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--accent-light); }
+  .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .score-high { color: var(--green); }
+  .score-mid { color: var(--gold); }
+  .score-low { color: var(--orange); }
+  .score-zero { color: var(--red); }
+
+  .curiosidade { background: rgba(245,158,11,0.06); border-left: 3px solid var(--gold); padding: 0.6rem 0.8rem; margin: 0.5rem 0; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: var(--text-muted); }
+  .curiosidade strong { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    h1 { font-size: 1.5rem; }
+    .bar-label { width: 100px; font-size: 0.75rem; }
+    .ranking-table { font-size: 0.72rem; }
+    .ranking-table th, .ranking-table td { padding: 0.35rem 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>AI Dev Challenge — Resultado da Avaliacao</h1>
+<p class="subtitle">Avaliacao tecnica aprofundada dos 10 projetos submetidos &bull; Abril 2026</p>
+
+<div class="note-box">
+  <strong>Nota:</strong> Foram encontrados <strong>10 projetos</strong> nesta pasta (nao 13 como previsto). As notas sao <strong>relativas entre os 10 projetos</strong> — o melhor em cada criterio recebe nota proxima de 10 e o pior proxima de 0. Dois projetos (<strong>piano-man</strong> e <strong>SDR-Radar</strong>) foram sinalizados por ausencia total de evidencia de uso de AI. Alem das notas, esta versao inclui <strong>perfil do desenvolvedor</strong>, analise de workflow, multiplos pontos fortes/fracos, e destaques tecnicos.
+</div>
+
+<!-- ========== PANORAMA ========== -->
+<h2>Panorama Geral</h2>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-value">10</div><div class="stat-label">Projetos</div></div>
+  <div class="stat-card"><div class="stat-value">1.477</div><div class="stat-label">Commits totais</div></div>
+  <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Stacks diferentes</div></div>
+  <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Provedores de AI</div></div>
+  <div class="stat-card"><div class="stat-value">1.248</div><div class="stat-label">Testes escritos</div></div>
+  <div class="stat-card"><div class="stat-value">8/10</div><div class="stat-label">Com Docker</div></div>
+</div>
+
+<div class="note-box" style="background:rgba(6,182,212,0.06);border-color:rgba(6,182,212,0.2);">
+  <strong>Provedores de AI usados nos produtos:</strong> Claude/Anthropic (mother, flowxide, fight-club, lenu), Gemini/Google (gabaritai, sunlight), Groq/Llama (compound), Flux/OpenRouter (meritus). <strong>Ferramentas de desenvolvimento:</strong> Claude Code (maioria), GitHub Copilot (mother, meritus).
+</div>
+
+<!-- ========== RANKING CHART ========== -->
+<h2>Ranking Geral — Comparativo de Medias</h2>
+<div class="chart-container">
+  <div class="bar-row"><span class="bar-label">&#129351; mother</span><div class="bar-track"><div class="bar-fill gold" style="width:95%">9.50</div></div></div>
+  <div class="bar-row"><span class="bar-label">&#129352; flowxide</span><div class="bar-track"><div class="bar-fill silver" style="width:82%">8.17</div></div></div>
+  <div class="bar-row"><span class="bar-label">&#129353; meritus</span><div class="bar-track"><div class="bar-fill bronze" style="width:68%">6.83</div></div></div>
+  <div class="bar-row"><span class="bar-label">4. fight-club</span><div class="bar-track"><div class="bar-fill normal" style="width:62%">6.17</div></div></div>
+  <div class="bar-row"><span class="bar-label">5. gabaritai</span><div class="bar-track"><div class="bar-fill normal" style="width:60%">6.00</div></div></div>
+  <div class="bar-row"><span class="bar-label">6. sunlight</span><div class="bar-track"><div class="bar-fill normal" style="width:57%">5.67</div></div></div>
+  <div class="bar-row"><span class="bar-label">7. piano-man *</span><div class="bar-track"><div class="bar-fill disq" style="width:55%">5.50</div></div></div>
+  <div class="bar-row"><span class="bar-label">8. lenu</span><div class="bar-track"><div class="bar-fill normal" style="width:50%">5.00</div></div></div>
+  <div class="bar-row"><span class="bar-label">9. SDR-Radar *</span><div class="bar-track"><div class="bar-fill disq" style="width:50%">5.00</div></div></div>
+  <div class="bar-row"><span class="bar-label">10. compound</span><div class="bar-track"><div class="bar-fill normal" style="width:47%">4.67</div></div></div>
+</div>
+<p style="text-align:center;color:var(--text-muted);font-size:0.78rem;">* Sem evidencia de uso de AI — em risco de desclassificacao</p>
+
+<!-- ========== RANKING TABLE ========== -->
+<h2>Tabela Comparativa</h2>
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>#</th><th>Projeto</th><th>Nivel Dev</th><th>Commits</th><th>Uso AI</th><th>Criat.</th><th>Escopo</th><th>Qual. Tec.</th><th>Potencial</th><th>UX</th><th>Media</th></tr></thead>
+  <tbody>
+    <tr class="rank-1"><td>&#129351;</td><td>mother</td><td>Senior/Staff</td><td>206</td><td>10</td><td>9</td><td>9</td><td>10</td><td>10</td><td>9</td><td>9.50</td></tr>
+    <tr class="rank-2"><td>&#129352;</td><td>flowxide</td><td>Senior</td><td>442</td><td>9</td><td>7</td><td>10</td><td>6</td><td>9</td><td>8</td><td>8.17</td></tr>
+    <tr class="rank-3"><td>&#129353;</td><td>meritus</td><td>Staff</td><td>287</td><td>7</td><td>2</td><td>8</td><td>9</td><td>7</td><td>8</td><td>6.83</td></tr>
+    <tr><td>4</td><td>fight-club</td><td>Mid</td><td>184</td><td>8</td><td>3</td><td>7</td><td>7</td><td>5</td><td>7</td><td>6.17</td></tr>
+    <tr><td>5</td><td>gabaritai</td><td>Senior</td><td>91</td><td>8</td><td>4</td><td>6</td><td>5</td><td>7</td><td>6</td><td>6.00</td></tr>
+    <tr><td>6</td><td>sunlight</td><td>Mid-Senior</td><td>128</td><td>5</td><td>6</td><td>6</td><td>7</td><td>4</td><td>6</td><td>5.67</td></tr>
+    <tr class="disqualified"><td>7*</td><td>piano-man</td><td>Mid-Senior</td><td>87</td><td class="score-zero">0</td><td>10</td><td>5</td><td>9</td><td>2</td><td>7</td><td>5.50</td></tr>
+    <tr><td>8</td><td>lenu</td><td>Senior</td><td>42</td><td>6</td><td>5</td><td>3</td><td>8</td><td>5</td><td>3</td><td>5.00</td></tr>
+    <tr class="disqualified"><td>9*</td><td>SDR-Radar</td><td>Junior-Mid</td><td>82</td><td class="score-zero">0</td><td>10</td><td>7</td><td>5</td><td>3</td><td>5</td><td>5.00</td></tr>
+    <tr><td>10</td><td>compound</td><td>Senior</td><td>50</td><td>7</td><td>2</td><td>4</td><td>4</td><td>6</td><td>5</td><td>4.67</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ========== INDIVIDUAL REPORTS ========== -->
+<h2>Relatorios Individuais</h2>
+
+<!-- ===== 1. MOTHER ===== -->
+<div class="project-card rank-1">
+  <div class="card-header">
+    <div><span class="project-name">&#129351; mother</span> <span class="badge badge-gold">1o Lugar</span> <span class="badge badge-level">Senior / Staff</span></div>
+    <span class="badge badge-avg">9.50</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Miguel Marcondes Filho &bull; <strong>Commits:</strong> 206 em 11 dias &bull; <strong>Stack:</strong> Next.js 16 / TypeScript / Prisma 7 / PostgreSQL / Claude Sonnet 4 / Inngest / Stripe / Better Auth</div>
+  <div class="card-desc">
+    MOTHER (Managed Orchestration Terminal for Human Engineering Readiness) e uma plataforma de "Developer Comprehension Infrastructure" que cria portoes de compreensao para PRs gerados por AI. O produto ataca um problema quantificado — 59% dos devs usam codigo AI sem entende-lo (Clutch, 800 devs). O fluxo: webhook do GitHub recebe PR &rarr; Claude analisa o diff &rarr; gera briefing com topicos de compreensao &rarr; dev revisa cada topico antes de mergear. Alem dos gates, oferece Solo Flights (quizzes de recall ativo), Squadron Meetings (sessoes de equipe em 5 fases), e Insights com Readiness Index. Monetizacao via Stripe com 3 tiers (Free/Team $19/Business $39). O nome referencia MU-TH-UR 6000 do filme Alien (1979).
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-high">10</td><td>AI E o produto. Claude analisa diffs, gera briefings, cria quizzes, avalia respostas, e identifica skill gaps. 4 use cases distintos com prompts anti-alucinacao. Copilot usado para code review (evidenciado em commits). 15 phase gates documentando dogfooding.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-high">9</td><td>Conceito inovador atacando problema emergente real com dados de industria. "Comprehension gates" sao mecanismo original. Dogfooding genial (phase gates para o proprio dev). Theme CRT memoravel (phosphor green, scanlines). Demo gate sem login para onboarding.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-high">9</td><td>15 fases implementadas: gates + solo flights + squadron meetings (5 fases de reuniao) + insights + billing Stripe + compliance GDPR + landing page com animacoes canvas + email notifications + multi-account. 306 arquivos TypeScript, 42K LOC.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-high">10</td><td>91% cobertura (70 test files, unit+integration split). 24 ADRs. Arquitetura 3 camadas (Actions/Services/Repos) rigidamente mantida. Webhook verification com timingSafeEqual. Inngest com retry, nonce para stale jobs, e truncamento inteligente de diffs. Pino logging estruturado.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-high">10</td><td>Mercado DevEx para codigo AI e emergente e enorme. Pricing SaaS definido e funcional via Stripe. Compliance GDPR (export endpoint). GitHub App com permissoes granulares. Pronto para investidor, pitch, ou cliente enterprise.</td></tr>
+      <tr><td>6. UX</td><td class="score-high">9</td><td>Landing page profissional com animacoes canvas (diff typing), glitch text, stats animados. Demo gate sem auth. Dashboard multi-account. Wizard guiado para revisao. Mobile responsive testado. Identidade CRT unica e memoravel.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Senior/Staff.</strong> Demonstra pensamento arquitetural maduro (3 camadas mantidas com disciplina), cultura de documentacao excepcional (24 ADRs, phase gates), e mentalidade production-ready desde o dia 1 (logging estruturado, security audit, compliance). 206 commits em 11 dias com picos de 55 commits/dia. 56% dos commits sao fixes — indica ciclo red-green-refactor ativo. Ritmo: sprints intensos alternados com dias de consolidacao.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Generation nonce</strong> (ADR-012) evita trabalho desperdicado se novo push chega enquanto gate anterior esta sendo gerado</li>
+        <li><strong>Truncamento inteligente de diffs</strong>: filtra lockfiles e codigo gerado antes de truncar a 100K chars</li>
+        <li><strong>parse-ai-json.ts</strong>: parser robusto que extrai JSON de respostas AI com code fences, texto misto, e markdown</li>
+        <li><strong>Squadron Meeting</strong>: state machine de 5 fases (Briefing &rarr; Hot Seat &rarr; Teach Back &rarr; Elaboration &rarr; Summary)</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>AI como core do produto com 4 use cases sofisticados e prompts anti-alucinacao</li>
+        <li>91% test coverage com split unit/integration e thresholds de 85% enforced</li>
+        <li>24 ADRs — maior colecao de decisoes documentadas do challenge</li>
+        <li>Dogfooding: phase gates do proprio produto usados para documentar o desenvolvimento</li>
+        <li>Stripe billing funcional com 3 tiers, seat proration, e feature gating</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>Custo de AI (Claude Sonnet 4) escala linearmente — sem caching de tokens</li>
+        <li>Squadron meetings usa polling ao inves de WebSockets para estado real-time</li>
+        <li>Truncamento de 100K chars pode perder contexto em monorepos grandes</li>
+        <li>Sem API pública documentada (OpenAPI/Swagger) para integracoes de terceiros</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O projeto dogfoodeia o proprio produto — cada fase de desenvolvimento tem um "phase gate" no formato que MOTHER gera para PRs reais. Sao 15 gates que funcionam como documentacao viva do projeto.</div>
+</div>
+
+<!-- ===== 2. FLOWXIDE ===== -->
+<div class="project-card rank-2">
+  <div class="card-header">
+    <div><span class="project-name">&#129352; flowxide</span> <span class="badge badge-silver">2o Lugar</span> <span class="badge badge-level">Senior</span></div>
+    <span class="badge badge-avg">8.17</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Samuel Flores &bull; <strong>Commits:</strong> 442 em 12 dias &bull; <strong>Stack:</strong> Rust (Actix-web) / Leptos WASM / PostgreSQL / AWS Bedrock (Claude Haiku) / OpenTofu / Stripe</div>
+  <div class="card-desc">
+    Flowxide e um SaaS de automacao visual de workflows: o usuario desenha processos num canvas infinito com drag-and-drop de nodes, conecta-os, e executa. O backend em Rust (Actix-web) processa workflows com um executor que usa Rhai para avaliar expressoes e Handlebars para templates de email. O frontend e 100% WebAssembly via Leptos (CSR). AI (Claude Haiku no AWS Bedrock) permite gerar workflows inteiros via chat com tool use — o LLM cria nodes, conexoes e layout automaticamente. Infraestrutura completa com OpenTofu na AWS (EC2 ARM64, RDS, CloudFront, SSM). Marketing site bilingue (EN/PT-BR) com Zola. 4 crates no workspace: shared, api, executor, app. Stripe para billing com plan gating.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-high">9</td><td>Claude Haiku via Bedrock com 5 tools (CRUD nodes+conexoes). Conversacao stateful (DashMap, 30min TTL). Deteccao off-topic (3-strike block). System prompt de 80+ linhas com schemas de nodes. Legal compliance atualizada. AI gating por plano Team.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-mid">7</td><td>Escolha tecnica ousada: Rust + WASM full-stack e raro e ambicioso. Canvas SVG infinito com pan/zoom. O conceito de workflow automation existe (Zapier, n8n), mas a implementacao em Rust e o AI assistant diferenciam.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-high">10</td><td>442 commits e 20K LOC de Rust — maior volume do challenge. 4 crates + marketing site + IaC (11 arquivos Terraform). 8 tipos de node, executor com Rhai, Stripe, onboarding 12 passos, WebSocket real-time, forms com questionnaires, ARM64 cross-compilation.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-mid">6</td><td>Shared types entre crates eliminam duplicacao. Error handling com anyhow+thiserror. OpenTofu IaC profissional. CI/CD com cross-compilation ARM64. Porem cobertura de testes menos visivel (WASM browser tests + unit tests, mas sem numeros claros de coverage).</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-high">9</td><td>Mercado de workflow automation: Zapier ($5B+), n8n, Make.com. Stripe integrado, multi-tenant, legal compliance, marketing site live. Dominio flowxide.com com CloudFront. Pronto para beta publico com usuarios reais.</td></tr>
+      <tr><td>6. UX</td><td class="score-high">8</td><td>Canvas SVG funcional com 8 tipos de node, drag-to-connect, context menu. AI panel deslizante (380px). Onboarding tutorial de 12 passos com spotlight. Design tokens (BEM + CSS custom properties). Dashboard com filtros e modais.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Senior.</strong> Engenheiro Rust poliglota com dominio de async/tokio, WASM, e infraestrutura AWS. 442 commits em 12 dias (~37/dia media, pico de 91 em um dia). Commits seguem conventional commits com scope por crate. 30% dos commits sao PRs mergeados (code review gate). Design docs extensivos com task breakdowns. Escolhas de dependencia maduras: cargo-nextest, sqlx compile-time, argon2 ao inves de bcrypt.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Full-stack Rust</strong>: Backend (Actix-web), Frontend (Leptos WASM), Executor (Tokio), Shared types — tudo em Rust</li>
+        <li><strong>Tool use com Claude</strong>: 5 tools (create_node, update_node, delete_node, create_connection, delete_connection) com loop de ate 10 rounds</li>
+        <li><strong>Executor com Rhai</strong>: Avalia expressoes condicionais nos workflows (condition nodes) em sandbox seguro</li>
+        <li><strong>IaC completo</strong>: OpenTofu com VPC, subnets, security groups, RDS, CloudFront, ACM, OIDC federation</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>Maior volume entregue: 442 commits, 20K LOC Rust, 4 crates + site + IaC</li>
+        <li>Ambicao tecnica: Rust/WASM full-stack e extremamente raro — demonstra expertise profunda</li>
+        <li>AI com tool use e conversacao stateful — implementacao sofisticada, nao wrapper simples</li>
+        <li>Infraestrutura AWS completa com OIDC federation (sem chaves hardcoded no CI)</li>
+        <li>Marketing site bilingue com termos de servico e politica de privacidade atualizados para AI</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>Cobertura de testes nao quantificada — sem metricas claras de coverage</li>
+        <li>Performance do canvas SVG sob stress (muitos nodes) nao demonstrada</li>
+        <li>Leptos (WASM) tem ecossistema menor que React — risco de maturidade</li>
+        <li>EC2 t4g.micro pode ser bottleneck para multiplos usuarios simultaneos</li>
+        <li>AI nao tem streaming (v1 full response only) — UX de espera ao gerar workflows</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> Com 442 commits em 12 dias (37/dia), e o projeto com maior velocidade de desenvolvimento. O pico foi 91 commits em um unico dia. A escolha de Rust full-stack com WASM e a mais ousada do challenge — nenhum outro projeto usou uma linguagem compilada tanto no backend quanto no frontend.</div>
+</div>
+
+<!-- ===== 3. MERITUS ===== -->
+<div class="project-card rank-3">
+  <div class="card-header">
+    <div><span class="project-name">&#129353; meritus</span> <span class="badge badge-bronze">3o Lugar</span> <span class="badge badge-level">Staff</span></div>
+    <span class="badge badge-avg">6.83</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Bruno Viveiros &bull; <strong>Commits:</strong> 287 em ~12 dias &bull; <strong>Stack:</strong> Fastify / Next.js 16 / Drizzle ORM / PostgreSQL / Flux 1.1 Pro (OpenRouter) / Resend</div>
+  <div class="card-desc">
+    Meritus e um sistema de badges e conquistas para reconhecimento de desenvolvedores, acionado automaticamente por webhooks do GitHub. Quando um dev mergeia um PR, faz code review, ou resolve issues, o sistema verifica criterios configurados e concede badges automaticamente. Admins podem criar badges com AI (Flux 1.1 Pro gera imagens via prompt) ou manualmente, definir criterios de conquista com thresholds, e gerenciar tiers (bronze/silver/gold). Inclui feed de atividades em tempo real, leaderboard com scoring ponderado e filtro temporal, painel admin completo com 6 secoes, e sistema de convites por email. Deploy live e funcional no Render.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-mid">7</td><td>Flux 1.1 Pro para geracao de imagens de badges (feature para admins). AI usage log com 30+ interacoes documentadas. ADRs 006 e 012 documentam decisao DALL-E 3 &rarr; OpenRouter. Claude Code para dev com TDD.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-low">2</td><td>Badge systems sao conceitos bem conhecidos em HR/DevEx. A integracao com GitHub webhooks e geracao de imagem por AI adicionam valor incremental, mas a proposta fundamental nao surpreende.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-high">8</td><td>287 commits, 16K LOC. CRUD completo + webhooks GitHub + feed scroll infinito + leaderboard + admin panel (6 paginas) + AI images + email via Resend + seed com dados demo. Deploy live e funcional.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-high">9</td><td>384 testes (281 API, 84 web, 18 shared). 13 ADRs. Zod schemas no shared package. JWT + refresh token rotation com selector/hash. HMAC webhook verification. 15 tabelas com 5 pgEnums. E2E com Playwright.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-mid">7</td><td>Developer recognition e demanda real de engenharia. Webhook-driven permite integracao com GitHub/GitLab. Poderia ser ferramenta interna de DevEx ou SaaS B2B. Leaderboard e gamificacao engajam equipes.</td></tr>
+      <tr><td>6. UX</td><td class="score-high">8</td><td>shadcn/ui profissional. Dark mode. Feed com scroll infinito e cursor pagination. Leaderboard com filtro temporal. Admin panel com 6 secoes completas. Dialogs/drawers para interacoes complexas. Mobile responsive.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Staff.</strong> A disciplina de engenharia e a mais impressionante do challenge: 384 testes, TDD evidenciado em commits ("add display-utils with label formatters (TDD)"), 13 ADRs, AI usage log detalhado, master plan com prioridades. Ritmo muito bursty — 74 commits em um dia — mas consistentemente atomico (1-6 arquivos por commit). Mentalidade de production hardening: logging infrastructure, CI/CD optimization, keepAlive timeouts.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Shared Zod schemas</strong>: Um package compartilhado garante type safety end-to-end entre API e frontend</li>
+        <li><strong>Refresh token rotation</strong> com selector/hash pattern — nivel bancario de seguranca de sessao</li>
+        <li><strong>HMAC webhook verification</strong> com constant-time comparison para prevenir timing attacks</li>
+        <li><strong>Image validation</strong> com magic-byte check e aspect ratio — nao confia em content-type</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>384 testes — maior suite de testes do challenge, com flow tests usando DB real</li>
+        <li>AI usage log documentando 30+ interacoes — transparencia total do processo com AI</li>
+        <li>Deploy live funcional (meritus-web.onrender.com) — juri pode testar agora</li>
+        <li>Master plan com priorizacao e status tracking — gestao de projeto exemplar</li>
+        <li>Demo seed script com 5 users, 5 badges, 181 events, 17 awards — pronto para demo de 10 min</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>Conceito nao inovador — gamificacao e badge systems sao well-trodden</li>
+        <li>AI image generation e um add-on, nao o core do produto</li>
+        <li>Sem annual reset implementado (documentado como "nice to have")</li>
+        <li>Render free tier pode ter cold starts e limites de performance</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> Bruno documentou um "AI usage log" com cada interacao significativa com Claude durante o desenvolvimento — data, fase, problema, prompt resumido, resultado. E a melhor evidencia de como AI foi usada como parceira no challenge inteiro.</div>
+</div>
+
+<!-- ===== 4. FIGHT-CLUB ===== -->
+<div class="project-card">
+  <div class="card-header">
+    <div><span class="project-name">4. fight-club</span> <span class="badge badge-level">Mid</span></div>
+    <span class="badge badge-avg">6.17</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Gabriel Quaresma &bull; <strong>Commits:</strong> 184 &bull; <strong>Stack:</strong> AdonisJS 6 / React 19 / PostgreSQL / Claude Sonnet / BullMQ / Valkey / Supabase</div>
+  <div class="card-desc">
+    Fight Club e uma plataforma privacy-first para gestao de aulas de artes marciais. Suporta tres perfis: professor (cria aulas, envia feedback encriptado, concede faixas), aluno (se matricula via convite, recebe feedback, pede dicas AI), e responsavel (gerencia filhos em aulas kids). O diferencial e a encriptacao AES-256 em todos os dados sensiveis (email, sobrenome, data nascimento, conteudo de feedback) com audit logging de acoes sensiveis. Claude API fornece dicas de treino personalizadas (sem enviar PII) e sugestoes de aula para professores. Notificacoes real-time via SSE, 5 jobs agendados com BullMQ, e PWA com i18n (PT-BR/EN).
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-high">8</td><td>Claude Sonnet para dicas de treino (aluno) e sugestoes de aula (professor). Zero PII nos prompts. Rate limit 10/min por usuario. CLAUDE.md (34.5KB) e PLAN.md (53.6KB) documentam workflow AI detalhadamente.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-low">3</td><td>Gestao de aulas e conceito padrao. O diferencial de privacidade (AES em PII, GDPR-style erasure) e tecnico, nao de produto. Poderia ser qualquer plataforma de aulas com encryption bolted on.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-mid">7</td><td>184 commits, 15K LOC. 3 roles, 17 controllers, AES encryption, SSE, BullMQ (5 jobs), avatar upload Supabase, reviews com rating, belt progression, notifications, PWA, i18n, GitHub issues integration.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-mid">7</td><td>98 arquivos de teste (functional + unit + E2E). Testes de encryption, PII isolation, e anonymization. Security headers middleware. Audit logging. Policies de autorizacao. Opaque tokens com SHA-256.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-mid">5</td><td>Nicho de artes marciais e limitado (~160K academias no Brasil). Privacy-first e diferencial, mas compliance nao e o que vende para donos de academia. Poderia pivotar para educacao ou esportes em geral.</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">7</td><td>Landing page com features, 3 dashboards especializados por role. shadcn/ui consistente. PWA instalavel. Bottom nav mobile. Toast system. Confirm dialogs. Loading states em todos os botoes.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Mid.</strong> Workflow PR-driven com merge commits e documentacao organizada (CLAUDE.md de 34.5KB, PLAN.md de 53.6KB). Ritmo bursty — pico de 38 commits em um dia. Tamanho de commits variavel (1 arquivo ate 344 insercoes) sugere curva de aprendizado com a ferramenta AI. Forte consciencia de seguranca (encriptacao, audit logs, security headers) para nivel mid — pode indicar experiencia previa em compliance.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>AES-256 em Lucid hooks</strong>: prepare/consume encriptam/decriptam transparentemente em cada query</li>
+        <li><strong>email_hash (SHA-256)</strong> para lookups deterministicos sem expor email em plaintext no DB</li>
+        <li><strong>User anonymizer</strong>: hard-delete de enrollments + anonimizacao de PII + nullificacao de audit logs</li>
+        <li><strong>SSE com multiplas conexoes</strong>: suporta varias abas do mesmo usuario com heartbeat anti-timeout</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>Privacy-first com AES-256 em 6+ colunas de PII — acima da media para projetos web</li>
+        <li>Testes de encryption e data isolation — verifica que PII nao vaza em API responses</li>
+        <li>3 roles completos com fluxos distintos (professor, aluno, responsavel)</li>
+        <li>5 scheduled jobs (BullMQ) para cleanup, lembretes, e review prompts</li>
+        <li>PLAN.md de 53.6KB — o maior documento de planejamento do challenge</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>Conceito pouco inovador — gestao de aulas e problema comoditizado</li>
+        <li>Tamanho de commits inconsistente — sugere menos disciplina de atomicidade</li>
+        <li>Sem testes de carga — AES em cada query pode ser bottleneck com muitos usuarios</li>
+        <li>Dependencia de Supabase para storage adiciona ponto de falha externo</li>
+        <li>SSE polling fallback (60s) e lento para notificacoes real-time</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O PLAN.md tem 53.6KB — maior documento de planejamento do challenge. O CLAUDE.md tem 34.5KB — maior guia de desenvolvimento AI. Juntos somam quase 90KB de documentacao de processo, sugerindo uso intensivo de AI como parceira de planejamento.</div>
+</div>
+
+<!-- ===== 5. GABARITAI ===== -->
+<div class="project-card">
+  <div class="card-header">
+    <div><span class="project-name">5. gabaritai</span> <span class="badge badge-level">Senior</span></div>
+    <span class="badge badge-avg">6.00</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Antonio Paulino &bull; <strong>Commits:</strong> 91 &bull; <strong>Stack:</strong> Rails 8 / Hotwire / PostgreSQL / Gemini 3.1 Flash / Solid Queue / Grover (PDF)</div>
+  <div class="card-desc">
+    GabaritAI e uma plataforma de preparacao para o ENEM que usa AI multimodal (Gemini vision + text) para automatizar o ciclo de estudo. O aluno faz upload de uma folha de respostas (foto/PDF) e do gabarito oficial &rarr; Gemini faz OCR para extrair respostas &rarr; correcao automatica &rarr; explicacao personalizada por questao &rarr; analytics de performance por area de conhecimento (Matematica, Linguagens, Ciencias Humanas, Ciencias da Natureza). Inclui dashboard com graficos de evolucao, top 5 pontos fortes/fracos, e sistema de metas de estudo. Feature unica: "answer contest" onde o aluno desafia a AI se discordar da resposta. DDD com 7 bounded contexts. Adapter pattern permite trocar Gemini por Ollama no dev.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-high">8</td><td>Gemini multimodal para 5 use cases: OCR de respostas, OCR de gabarito, geracao de answer key, explicacao por questao, e recomendacoes de estudo. Adapter pattern (Gemini/Ollama/Stub). CLAUDE.md com TDD obrigatorio.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-low">4</td><td>ENEM prep platforms existem (Descomplica, Stoodi), mas o uso de AI multimodal para OCR + correcao + explicacao e diferenciado. "Answer contest" (aluno desafia AI) e toque criativo original.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-mid">6</td><td>91 commits, 7 bounded contexts, pipeline AI completo (upload &rarr; OCR &rarr; grading &rarr; explanation &rarr; analytics). Dashboard com graficos. Porem Organization/Classroom context parcialmente stub.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-mid">5</td><td>65 test files (RSpec). DDD com 7 contextos. Adapter pattern. ServiceResult wrapper. Pundit policies. Porem sem E2E, sem coverage metrics, e Organization context incompleto. Memory optimizations para Render free tier.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-mid">7</td><td>ENEM afeta ~5M estudantes/ano no Brasil. AI grading + explicacao personalizada sao diferenciais reais vs plataformas existentes. Modelo freemium viavel. Per-question analytics nao existe nos concorrentes.</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">6</td><td>Design system documentado (DESIGN.md "Academic Precision Framework"). Upload multi-step (3 passos). Dashboard com Chartkick/Chart.js. Cores por area de conhecimento. Turbo broadcasts para status real-time.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Senior.</strong> Commits atomicos e feature-driven (1-7 arquivos por commit). Refactoring discipline visivel em multiplos commits de "review findings". DDD com 7 bounded contexts e ambicioso e bem executado. Deployment optimization (memory tuning para Render 512MB) demonstra consciencia de producao. Ritmo steady-bursty com pico de 32 commits em um dia.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>AI multimodal</strong>: Gemini processa imagens (fotos de gabarito) E texto — nao so chat</li>
+        <li><strong>Answer contest</strong>: Aluno pode desafiar a AI se discordar, recalculando score</li>
+        <li><strong>Solid Stack completo</strong>: Queue + Cache + Cable sem Redis — zero dependencias externas</li>
+        <li><strong>DESIGN.md</strong> com paleta por area de conhecimento (Math=azul, Linguagens=roxo, etc.)</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>AI multimodal (vision + text) com 5 use cases distintos — mais diverso que a maioria</li>
+        <li>DDD com 7 bounded contexts — arquitetura mais granular do challenge</li>
+        <li>Answer contest e feature unica: aluno pode corrigir a AI</li>
+        <li>Zero dependencias externas: Solid Queue/Cache/Cable eliminam Redis</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>Organization/Classroom contexts parcialmente stub — escopo nao completado</li>
+        <li>Sem testes E2E — gap significativo para pipeline AI que depende de arquivos</li>
+        <li>Sem rate limiting nas chamadas Gemini — risco de custo descontrolado</li>
+        <li>Sem caching de respostas AI — mesma questao gera custo repetido</li>
+        <li>Memory de 512MB no Render limita capacidade de processamento de imagens</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O DESIGN.md define uma "Academic Precision Framework" com north star "The Digital Curator" e estilo de "jornal academico premium". Cada area de conhecimento do ENEM tem cor propria: Matematica (azul), Linguagens (roxo), Humanas (laranja), Natureza (verde). O nivel de detalhe de design e incomum para um backend developer.</div>
+</div>
+
+<!-- ===== 6. SUNLIGHT ===== -->
+<div class="project-card">
+  <div class="card-header">
+    <div><span class="project-name">6. sunlight</span> <span class="badge badge-level">Mid-Senior</span></div>
+    <span class="badge badge-avg">5.67</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Jeferson Brito &bull; <strong>Commits:</strong> 128 &bull; <strong>Stack:</strong> Nuxt 4 / Vue 3 / Cloudflare Workers+D1+KV / Google Gemini 2.5 Flash / Better Auth</div>
+  <div class="card-desc">
+    Sunlight e um micro-wellness companion para knowledge workers. Conecta-se ao Google Calendar, analisa a agenda do usuario em tempo real, e detecta janelas de 5-45 minutos entre reunioes usando 5 regras configuradas (duracao, horario de trabalho, throttling, dismissals consecutivos, lookahead de 60 min). Nessas janelas, entrega "momentos" personalizados — exercicios de respiracao, grounding, reflexao, sensoriais e fisicos — selecionados por um algoritmo de scoring com 6 fatores. AI (Gemini) gera insights semanais opt-in baseados no engajamento. Totalmente local-first: dados de calendario ficam no dispositivo (IndexedDB via Dexie), e apenas identidade e salva no servidor. Deploy serverless no Cloudflare (Workers + D1 + KV). Push notifications via Web Push API com VAPID. 20+ momentos curados com desbloqueio progressivo semanal.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-mid">5</td><td>Gemini 2.5 Flash para insights semanais opt-in. Feature auxiliar, nao central. Prompt cuidadoso ("2-3 sentences max, no stats"). Testado com mocks. CLAUDE.md presente. 14 spec docs sugerem AI no planejamento.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-mid">6</td><td>Gap detection no calendario e nicho criativo. 5 regras de deteccao e 6 fatores de scoring sao bem engenhados. Desbloqueio progressivo de conteudo e gamificacao sutil. Privacy-first (local-first) e diferencial.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-mid">6</td><td>128 commits. PWA completa com service worker, push notifications, cron dispatcher (15 min), onboarding 3 steps, Google Calendar sync, 20+ momentos curados, settings com horario de trabalho. Focado mas completo.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-mid">7</td><td>19 test files (unit + component + E2E Playwright). 9 ADRs. Code conventions doc. Zod validation. VAPID push corretamente implementado. oxlint + oxfmt para linting. CSS com oklch color space e container queries.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-low">4</td><td>Mercado de wellness e saturado (Calm, Headspace, etc.). PWA sem app store limita distribuicao. Poderia pivotar para wellness corporativo (B2B), mas falta diferencial competitivo forte vs apps estabelecidos.</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">6</td><td>Estetica quente e acolhedora (tons peach, Poppins+Lora fonts). Onboarding em 3 passos limpos. Momento view full-screen imersiva. Settings intuitivo. Mobile-first PWA. Porem poucas telas e interacoes limitadas.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Mid-Senior.</strong> Ritmo muito steady — distribuicao uniforme de 10-31 commits/dia. Commits small-medium (1-9 arquivos) bem escopados. 14 spec docs sugerem planejamento cuidadoso antes de codificar. Bom entendimento de serverless (Cloudflare Workers, D1, KV). Security-conscious (fixes de seguranca vistos nos commits recentes). Escolhas modernas: oklch colors, CSS container queries, oxlint.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Gap detection algorithm</strong>: 5 regras compostas (duracao, horario, throttle, dismissals, lookahead)</li>
+        <li><strong>Moment selection scoring</strong>: 6 fatores (tipo, recencia, engajamento, novidade, progressao, aleatoriedade)</li>
+        <li><strong>Local-first architecture</strong>: Calendar data em IndexedDB (Dexie), nunca sai do dispositivo</li>
+        <li><strong>Cron dispatcher no Cloudflare</strong>: Worker agendado a cada 15 min busca subscriptions do KV e envia push</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>Algoritmos proprietarios (gap detection + moment scoring) sao IP real</li>
+        <li>Local-first com privacidade genuina — dados de calendario nunca saem do dispositivo</li>
+        <li>14 spec documents e 9 ADRs — documentacao proporcional a projetos maiores</li>
+        <li>Serverless completo (Cloudflare Workers + D1 + KV) — custo operacional minimo</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>AI e feature opt-in secundaria — nao e central ao produto</li>
+        <li>Mercado de wellness saturado — competir com Calm/Headspace e dificil</li>
+        <li>Poucas telas: index, moment, insight, onboarding, settings — UX limitada</li>
+        <li>20 momentos curados e pouco conteudo para retencao de longo prazo</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O algoritmo de selecao de momentos usa 6 fatores ponderados — tipo preferido, recencia, engajamento historico, novidade, progressao semanal, e componente aleatorio. E o sistema de recomendacao mais engenhado do challenge, mesmo sendo para "momentos de respiracao".</div>
+</div>
+
+<!-- ===== 7. PIANO-MAN ===== -->
+<div class="project-card disqualified">
+  <div class="card-header">
+    <div><span class="project-name">7. piano-man</span> <span class="badge badge-disqualified">Sem evidencia de AI</span> <span class="badge badge-level">Mid-Senior</span></div>
+    <span class="badge badge-avg">5.50</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Felipe (feliperli) &bull; <strong>Commits:</strong> 87 &bull; <strong>Stack:</strong> React 19 / PixiJS 8 / TypeScript strict / Vitest / Playwright</div>
+  <div class="card-desc">
+    pIAnoMan e um jogo de ritmo 2D em pixel art com narrativa emocional: Mr. Watson, professor de musica numa escola pobre, toca piano enquanto alunos gravam para um canal do YouTube. O jogador usa 4 teclas (A/S/K/L) para acertar notas em 4 lanes com perspectiva 3D. O jogo tem economia completa: views geram subscribers que geram dinheiro para comprar novas musicas ($5 cada) e upgrades para a sala de aula (whiteboard, ar-condicionado, disco ball, maquina de fumaca — cada um com bonus de 10-20% nos ganhos). 13 musicas jogaveis com dificuldade calculada algoritmicamente. DDD exemplar com 4 camadas: domain (pure functions), application (React hooks), infrastructure (browser APIs), presentation (PixiJS). Pipeline ML (basic_pitch + librosa) para transcrever audio em tablatura. Deteccao de hit com timing windows, combo counter, performance gauge (fail a 0%).
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-zero">0</td><td>Nenhuma evidencia em commits (87), README, codigo, ou configuracoes. Sem CLAUDE.md, .claude/, ou mencoes a Claude/Copilot/GPT. CLAUDE.md presente mas sem indicios de geracao por AI. Nao atende ao requisito central.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-high">10</td><td>O projeto mais criativo: jogo de ritmo completo com narrativa emocional, pixel art, sistema economico (views/subs/money), upgrades visuais com efeito na sala, 13 musicas, perspectiva 3D em canvas 2D. Pipeline ML para transcricao de audio.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-mid">5</td><td>87 commits, 7.8K LOC, 143 arquivos TS. 13 musicas, loja com 2 abas, 6 upgrades, 7 cenas, efeitos visuais. Bom para um jogo indie, mas escopo menor que apps SaaS com backend, auth, billing.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-high">9</td><td>DDD exemplar: domain layer 100% puro (sem React/PixiJS). TypeScript strict com zero `any`. Imutabilidade consistente (ReadonlySet, spread operators). 24 unit + 5 E2E. 10 ADRs. Canvas testing via data-attributes (tecnica inovadora).</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-low">2</td><td>Jogo web nicho. Rhythm games e dominado por plataformas estabelecidas (Guitar Hero, osu!). Potencial como jogo educacional ou indie, mas mercado limitado. Sem monetizacao ou modelo de negocio.</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">7</td><td>Experiencia de jogo completa: intro narrativa, selecao de musica com dificuldade, gameplay fluido, resultados com breakdown, loja com navegacao por teclado. Pixel art charmoso. Animacoes (breathing, glow, crowd). Keyboard-only.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Mid-Senior.</strong> DDD impecavel com 4 camadas e zero violacao de dependencias — isso requer disciplina e entendimento profundo de arquitetura. Commits large-feature (16-25 arquivos, 878 insercoes) sugerem batching em vez de atomicidade. 10 ADRs mostram reflexao sobre decisoes. CLAUDE.md presente com regras de arquitetura, mas sem .claude/ directory. Bom refactoring discipline (hook extraction, constant consolidation em commits dedicados).
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Domain layer 100% puro</strong>: gameReducer e state machine deterministica sem efeitos colaterais</li>
+        <li><strong>Discriminated unions</strong> para GamePhase e GameEvent — exhaustive switches enforced pelo compiler</li>
+        <li><strong>Canvas E2E testing</strong>: expoe estado via data-attributes no body quando VITE_E2E=true — tecnica original</li>
+        <li><strong>ChiptuneSynth</strong>: sintetizador de onda quadrada (estilo Game Boy) implementado com Web Audio API</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>DDD mais limpo do challenge — domain layer e textbook-quality para ensino</li>
+        <li>Criatividade excepcional: narrativa emocional + mecanica de jogo + economia + pixel art</li>
+        <li>TypeScript strict sem ANY — disciplina de tipagem acima de todos os outros projetos</li>
+        <li>Pipeline ML (basic_pitch) para converter audio real em tablatura jogavel</li>
+        <li>Tecnica original de E2E testing para canvas (data-attributes) resolve problema real</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li><strong>ZERO evidencia de uso de AI</strong> — problema fundamental para este challenge</li>
+        <li>Commits grandes (16-25 arquivos) ao inves de atomicos</li>
+        <li>Client-side only — sem backend, auth, ou persistencia alem de localStorage</li>
+        <li>13 musicas hardcoded — sem sistema de upload ou community content</li>
+        <li>Sem modelo de negocio ou monetizacao</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O sintetizador ChiptuneSynth gera sons de Game Boy usando Web Audio API com ondas quadradas. A perspectiva 3D dos lanes e calculada com transformacao matematica pura em canvas 2D — sem WebGL. O gameReducer e tao puro que poderia ser executado em qualquer runtime JavaScript sem modificacao (Node, Deno, Bun, browser).</div>
+</div>
+
+<!-- ===== 8. LENU ===== -->
+<div class="project-card">
+  <div class="card-header">
+    <div><span class="project-name">8. lenu</span> <span class="badge badge-level">Senior</span></div>
+    <span class="badge badge-avg">5.00</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Marcelo Alexandre &bull; <strong>Commits:</strong> 42 &bull; <strong>Stack:</strong> Rails 8 / Phlex / Tailwind 4 / Claude (RubyLLM) / Solid Queue / SQLite (per-tenant)</div>
+  <div class="card-desc">
+    Lenu (nome da personagem Elena das novelas napolitanas de Ferrante) e uma companheira criativa para criadores de conteudo. A filosofia central: "AI como alavanca para as ideias do criador, nao uma fabrica de conteudo." O fluxo: criador captura material-fonte (URLs com extracao automatica via Readability, links YouTube, notas avulsas) &rarr; organiza por tags &rarr; seleciona captures + formatos (video longo/curto, texto longo/curto) &rarr; Claude gera 1-5 ideias por formato respeitando a voz do criador. DDD com 3 bounded contexts (Identity, Capture, Ideation) documentados em dominio. Command/Query separation. Per-user SQLite databases para isolamento total de dados. Phlex para views em Ruby puro (sem ERB). Invite-only com validacao de dominio de email.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-mid">6</td><td>Claude via RubyLLM para geracao de ideias. PromptAssemblyService com chunking inteligente (max 2K/capture, 8K total). Prompts em portugues respeitando voz do criador. CLAUDE.md + .agents/skills indicam AI no dev. Porem 1 use case apenas.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-mid">5</td><td>Filosofia "AI como alavanca, nao fabrica" e diferenciada. Captura de material-fonte como input para AI e abordagem interessante. Nome literario (Ferrante) mostra personalidade. Mas assistentes de conteudo sao mercado competitivo.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-low">3</td><td>42 commits — menor volume do challenge. MVP com captures, tags, ideation, settings. Features adiadas: edicao in-app, chat AI, YouTube transcripts, tags sugeridas por AI. Foundation solida mas entrega limitada.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-high">8</td><td>DDD com 3 bounded contexts + domain docs. Command/Query separation. 49 test files com testing strategy document. Lighthouse CI no pipeline. Brakeman + bundler-audit. Per-user SQLite tenancy (isolamento real, nao row-level).</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-mid">5</td><td>Mercado de content creators e grande mas competitivo (Notion AI, Jasper). A filosofia anti-"AI slop" pode atrair nicho premium. Poderia evoluir para ferramenta de agencia. Closed alpha limita validacao.</td></tr>
+      <tr><td>6. UX</td><td class="score-low">3</td><td>MVP funcional. Phlex components limpos. Bottom nav mobile. Polling para status (3s interval, 60s max). Porem visualmente basico, sem animacoes, poucas telas, e design sem personalidade forte.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Senior.</strong> Arquitetura madura alem do volume de commits. DDD com domain docs como contrato, command/query separation, testing strategy document — tudo indica experiencia significativa. Ritmo steady com sprint inicial (18 commits dia 1) seguido de 1-4/dia. Commits de features grandes (27+ arquivos, 795 insercoes) sugerem preferencia por completude antes de commit. Adocao de Phlex (views em Ruby puro) mostra awareness de patterns emergentes. Prioriza qualidade sobre quantidade.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>Per-user SQLite databases</strong>: Cada tenant tem DB proprio via activerecord-tenanted — isolamento fisico, nao logico</li>
+        <li><strong>PromptAssemblyService</strong>: Chunking inteligente com max 2K/capture e 8K total para evitar desperdicio de tokens</li>
+        <li><strong>Domain docs como contrato</strong>: 5 docs de dominio (bounded contexts, ubiquitous language, invariants)</li>
+        <li><strong>Lighthouse CI</strong>: Performance, accessibility, SEO e best practices medidos automaticamente no CI</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>Arquitetura DDD madura com domain docs como "source of truth"</li>
+        <li>Testing strategy document alinha testes com risco — nao busca 100% coverage por merito</li>
+        <li>Per-user database isolation e a abordagem de tenancy mais forte do challenge</li>
+        <li>Lighthouse CI automatizado — unico projeto que mede performance no pipeline</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>42 commits — menor entrega do challenge em volume</li>
+        <li>UX basica sem polimento visual — Phlex e funcional mas sem personalidade</li>
+        <li>Muitas features adiadas (chat AI, YouTube transcripts, tags AI)</li>
+        <li>Per-user SQLite e complexo operacionalmente (backup, migracao, monitoring por DB)</li>
+        <li>Closed alpha com invite code limita validacao com usuarios reais</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O nome "Lenu" vem da protagonista Elena (apelido Lenu) da serie Napolitana de Elena Ferrante. A filosofia do produto — AI como companheira criativa, nao substituta — ecoa a relacao entre as personagens Lenu e Lila no livro. E o unico projeto com referencia literaria no nome.</div>
+</div>
+
+<!-- ===== 9. SDR-RADAR ===== -->
+<div class="project-card disqualified">
+  <div class="card-header">
+    <div><span class="project-name">9. SDR-Radar-Chanllenge</span> <span class="badge badge-disqualified">Sem evidencia de AI</span> <span class="badge badge-level">Junior-Mid</span></div>
+    <span class="badge badge-avg">5.00</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Rafael Martins &bull; <strong>Commits:</strong> 82 &bull; <strong>Stack:</strong> TypeScript / C (N-API) / Fastify / React / Leaflet / TimescaleDB / GraphQL / WebSocket</div>
+  <div class="card-desc">
+    SDR Radar e um sistema de radar de aviacao caseiro usando hardware RTL-SDR (dongle USB de radio definido por software). O pipeline: addon nativo em C (1.787 LOC) se comunica com o hardware USB via N-API com thread safety &rarr; decodificador ADS-B em TypeScript processa sinais (magnitude IQ, deteccao de preambulo, CRC-24, CPR resolution para coordenadas) &rarr; backend Fastify recebe dados via HTTP, persiste em TimescaleDB, e distribui via WebSocket + GraphQL &rarr; frontend React com mapa Leaflet mostra aeronaves em tempo real com trails, heatmap temporal, replay historico, e circulo de alcance maximo. Suporta multiplos receptores (stations). Deploy no Railway com Docker multi-arch (amd64 + arm64 para Raspberry Pi). Modo simulado para desenvolvimento sem hardware.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-zero">0</td><td>Nenhuma evidencia. Sem mencoes a Claude/Copilot/GPT em commits, README, codigo, ou configs. Sem CLAUDE.md, .claude/, PLAN.md. Diary de desenvolvimento documenta aprendizado manual ("I have been studying").</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-high">10</td><td>Projeto mais tecnicamente unico: hardware USB &rarr; C nativo &rarr; signal processing &rarr; web full-stack. Integracao hardware-software e extremamente rara em desafios web. CRC-24, CPR resolution, preamble detection — dominio de aviacao real.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-mid">7</td><td>82 commits, 5 packages monorepo. 1.787 LOC de C, decodificador ADS-B completo, 3 Dockerfiles, multi-arch (amd64+arm64). Frontend com replay, heatmap, tutorial, multiplos temas. Deploy live no Railway.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-mid">5</td><td>18 test files com decoder tests abrangentes (CRC, CPR, preamble). CI/CD GitHub Actions. Multi-arch Docker. Boa organizacao monorepo. Porem commits grandes (8-11 arquivos, 1149 insercoes) e menos testes que outros projetos.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-low">3</td><td>Nicho muito especifico: entusiastas de aviacao/radio amador. Dependencia de hardware USB limita audiencia. Alternativas existem (dump1090, FlightAware). Poderia ser educacional ou para escolas de aviacao.</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">5</td><td>Mapa Leaflet funcional com multiplos temas, trails por aeronave, heatmap temporal, replay com scrubber. Tutorial interativo com spotlight. Mobile responsive. Porem interface tecnica voltada para nicho.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Junior-Mid.</strong> Commits grandes (8-11 arquivos, 861-1149 insercoes) indicam menos experiencia com atomicidade. Sem CLAUDE.md, .claude/, PLAN.md, ou qualquer evidencia de workflow com AI. Diary de desenvolvimento mostra aprendizado manual em ADS-B. Porem, o codigo C demonstra conhecimento de sistemas (thread safety, N-API, buffer finalizers) que sugere background em engenharia ou embedded. Ritmo moderate bursty com baseline de 7-16 commits/dia.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>C nativo com N-API</strong>: Threadsafe functions para marshaling de callbacks USB para event loop Node.js</li>
+        <li><strong>Decodificador ADS-B completo</strong>: CRC-24, CPR global+local resolution, IQ magnitude com LUT 256x256</li>
+        <li><strong>Multi-arch Docker</strong>: Imagens amd64 + arm64 para rodar em Raspberry Pi — unico projeto com suporte ARM real</li>
+        <li><strong>TimescaleDB</strong>: Hypertable para dados de tracking temporal — escolha otima para time-series</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>Proeza tecnica: C nativo com thread safety + signal processing + web full-stack</li>
+        <li>Conhecimento de dominio profundo em ADS-B/aviacao (nao e conhecimento comum)</li>
+        <li>Multi-arch Docker para Raspberry Pi — pensamento de deploy real com hardware</li>
+        <li>Deploy live no Railway com frontend acessivel publicamente</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li><strong>ZERO evidencia de uso de AI</strong> — dissonancia total com o challenge</li>
+        <li>Commits grandes e esparsos — falta atomicidade</li>
+        <li>Sem CLAUDE.md, .claude/, PLAN.md — nenhum artefato de workflow AI</li>
+        <li>Nicho extremamente limitado — hardware-dependent</li>
+        <li>Diary documenta aprendizado manual, reforçando ausencia de AI</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> O decoder implementa CPR (Compact Position Reporting) — algoritmo que converte posicoes de aeronaves com apenas 17 bits de latitude e longitude usando resolucao global (2 mensagens de zonas diferentes) ou local (1 mensagem + referencia). O código C inclui uma LUT de 256x256 pre-calculada para conversao IQ &rarr; magnitude, otimizando processamento de amostras em tempo real.</div>
+</div>
+
+<!-- ===== 10. COMPOUND ===== -->
+<div class="project-card">
+  <div class="card-header">
+    <div><span class="project-name">10. compound</span> <span class="badge badge-level">Senior</span></div>
+    <span class="badge badge-avg">4.67</span>
+  </div>
+  <div class="card-meta"><strong>Participante:</strong> Marcio Flavio &bull; <strong>Commits:</strong> 50 &bull; <strong>Stack:</strong> Rails 8 / Hotwire / Tailwind / SQLite / Groq (Llama 3.3 70B) / Kamal</div>
+  <div class="card-desc">
+    Compound e um app web para investidores de longo prazo no Brasil. Combina gestao de portfolio (acoes B3, renda fixa, FIIs, internacional, crypto), analise fundamentalista (P/L, P/VP, preco justo de Graham, CAGR, dividend yield) com AI para duas funcionalidades: PIAR (Plano de Alocacao de Investimentos Recomendado) que gera alocacao personalizada baseada em perfil de investidor (idade, tolerancia a risco, horizonte, renda), e Portfolio Analyzer que avalia posicoes atuais vs plano ideal identificando sobreposicoes, gaps de diversificacao, e problemas de qualidade. Usa Groq (Llama 3.3 70B) em producao e Ollama no dev. Bilingue (PT-BR/EN). Auth com email/password + passkey/WebAuthn. Deploy via Kamal com SSL.
+  </div>
+  <table class="score-table">
+    <thead><tr><th>Criterio</th><th>Nota</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>1. Uso de AI</td><td class="score-mid">7</td><td>Groq/Llama para PIAR (alocacao, temp=0.7) e Portfolio Analyzer (findings, temp=0.3). Adapter pattern (OpenAI-compatible). Prompts com regras (nenhuma classe >40%, foco longo prazo). Background job async. CLAUDE.md de 12.5KB.</td></tr>
+      <tr><td>2. Criatividade</td><td class="score-low">2</td><td>Ferramentas de investimento sao abundantes (Rico, XP, Status Invest). P/L, P/VP, Graham sao metricas padrao. AI para alocacao adiciona valor incremental. Posicionamento "informacional" (nao recomenda compra/venda) e inteligente mas limitante.</td></tr>
+      <tr><td>3. Escopo</td><td class="score-low">4</td><td>50 commits — segundo menor volume. Portfolio CRUD, stock analysis (5 metricas), AI allocation, AI portfolio analysis, passkey auth, i18n. Funcional e completo para o que propoe, mas com menos features que outros.</td></tr>
+      <tr><td>4. Qualidade Tecnica</td><td class="score-low">4</td><td>61 test files (models, controllers, services, jobs). Service-oriented arch. Adapter pattern. Money-rails para precisao. Pessimistic locking. Porem 50 commits para 2 semanas e pouco incremental. Rate limiting basico.</td></tr>
+      <tr><td>5. Potencial Real</td><td class="score-mid">6</td><td>Mercado fintech no Brasil e grande. PIAR com AI pode atrair investidores iniciantes. Disclaimer "informacional" evita regulacao (CVM). Groq gratuito reduz custos. Porem competicao e feroz (Rico, XP, Warren).</td></tr>
+      <tr><td>6. UX</td><td class="score-mid">5</td><td>Tema gold-dark coerente. Manrope font. Dashboard com portfolio summary. Stock analysis com metric cards e tooltips. Turbo Streams para updates async. Bilingue. Porem views sao Rails padrao sem diferencial visual forte.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="details-grid">
+    <div class="detail-box box-dev">
+      <div class="box-label">Perfil do Desenvolvedor</div>
+      <strong>Nivel: Senior.</strong> Apesar do volume menor (50 commits), demonstra maturidade em decisoes de producao: Kamal deployment, SSL via Let's Encrypt + Cloudflare, WebAuthn/passkey (poucos devs implementam), money-rails para precisao financeira, pessimistic locking para concorrencia. PR-driven workflow com 13 PRs mergeados. Ritmo slow-steady com pico de 13 commits/dia. Commits atomicos (1-3 arquivos). CLAUDE.md de 12.5KB indica planejamento cuidadoso.
+    </div>
+    <div class="detail-box box-tech">
+      <div class="box-label">Destaques Tecnicos</div>
+      <ul>
+        <li><strong>WebAuthn/Passkey auth</strong>: Discoverable credentials com RP ID explicito — poucos projetos implementam</li>
+        <li><strong>Money-rails</strong>: Armazena valores como integer cents — elimina erros de floating point financeiro</li>
+        <li><strong>Pessimistic locking</strong>: with_lock em positions para buy/sell concorrente — awareness de race conditions</li>
+        <li><strong>Groq gratuito</strong>: Usa Llama 3.3 70B via Groq API — custo zero de AI em producao</li>
+      </ul>
+    </div>
+    <div class="detail-box box-strong">
+      <div class="box-label">Pontos Fortes</div>
+      <ul>
+        <li>WebAuthn/Passkey — autenticacao mais moderna do challenge</li>
+        <li>Adapter pattern para LLM permite trocar provider sem mudar logica</li>
+        <li>Money-rails + pessimistic locking — consciencia de dominio financeiro</li>
+        <li>Groq gratuito como provider — custo zero de AI em producao</li>
+      </ul>
+    </div>
+    <div class="detail-box box-weak">
+      <div class="box-label">Pontos de Atencao</div>
+      <ul>
+        <li>50 commits para 2 semanas — entrega abaixo da media do grupo</li>
+        <li>Conceito pouco inovador — ferramentas de investimento sao comoditizadas</li>
+        <li>UX sem diferencial visual — tema gold-dark e coerente mas generico</li>
+        <li>Posicionamento "informacional" limita o que o produto pode fazer</li>
+        <li>Dependencia de API Brapi (dados B3) com tier gratuito limitado</li>
+      </ul>
+    </div>
+  </div>
+  <div class="curiosidade"><strong>Curiosidade:</strong> E o unico projeto que usa Groq como provider de AI — Llama 3.3 70B com custo zero via API gratuita. Tambem e o unico com autenticacao por Passkey/WebAuthn, a forma mais moderna e segura de login (sem senhas). A combinacao de "custo zero de AI" + "auth sem senha" mostra um dev que otimiza custos e seguranca simultaneamente.</div>
+</div>
+
+<!-- ========== PROMPT ANALYSIS ========== -->
+<h2>Analise de Qualidade dos Prompts de AI</h2>
+<div class="note-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+  <strong>Metodologia:</strong> Leitura dos prompts reais (system prompts, user prompts, tool definitions) enviados ao LLM em cada projeto. Avaliados em: clareza, especificidade, controle de formato de saida, guardrails de seguranca, riqueza de contexto, e sofisticacao de prompt engineering.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>#</th><th>Projeto</th><th>Nota</th><th>Provider</th><th>Tecnica Principal</th><th>Maior Falha</th></tr></thead>
+  <tbody>
+    <tr class="rank-1"><td>&#129351;</td><td style="text-align:left">mother</td><td>9.0</td><td>Claude Sonnet 4</td><td>Anti-alucinacao explicita + JSON schema + validacao runtime</td><td>Verbosidade pode diluir atencao do modelo</td></tr>
+    <tr class="rank-2"><td>&#129352;</td><td style="text-align:left">flowxide</td><td>8.5</td><td>Claude Haiku (Bedrock)</td><td>Tool use com 5 ferramentas + JSON Schema + heuristica de decisao</td><td>Sem controle de formato para respostas texto</td></tr>
+    <tr class="rank-3"><td>&#129353;</td><td style="text-align:left">compound</td><td>8.0</td><td>Groq / Llama 3.3</td><td>Guardrails financeiros + few-shot example + regras de negocio</td><td>Sem anti-alucinacao para metricas financeiras</td></tr>
+    <tr><td>4</td><td style="text-align:left">gabaritai</td><td>7.5</td><td>Gemini 3.1 Flash</td><td>Multimodal (vision+text) + tom pedagogico + proibicao de markdown</td><td>determine_correct_answers depende de memoria do LLM para respostas de provas especificas</td></tr>
+    <tr><td>5</td><td style="text-align:left">lenu</td><td>7.0</td><td>Claude (RubyLLM)</td><td>4 prompts por formato + anti-plagio + budget de tokens</td><td>Sem guardrails de seguranca + sem few-shot</td></tr>
+    <tr><td>6</td><td style="text-align:left">fight-club</td><td>6.0</td><td>Claude Sonnet</td><td>Protecao de PII + adaptacao kids + i18n</td><td>Prompt muito curto (2 frases) + output Markdown livre + sem guardrail medico</td></tr>
+    <tr><td>7</td><td style="text-align:left">meritus</td><td>5.5</td><td>Flux 1.1 Pro</td><td>Sanitizacao de input + contexto de tier/progressao</td><td>Prompt minimo para geracao de imagem + sem negative prompts</td></tr>
+    <tr><td>8</td><td style="text-align:left">sunlight</td><td>4.0</td><td>Gemini 2.5 Flash</td><td>Controle de tom ("warm", "gentle")</td><td>~8 linhas total, sem system prompt, parametro style nao explicado ao modelo</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-tech">
+    <div class="box-label">O que separa os melhores</div>
+    <ul>
+      <li><strong>Validacao runtime</strong>: mother e compound parsam e validam JSON do AI com schemas. sunlight e fight-club confiam no output bruto.</li>
+      <li><strong>Anti-alucinacao</strong>: mother tem 3+ regras explicitas por prompt ("Base topics ONLY on the provided diff", "Never generate URLs from memory"). sunlight tem zero.</li>
+      <li><strong>Output estruturado</strong>: Top 4 exigem JSON com schema exato. Bottom 3 retornam texto livre.</li>
+      <li><strong>Few-shot examples</strong>: Apenas compound inclui exemplo completo de resposta esperada no prompt.</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Red Flags Encontrados</div>
+    <ul>
+      <li><strong>gabaritai</strong>: Pede ao LLM para "fornecer respostas corretas com base no seu conhecimento" para provas ENEM especificas — alto risco de alucinacao</li>
+      <li><strong>fight-club</strong>: Dicas de treino de artes marciais sem guardrail contra conselhos medicos/lesoes</li>
+      <li><strong>sunlight</strong>: Parametro "style" (direct/reflective) injetado no prompt mas nunca explicado ao modelo</li>
+      <li><strong>meritus</strong>: Geracao de imagem sem negative prompts (pratica padrao em image gen)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="curiosidade"><strong>Destaque:</strong> O prompt de mother inclui a regra <em>"Pre-computed data separation: Category pass rates and knowledge silos are pre-computed from actual data. Do NOT invent or recalculate them."</em> — demonstra entendimento profundo de onde LLMs falham (inventam numeros quando nao deviam).</div>
+
+<!-- ========== README AS PITCH ========== -->
+<h2>README como Pitch</h2>
+<div class="note-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+  <strong>Metodologia:</strong> Cada README avaliado como documento de venda — convenceria alguem que nunca viu o codigo a se importar com o projeto? Criterios: hook/primeira impressao, problem statement, descricao da solucao, assets visuais, setup, completude, profissionalismo, e diferenciacao.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>#</th><th>Projeto</th><th>Nota</th><th>Linhas</th><th>Screenshots</th><th>Problem Statement</th><th>Frase de Impacto</th></tr></thead>
+  <tbody>
+    <tr class="rank-1"><td>&#129351;</td><td style="text-align:left">mother</td><td>9</td><td>~300</td><td style="color:var(--red)">Nao</td><td style="color:var(--green)">Excelente (dados citados)</td><td style="font-size:0.78rem;text-align:left">"Everyone builds tools to help AI write code. Nobody ensures the human actually understands it."</td></tr>
+    <tr class="rank-2"><td>&#129352;</td><td style="text-align:left">SDR-Radar</td><td>8</td><td>~400</td><td style="color:var(--red)">Nao</td><td style="color:var(--orange)">Fraco</td><td style="font-size:0.78rem;text-align:left">"A homemade secondary aviation radar that receives ADS-B signals at 1090 MHz..."</td></tr>
+    <tr class="rank-3"><td>&#129353;</td><td style="text-align:left">fight-club</td><td>7</td><td>558</td><td style="color:var(--green)">14+ imgs</td><td style="color:var(--red)">Ausente</td><td style="font-size:0.78rem;text-align:left">"A privacy-first martial arts class management platform"</td></tr>
+    <tr><td>4</td><td style="text-align:left">sunlight</td><td>7</td><td>~120</td><td style="color:var(--green)">5 imgs</td><td style="color:var(--orange)">Implicito</td><td style="font-size:0.78rem;text-align:left">"It finds the quiet spaces in your workday — the 8 minutes before your next meeting..."</td></tr>
+    <tr><td>5</td><td style="text-align:left">meritus</td><td>7</td><td>~250</td><td style="color:var(--red)">Placeholder visivel</td><td style="color:var(--green)">Bom</td><td style="font-size:0.78rem;text-align:left">"Verbal praise disappears after standup; performance reviews come months too late."</td></tr>
+    <tr><td>6</td><td style="text-align:left">piano-man</td><td>6</td><td>~130</td><td style="color:var(--red)">Nao</td><td style="color:var(--orange)">Narrativa (jogo)</td><td style="font-size:0.78rem;text-align:left">"Mr. Watson is a music teacher at a poor school... His students had a brilliant idea"</td></tr>
+    <tr><td>7</td><td style="text-align:left">flowxide</td><td>5</td><td>~130</td><td style="color:var(--red)">Nao</td><td style="color:var(--red)">Ausente</td><td style="font-size:0.78rem;text-align:left">"Visual workflow automation for teams." (pitch inteiro)</td></tr>
+    <tr><td>8</td><td style="text-align:left">gabaritai</td><td>4</td><td>~140</td><td style="color:var(--red)">Nao</td><td style="color:var(--red)">Ausente</td><td style="font-size:0.78rem;text-align:left">"AI-powered ENEM exam prep platform for Brazilian students." (pitch inteiro)</td></tr>
+    <tr><td>9</td><td style="text-align:left">compound</td><td>3</td><td>41</td><td style="color:var(--red)">Nao</td><td style="color:var(--red)">Ausente</td><td style="font-size:0.78rem;text-align:left">"Compound is informational only — it helps you study, never tells you to buy or sell."</td></tr>
+    <tr><td>10</td><td style="text-align:left">lenu</td><td>3</td><td>37</td><td style="color:var(--red)">Nao</td><td style="color:var(--red)">Ausente</td><td style="font-size:0.78rem;text-align:left">README e essencialmente um ponteiro para docs externas.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-tech">
+    <div class="box-label">Padroes Observados</div>
+    <ul>
+      <li>Apenas <strong>2 de 10</strong> projetos incluem screenshots no README (fight-club e sunlight)</li>
+      <li>Apenas <strong>2 de 10</strong> (mother e meritus) tem problem statement explicito e compelling</li>
+      <li>mother e o unico projeto que cita dados externos para sustentar o problema</li>
+      <li>compound (41 linhas) e lenu (37 linhas) investiram documentacao no CLAUDE.md ao inves do README — erro estrategico para avaliacao</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Oportunidades Perdidas</div>
+    <ul>
+      <li><strong>flowxide</strong>: Produto visual (canvas infinito) com ZERO screenshots — uma imagem valeria mais que 130 linhas de texto</li>
+      <li><strong>piano-man</strong>: Jogo pixel art sem nenhum GIF de gameplay — o pitch mais visual nao tem visual</li>
+      <li><strong>meritus</strong>: Placeholder <code>&lt;!-- Add demo GIF here --&gt;</code> visivel no README renderizado</li>
+      <li><strong>gabaritai</strong>: 7 bounded contexts DDD impressionam devs, mas nao comunicam valor ao usuario</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== CODE QUALITY ========== -->
+<h2>Saude do Codigo (Linters &amp; Metricas)</h2>
+<div class="note-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+  <strong>Metodologia:</strong> RuboCop executado nos projetos Ruby (gabaritai, compound, lenu). Clippy executado no projeto Rust (flowxide). Projetos TypeScript avaliados via analise de configuracao (ESLint config, tsconfig strictness) pois node_modules nao estavam instalados. Contagem de TODO/FIXME/HACK via grep em todo o codigo.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>Projeto</th><th>Linguagem</th><th>LOC</th><th>Lint Status</th><th>TODO/FIXME</th><th>Strictness</th><th>Saude (1-10)</th></tr></thead>
+  <tbody>
+    <tr><td style="text-align:left;font-weight:600">compound</td><td>Ruby</td><td>7.396</td><td style="color:var(--green)">0 offenses (162 files)</td><td>1</td><td>RuboCop Omakase</td><td style="color:var(--green);font-weight:700">9</td></tr>
+    <tr><td style="text-align:left;font-weight:600">mother</td><td>TS</td><td>41.481</td><td style="color:var(--cyan)">Config: strict ESLint + no-any</td><td>2</td><td>strict: true</td><td style="font-weight:700">8</td></tr>
+    <tr><td style="text-align:left;font-weight:600">meritus</td><td>TS</td><td>16.230</td><td style="color:var(--cyan)">Config: shared ESLint pkg</td><td>0</td><td>strict + noUncheckedIndexedAccess</td><td style="font-weight:700">8</td></tr>
+    <tr><td style="text-align:left;font-weight:600">piano-man</td><td>TS</td><td>8.315</td><td style="color:var(--cyan)">Config: standard ESLint</td><td>0</td><td>strict: true (all)</td><td style="font-weight:700">8</td></tr>
+    <tr><td style="text-align:left;font-weight:600">SDR-Radar</td><td>TS</td><td>14.034</td><td style="color:var(--cyan)">Config: ESLint + Prettier</td><td>0</td><td>strict + noUncheckedIndexedAccess</td><td style="font-weight:700">8</td></tr>
+    <tr><td style="text-align:left;font-weight:600">lenu</td><td>Ruby</td><td>6.634</td><td style="color:var(--green)">0 offenses (168 files)</td><td>0</td><td>RuboCop Omakase</td><td style="font-weight:700">8</td></tr>
+    <tr><td style="text-align:left;font-weight:600">fight-club</td><td>TS</td><td>39.476</td><td style="color:var(--orange)">Backend: ESLint. Frontend: tsc-only</td><td>0</td><td>strict: true (both)</td><td style="font-weight:700">7</td></tr>
+    <tr><td style="text-align:left;font-weight:600">gabaritai</td><td>Ruby</td><td>8.738</td><td style="color:var(--orange)">95 offenses (formatting)</td><td>0</td><td>RuboCop Omakase</td><td style="font-weight:700">7</td></tr>
+    <tr><td style="text-align:left;font-weight:600">sunlight</td><td>TS</td><td>5.232</td><td style="color:var(--cyan)">Config: oxlint (moderno)</td><td>0</td><td>strict (Nuxt default)</td><td style="font-weight:700">7</td></tr>
+    <tr><td style="text-align:left;font-weight:600">flowxide</td><td>Rust</td><td>20.097</td><td style="color:var(--red)">76 clippy warnings</td><td>0</td><td>Rust compiler</td><td style="font-weight:700">6</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-strong">
+    <div class="box-label">Destaques Positivos</div>
+    <ul>
+      <li><strong>compound</strong>: 0 offenses em 162 arquivos Ruby + Brakeman + bundler-audit + importmap-audit no CI — pipeline de qualidade mais completo</li>
+      <li><strong>lenu</strong>: 0 offenses em 168 arquivos Ruby — codigo impecavel</li>
+      <li><strong>meritus</strong>: TypeScript com <code>noUncheckedIndexedAccess</code> — flag que a maioria dos projetos nao usa, previne bugs de undefined</li>
+      <li>9 de 10 projetos tem <strong>zero TODO/FIXME/HACK</strong> — disciplina de limpeza notavel</li>
+      <li>Todos os projetos TypeScript usam <strong>strict: true</strong> — padrao de qualidade universalmente adotado</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Pontos de Atencao</div>
+    <ul>
+      <li><strong>flowxide</strong>: 76 warnings do Clippy (funcoes nao usadas, clones redundantes, dead code) — sugere refactoring incompleto em 20K LOC de Rust</li>
+      <li><strong>gabaritai</strong>: 95 offenses RuboCop (todas de formatacao) — RuboCop nao foi rodado consistentemente durante o dev</li>
+      <li><strong>fight-club</strong>: Frontend sem ESLint (apenas tsc-only) — gap de linting no React</li>
+      <li><strong>mother</strong>: 41K LOC e o maior codebase — complexidade pode ser risco de manutencao</li>
+    </ul>
+  </div>
+</div>
+
+<div class="curiosidade"><strong>Dado surpreendente:</strong> compound — o projeto com menor media geral (4.67) — tem o codigo mais limpo: 0 offenses RuboCop, Brakeman security scanner, bundler-audit, e importmap-audit. Prova que qualidade de codigo e entrega de produto sao dimensoes diferentes. O dev priorizou polimento sobre volume.</div>
+
+<!-- ========== CLAUDE.MD ANALYSIS ========== -->
+<h2>Configuracao de AI Workflow (CLAUDE.md)</h2>
+<div class="note-box" style="background:rgba(6,182,212,0.06);border-color:rgba(6,182,212,0.2);">
+  <strong>Metodologia:</strong> Leitura integral de CLAUDE.md, .claude/, .agents/, PLAN.md, e arquivos de configuracao de AI de cada projeto. Avaliados em: tamanho, especificidade, categorias cobertas, skills customizados, e sofisticacao geral do workflow com AI.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>#</th><th>Projeto</th><th>CLAUDE.md</th><th>Skills</th><th>Plans</th><th>Sofisticacao</th><th>Nota</th></tr></thead>
+  <tbody>
+    <tr class="rank-1"><td>1</td><td style="text-align:left">fight-club</td><td>558 linhas / 34.5KB</td><td>7 (code-quality, single-component + vendor)</td><td>PLAN.md 1.123 linhas</td><td>Avancado</td><td style="font-weight:700">9</td></tr>
+    <tr class="rank-2"><td>2</td><td style="text-align:left">mother</td><td>247 linhas + AGENTS.md 117 linhas</td><td>12 (vendor) + MCP Context7</td><td>Implementation plan + product design</td><td>Avancado</td><td style="font-weight:700">9</td></tr>
+    <tr class="rank-3"><td>3</td><td style="text-align:left">meritus</td><td>127 linhas</td><td>3 custom sofisticados (review-pr 3-agent, address-pr-comments)</td><td>5 plans (~106KB total)</td><td>Avancado</td><td style="font-weight:700">8</td></tr>
+    <tr><td>4</td><td style="text-align:left">compound</td><td>324 linhas / 12.5KB</td><td>0</td><td>PRD + DB schema</td><td>Intermediario</td><td style="font-weight:700">8</td></tr>
+    <tr><td>5</td><td style="text-align:left">gabaritai</td><td>84 linhas</td><td>0 (mas hook de review automatico)</td><td>Nenhum</td><td>Intermediario</td><td style="font-weight:700">7</td></tr>
+    <tr><td>6</td><td style="text-align:left">piano-man</td><td>62 linhas</td><td>0</td><td>Nenhum</td><td>Basico</td><td style="font-weight:700">6</td></tr>
+    <tr><td>7</td><td style="text-align:left">sunlight</td><td>95 linhas (pouco especifico)</td><td>0</td><td>Nenhum</td><td>Basico</td><td style="font-weight:700">5</td></tr>
+    <tr><td>8</td><td style="text-align:left">SDR-Radar</td><td style="color:var(--red)">Nao existe</td><td>1 (OpenCode, nao Claude)</td><td>Dev diary</td><td>Basico</td><td style="font-weight:700">4</td></tr>
+    <tr><td>9</td><td style="text-align:left">flowxide</td><td style="color:var(--red)">Nao existe</td><td>0 (copilot-instructions.md = design only)</td><td>Nenhum</td><td>Basico</td><td style="font-weight:700">3</td></tr>
+    <tr><td>10</td><td style="text-align:left">lenu</td><td>6 linhas / 183 bytes</td><td>32 (todos vendor/Impeccable toolkit)</td><td>Nenhum</td><td>Basico</td><td style="font-weight:700">3</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-tech">
+    <div class="box-label">Insights Principais</div>
+    <ul>
+      <li><strong>fight-club</strong> tem o maior CLAUDE.md (34.5KB) — funciona como wiki viva do projeto com cada endpoint de API documentado</li>
+      <li><strong>meritus</strong> tem os skills customizados mais sofisticados: review-pr despacha 3 agentes paralelos (quality, security, compliance) que postam comments diretamente no PR</li>
+      <li><strong>gabaritai</strong> configurou um hook de TaskCompleted que automaticamente spawna agentes de review quando uma tarefa e concluida</li>
+      <li><strong>compound</strong> sem skills mas com pre-commit checklist de 9 passos — abordagem manual mas eficaz</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Quantidade vs Qualidade de Skills</div>
+    <ul>
+      <li><strong>lenu</strong> tem 32 skills mas CLAUDE.md de 6 linhas — quantidade de ferramentas sem contexto de projeto e inutil</li>
+      <li><strong>meritus</strong> tem 3 skills mas cada um e sofisticado e project-specific — qualidade > quantidade</li>
+      <li><strong>flowxide</strong> com 442 commits mas SEM CLAUDE.md — surpreendente para o 2o lugar geral. Usou copilot-instructions.md focado apenas em design</li>
+      <li>Skills vendor-provided (Better Auth, Vercel) sao uteis mas nao demonstram customizacao do dev</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== COMMIT TIMELINE ========== -->
+<h2>Timeline de Commits (Velocity Chart)</h2>
+<div class="note-box" style="background:rgba(6,182,212,0.06);border-color:rgba(6,182,212,0.2);">
+  Periodo do challenge: 30 Mar — 10 Abr 2026 (12 dias). Valores representam commits por dia. Celulas vazias = sem atividade.
+</div>
+
+<div class="chart-container" style="overflow-x:auto;font-family:monospace;font-size:0.78rem;line-height:1.4;">
+<table style="width:100%;border-collapse:collapse;">
+  <thead>
+    <tr style="color:var(--text-muted);font-size:0.7rem;">
+      <th style="text-align:left;padding:0.3rem 0.5rem;border-bottom:1px solid var(--card-border);">Projeto</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">30/3</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">31/3</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">1/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">2/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">3/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">4/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">5/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">6/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">7/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">8/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">9/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">10/4</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);color:var(--accent-light)">Total</th>
+      <th style="padding:0.3rem;border-bottom:1px solid var(--card-border);">Media/dia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">flowxide</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.15);">45</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.08);">25</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.3);">91</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.2);">65</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.15);">47</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.12);">41</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.07);">23</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.06);">21</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;">13</td><td style="padding:0.3rem;text-align:center;">16</td><td style="padding:0.3rem;text-align:center;">9</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">401</td><td style="padding:0.3rem;text-align:center;">33.4</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">meritus</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">11</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.12);">40</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.22);">74</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">21</td><td style="padding:0.3rem;text-align:center;">14</td><td style="padding:0.3rem;text-align:center;">13</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.2);">62</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.15);">51</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">287</td><td style="padding:0.3rem;text-align:center;">26.1</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">fight-club</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.12);">38</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.1);">32</td><td style="padding:0.3rem;text-align:center;">19</td><td style="padding:0.3rem;text-align:center;">18</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.1);">33</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">25</td><td style="padding:0.3rem;text-align:center;">18</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">184</td><td style="padding:0.3rem;text-align:center;">23.0</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">mother</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.17);">55</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.12);">41</td><td style="padding:0.3rem;text-align:center;">2</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;">3</td><td style="padding:0.3rem;text-align:center;">2</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">128</td><td style="padding:0.3rem;text-align:center;">10.7</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">sunlight</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">10</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">8</td><td style="padding:0.3rem;text-align:center;">16</td><td style="padding:0.3rem;text-align:center;background:rgba(245,158,11,0.1);">31</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;">19</td><td style="padding:0.3rem;text-align:center;">25</td><td style="padding:0.3rem;text-align:center;">14</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">128</td><td style="padding:0.3rem;text-align:center;">12.8</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">gabaritai</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">11</td><td style="padding:0.3rem;text-align:center;">19</td><td style="padding:0.3rem;text-align:center;">6</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;">18</td><td style="padding:0.3rem;text-align:center;background:rgba(239,68,68,0.15);">32</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">91</td><td style="padding:0.3rem;text-align:center;">9.1</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">piano-man</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">10</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">14</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;">8</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;background:rgba(239,68,68,0.12);">29</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">87</td><td style="padding:0.3rem;text-align:center;">7.3</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">SDR-Radar</td><td style="padding:0.3rem;text-align:center;">8</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">16</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">8</td><td style="padding:0.3rem;text-align:center;">21</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;">14</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">82</td><td style="padding:0.3rem;text-align:center;">6.8</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">compound</td><td style="padding:0.3rem;text-align:center;">6</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">5</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">2</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;">7</td><td style="padding:0.3rem;text-align:center;background:rgba(239,68,68,0.08);">13</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">50</td><td style="padding:0.3rem;text-align:center;">4.2</td></tr>
+    <tr><td style="text-align:left;padding:0.3rem 0.5rem;font-weight:600;">lenu</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">18</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">1</td><td style="padding:0.3rem;text-align:center;">4</td><td style="padding:0.3rem;text-align:center;">2</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;">3</td><td style="padding:0.3rem;text-align:center;color:var(--text-muted);">-</td><td style="padding:0.3rem;text-align:center;font-weight:700;color:var(--accent-light);">34</td><td style="padding:0.3rem;text-align:center;">3.1</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-strong">
+    <div class="box-label">Quem front-loaded o trabalho (sem rush final)</div>
+    <ul>
+      <li><strong>mother</strong>: 75% dos commits nos primeiros 2 dias. Apenas 3.9% nos ultimos 2 dias. Trabalho mais front-loaded do challenge.</li>
+      <li><strong>flowxide</strong>: 56% dos commits nos primeiros 4 dias. Apenas 6.2% nos ultimos 2 dias. Ritmo decrescente consistente.</li>
+      <li><strong>lenu</strong>: Parou no dia 9/4. Unico projeto a terminar antes do deadline.</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Quem teve rush final (>30% nos ultimos 2 dias)</div>
+    <ul>
+      <li><strong style="color:var(--red)">gabaritai: 55%</strong> dos commits nos ultimos 2 dias — rush mais extremo</li>
+      <li><strong>piano-man: 41%</strong> — quase metade da entrega no final</li>
+      <li><strong>compound: 40%</strong> — 13 dos 50 commits no ultimo dia</li>
+      <li><strong>meritus: 39%</strong> — 113 commits nos dias 9-10/4</li>
+      <li><strong>sunlight: 31%</strong> — no limite do rush</li>
+    </ul>
+  </div>
+</div>
+
+<div class="curiosidade"><strong>Dado notavel:</strong> fight-club comecou 4 dias depois dos demais (3/4 vs 30/3) mas ainda entregou 184 commits — a maior intensidade por dia do challenge (23 commits/dia). 9 de Abril foi o unico dia em que TODOS os 10 projetos tiveram pelo menos 1 commit — o "crunch day" universal.</div>
+
+<!-- ========== COST ESTIMATION ========== -->
+<h2>Custo Estimado de Operacao</h2>
+<div class="note-box" style="background:rgba(6,182,212,0.06);border-color:rgba(6,182,212,0.2);">
+  Estimativa para 100 usuarios ativos, ~2.000 requests de AI/mes. Inclui custo de API de AI + hosting + banco de dados. Baseado em precos publicos de Abril 2026.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>Projeto</th><th>Provider AI</th><th>Custo AI/mes</th><th>Hosting+DB/mes</th><th>Total/mes</th></tr></thead>
+  <tbody>
+    <tr><td style="text-align:left;font-weight:600">mother</td><td>Claude Sonnet 4</td><td style="color:var(--red);font-weight:700">~$126</td><td>~$10</td><td style="color:var(--red);font-weight:700">~$136</td></tr>
+    <tr><td style="text-align:left;font-weight:600">flowxide</td><td>Claude Haiku (Bedrock)</td><td>~$17</td><td>~$23 (AWS)</td><td style="font-weight:700">~$40</td></tr>
+    <tr><td style="text-align:left;font-weight:600">fight-club</td><td>Claude Sonnet</td><td>~$18</td><td style="color:var(--green)">$0 (Render free)</td><td style="font-weight:700">~$18</td></tr>
+    <tr><td style="text-align:left;font-weight:600">lenu</td><td>Claude Haiku</td><td>~$9</td><td>~$7</td><td style="font-weight:700">~$16</td></tr>
+    <tr><td style="text-align:left;font-weight:600">gabaritai</td><td>Gemini Flash Lite</td><td style="color:var(--green)">~$0.50</td><td>~$8</td><td style="font-weight:700">~$9</td></tr>
+    <tr><td style="text-align:left;font-weight:600">compound</td><td>Groq / Llama 3.3</td><td style="color:var(--green)">$0 (free tier)</td><td>~$7</td><td style="font-weight:700">~$7</td></tr>
+    <tr><td style="text-align:left;font-weight:600">SDR-Radar</td><td>Nenhum</td><td>$0</td><td>~$7</td><td style="font-weight:700">~$7</td></tr>
+    <tr><td style="text-align:left;font-weight:600">meritus</td><td>Flux 1.1 Pro</td><td style="color:var(--green)">~$2</td><td style="color:var(--green)">$0 (Render free)</td><td style="color:var(--green);font-weight:700">~$2</td></tr>
+    <tr><td style="text-align:left;font-weight:600">sunlight</td><td>Gemini Flash</td><td style="color:var(--green)">~$0.01</td><td style="color:var(--green)">$0 (Cloudflare free)</td><td style="color:var(--green);font-weight:700">~$0</td></tr>
+    <tr><td style="text-align:left;font-weight:600">piano-man</td><td>Nenhum</td><td>$0</td><td style="color:var(--green)">$0 (static)</td><td style="color:var(--green);font-weight:700">$0</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="curiosidade"><strong>Atencao:</strong> mother custa ~$136/mes para 100 usuarios — $126 so em AI (Claude Sonnet 4 a $15/MTok output). Para 1.000 usuarios seria ~$1.260/mes so de AI. O pricing de $19/dev/mes no tier Team precisaria de ~7 usuarios pagantes so para cobrir custo de AI. Projetos com Gemini Flash Lite ou Groq free tier tem custo de AI proximo de zero.</div>
+
+<!-- ========== I18N ========== -->
+<h2>Internacionalizacao (i18n)</h2>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>Projeto</th><th>Multi-idioma?</th><th>Idiomas</th><th>Implementacao</th><th>Cobertura</th></tr></thead>
+  <tbody>
+    <tr><td style="text-align:left;font-weight:600">compound</td><td style="color:var(--green)">Sim (completo)</td><td>EN + PT-BR</td><td>Rails I18n + locale switcher</td><td style="color:var(--green)">Completa (406+413 linhas)</td></tr>
+    <tr><td style="text-align:left;font-weight:600">fight-club</td><td style="color:var(--green)">Sim (frontend)</td><td>EN + PT</td><td>react-i18next + detector</td><td style="color:var(--green)">Frontend completo (~529 linhas cada)</td></tr>
+    <tr><td style="text-align:left;font-weight:600">gabaritai</td><td style="color:var(--orange)">Parcial</td><td>PT-BR (EN stub)</td><td>Rails I18n</td><td>PT-BR completo, EN apenas boilerplate</td></tr>
+    <tr><td style="text-align:left;font-weight:600">lenu</td><td style="color:var(--orange)">Parcial</td><td>PT-BR (EN minimal)</td><td>Rails I18n + Devise I18n</td><td>PT-BR completo, EN apenas ActiveRecord</td></tr>
+    <tr><td style="text-align:left;font-weight:600">flowxide</td><td style="color:var(--orange)">Parcial (site)</td><td>EN + PT-BR (site only)</td><td>Zola content directories</td><td>Marketing site bilingue, app EN only</td></tr>
+    <tr><td style="text-align:left;font-weight:600">mother</td><td style="color:var(--red)">Nao</td><td>EN only</td><td>-</td><td>Strings hardcoded em ingles</td></tr>
+    <tr><td style="text-align:left;font-weight:600">meritus</td><td style="color:var(--red)">Nao</td><td>EN only</td><td>-</td><td>Strings hardcoded em ingles</td></tr>
+    <tr><td style="text-align:left;font-weight:600">sunlight</td><td style="color:var(--red)">Nao</td><td>EN only</td><td>Intl API (datas apenas)</td><td>Strings hardcoded em ingles</td></tr>
+    <tr><td style="text-align:left;font-weight:600">piano-man</td><td style="color:var(--red)">Nao</td><td>EN only</td><td>-</td><td>-</td></tr>
+    <tr><td style="text-align:left;font-weight:600">SDR-Radar</td><td style="color:var(--red)">Nao</td><td>EN only</td><td>-</td><td>-</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="curiosidade"><strong>Insight:</strong> Apenas <strong>compound</strong> tem i18n verdadeiramente completo (EN + PT-BR com cobertura equivalente). fight-club e proximo mas o backend responde em ingles. gabaritai e lenu tem infraestrutura de i18n mas sao efetivamente monolíngues (PT-BR). 6 de 10 projetos nao tem i18n nenhum.</div>
+
+<!-- ========== ACCESSIBILITY ========== -->
+<h2>Acessibilidade (Quick Audit)</h2>
+<div class="note-box" style="background:rgba(6,182,212,0.06);border-color:rgba(6,182,212,0.2);">
+  Audit baseado em grep de aria-*, semantic HTML (&lt;main&gt;, &lt;nav&gt;, &lt;header&gt;, etc.), alt em imagens, role attributes, tabIndex, e plugins de acessibilidade. Nao substitui audit WCAG completo.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table">
+  <thead><tr><th>Projeto</th><th>aria-*</th><th>Semantic HTML</th><th>alt imgs</th><th>role</th><th>Plugin a11y</th><th>Rating</th></tr></thead>
+  <tbody>
+    <tr><td style="text-align:left;font-weight:600">mother</td><td>54</td><td>56</td><td>10</td><td>19</td><td>-</td><td style="color:var(--green);font-weight:700">Bom</td></tr>
+    <tr><td style="text-align:left;font-weight:600">flowxide</td><td>76</td><td>40</td><td>0</td><td>56</td><td>-</td><td style="color:var(--green);font-weight:700">Bom</td></tr>
+    <tr><td style="text-align:left;font-weight:600">fight-club</td><td>49</td><td>10</td><td>4</td><td>7</td><td>-</td><td style="color:var(--orange);font-weight:700">Razoavel</td></tr>
+    <tr><td style="text-align:left;font-weight:600">gabaritai</td><td>32</td><td>41</td><td>0</td><td>2</td><td>-</td><td style="color:var(--orange);font-weight:700">Razoavel</td></tr>
+    <tr><td style="text-align:left;font-weight:600">sunlight</td><td>9</td><td>9</td><td>1</td><td>4</td><td style="color:var(--green)">@nuxt/a11y</td><td style="color:var(--orange);font-weight:700">Razoavel</td></tr>
+    <tr><td style="text-align:left;font-weight:600">meritus</td><td>11</td><td>5</td><td>4</td><td>2</td><td>-</td><td style="color:var(--orange);font-weight:700">Razoavel</td></tr>
+    <tr><td style="text-align:left;font-weight:600">compound</td><td>2</td><td>37</td><td>0</td><td>0</td><td>-</td><td style="color:var(--red);font-weight:700">Fraco</td></tr>
+    <tr><td style="text-align:left;font-weight:600">lenu</td><td>0</td><td>15</td><td>0</td><td>2</td><td>-</td><td style="color:var(--red);font-weight:700">Fraco</td></tr>
+    <tr><td style="text-align:left;font-weight:600">SDR-Radar</td><td>10</td><td>0</td><td>0</td><td>8</td><td>-</td><td style="color:var(--red);font-weight:700">Fraco</td></tr>
+    <tr><td style="text-align:left;font-weight:600">piano-man</td><td>0</td><td>0</td><td>0</td><td>0</td><td>-</td><td style="color:var(--text-muted);">N/A (canvas)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="curiosidade"><strong>Insight:</strong> Nenhum projeto tem acessibilidade excelente. mother e flowxide lideram com alto uso de aria-* e HTML semantico. sunlight e o unico com plugin automatizado (@nuxt/a11y). compound — apesar de codigo impecavel (0 RuboCop offenses) — tem apenas 2 aria-* em todo o projeto, mostrando que lint nao mede acessibilidade.</div>
+
+<!-- ========== WEIGHTED MATRIX ========== -->
+<h2>Matriz de Decisao com Pesos</h2>
+<div class="note-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+  O ranking padrao usa peso igual para os 6 criterios. Mas o challenge e sobre <strong>AI como parceira</strong> — faz sentido dar mais peso a "Uso de AI". Abaixo, 3 cenarios de ponderacao para ver como o ranking muda.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table" style="font-size:0.82rem;">
+  <thead>
+    <tr>
+      <th rowspan="2" style="vertical-align:bottom;">Projeto</th>
+      <th colspan="2" style="background:rgba(99,102,241,0.15);border-bottom:none;">Cenario A: Peso Igual</th>
+      <th colspan="2" style="background:rgba(245,158,11,0.15);border-bottom:none;">Cenario B: AI = 2x</th>
+      <th colspan="2" style="background:rgba(34,197,94,0.15);border-bottom:none;">Cenario C: AI+Qualidade = 2x</th>
+    </tr>
+    <tr>
+      <th style="background:rgba(99,102,241,0.1);">Media</th>
+      <th style="background:rgba(99,102,241,0.1);">Pos.</th>
+      <th style="background:rgba(245,158,11,0.1);">Media</th>
+      <th style="background:rgba(245,158,11,0.1);">Pos.</th>
+      <th style="background:rgba(34,197,94,0.1);">Media</th>
+      <th style="background:rgba(34,197,94,0.1);">Pos.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Cenario A: (AI+Criat+Escopo+Qual+Pot+UX)/6 -->
+    <!-- Cenario B: (AI*2+Criat+Escopo+Qual+Pot+UX)/7 -->
+    <!-- Cenario C: (AI*2+Criat+Escopo+Qual*2+Pot+UX)/8 -->
+    <tr><td style="text-align:left;font-weight:600">mother</td>
+      <td style="font-weight:700">9.50</td><td>&#129351;</td>
+      <td style="font-weight:700">9.57</td><td>&#129351;</td>
+      <td style="font-weight:700">9.75</td><td>&#129351;</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">flowxide</td>
+      <td>8.17</td><td>&#129352;</td>
+      <td>8.29</td><td>&#129352;</td>
+      <td>7.75</td><td>&#129352;</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">meritus</td>
+      <td>6.83</td><td>&#129353;</td>
+      <td>6.86</td><td>&#129353;</td>
+      <td>7.13</td><td>&#129353;</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">fight-club</td>
+      <td>6.17</td><td>4</td>
+      <td>6.43</td><td>4</td>
+      <td>6.50</td><td>4</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">gabaritai</td>
+      <td>6.00</td><td>5</td>
+      <td>6.29</td><td>5</td>
+      <td>5.88</td><td>5</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">sunlight</td>
+      <td>5.67</td><td>6</td>
+      <td>5.57</td><td>6</td>
+      <td>5.75</td><td>6</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">piano-man</td>
+      <td>5.50</td><td>7</td>
+      <td>4.71</td><td>8</td>
+      <td>5.25</td><td>7</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">lenu</td>
+      <td>5.00</td><td>8</td>
+      <td>5.14</td><td>7</td>
+      <td>5.25</td><td>7</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">SDR-Radar</td>
+      <td>5.00</td><td>9</td>
+      <td>4.29</td><td>10</td>
+      <td>4.38</td><td>10</td>
+    </tr>
+    <tr><td style="text-align:left;font-weight:600">compound</td>
+      <td>4.67</td><td>10</td>
+      <td>5.00</td><td>9</td>
+      <td>4.75</td><td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-tech">
+    <div class="box-label">Conclusao: Top 3 e robusto</div>
+    <ul>
+      <li><strong>mother, flowxide, meritus</strong> ficam top 3 em TODOS os cenarios de peso</li>
+      <li>fight-club fica em 4o lugar em todos os cenarios — solidamente o "quase finalista"</li>
+      <li>piano-man e SDR-Radar caem ainda mais quando AI tem peso dobrado (de 7o/9o para 8o/10o)</li>
+      <li>O ranking e <strong>estavel</strong> — mudancas de peso nao alteram posicoes significativamente</li>
+    </ul>
+  </div>
+  <div class="detail-box box-dev">
+    <div class="box-label">Formulas dos Cenarios</div>
+    <ul>
+      <li><strong>A (Igual):</strong> (AI + Criat + Escopo + Qual + Pot + UX) / 6</li>
+      <li><strong>B (AI 2x):</strong> (AI&times;2 + Criat + Escopo + Qual + Pot + UX) / 7</li>
+      <li><strong>C (AI+Qual 2x):</strong> (AI&times;2 + Criat + Escopo + Qual&times;2 + Pot + UX) / 8</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== STACK RADAR ========== -->
+<h2>Comparativo de Stacks</h2>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table" style="font-size:0.78rem;">
+  <thead><tr>
+    <th>Projeto</th><th>Backend</th><th>Frontend</th><th>DB</th><th>AI Provider</th><th>Deploy</th><th>Testes</th><th>Auth</th><th>Jobs</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left;font-weight:600">mother</td>
+      <td>Next.js 16 (API)</td><td>React 19 (RSC)</td><td>PostgreSQL</td><td>Claude Sonnet 4</td><td>Vercel + Docker</td><td>Vitest (70 files)</td><td>Better Auth + GitHub</td><td>Inngest</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">flowxide</td>
+      <td>Rust (Actix-web)</td><td>Rust (Leptos WASM)</td><td>PostgreSQL</td><td>Claude Haiku (Bedrock)</td><td>AWS (OpenTofu)</td><td>Nextest + WASM</td><td>Custom sessions</td><td>Tokio executor</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">meritus</td>
+      <td>Fastify</td><td>Next.js 16</td><td>PostgreSQL</td><td>Flux 1.1 Pro</td><td>Render + Docker</td><td>Vitest (42 files)</td><td>JWT + refresh</td><td>Inline</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">fight-club</td>
+      <td>AdonisJS 6</td><td>React 19 (Vite)</td><td>PostgreSQL</td><td>Claude Sonnet</td><td>Render + Docker</td><td>Japa + Vitest (98)</td><td>Opaque tokens</td><td>BullMQ + Valkey</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">gabaritai</td>
+      <td>Rails 8</td><td>Hotwire</td><td>PostgreSQL</td><td>Gemini Flash Lite</td><td>Render + Docker</td><td>RSpec (65 files)</td><td>has_secure_password</td><td>Solid Queue</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">sunlight</td>
+      <td>Nitro (Cloudflare)</td><td>Vue 3 (Nuxt 4)</td><td>D1 (SQLite) + KV</td><td>Gemini 2.5 Flash</td><td>Cloudflare Pages</td><td>Vitest + Playwright</td><td>Better Auth + Google</td><td>Cron (Workers)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">piano-man</td>
+      <td style="color:var(--text-muted)">Nenhum</td><td>React 19 + PixiJS</td><td style="color:var(--text-muted)">localStorage</td><td style="color:var(--text-muted)">Nenhum</td><td>Docker + static</td><td>Vitest + Playwright</td><td style="color:var(--text-muted)">N/A</td><td style="color:var(--text-muted)">N/A</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">lenu</td>
+      <td>Rails 8</td><td>Phlex (Ruby)</td><td>SQLite (per-tenant)</td><td>Claude Haiku</td><td>Kamal + Docker</td><td>Minitest (49 files)</td><td>Devise + invite</td><td>Solid Queue</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">SDR-Radar</td>
+      <td>Fastify + C (N-API)</td><td>React 18 + Leaflet</td><td>TimescaleDB</td><td style="color:var(--text-muted)">Nenhum</td><td>Railway + Docker</td><td>Vitest (18 files)</td><td>Bearer token</td><td style="color:var(--text-muted)">N/A</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">compound</td>
+      <td>Rails 8</td><td>Hotwire</td><td>SQLite</td><td>Groq / Llama 3.3</td><td>Kamal + Docker</td><td>Minitest (61 files)</td><td>Auth + WebAuthn</td><td>Solid Queue</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-tech">
+    <div class="box-label">Stacks mais ousadas</div>
+    <ul>
+      <li><strong>flowxide</strong>: Unico full-stack Rust+WASM — aposta de maior risco/recompensa</li>
+      <li><strong>sunlight</strong>: Unico 100% serverless (Cloudflare Workers+D1+KV) — custo operacional zero</li>
+      <li><strong>SDR-Radar</strong>: Unico com codigo C nativo (N-API) — integracao hardware rara em web</li>
+      <li><strong>lenu</strong>: Unico com Phlex (views em Ruby puro) + per-tenant SQLite — escolhas nichadas</li>
+    </ul>
+  </div>
+  <div class="detail-box box-dev">
+    <div class="box-label">Padroes dominantes</div>
+    <ul>
+      <li><strong>3 projetos Rails 8</strong> (gabaritai, compound, lenu) — framework mais popular do grupo</li>
+      <li><strong>4 projetos com PostgreSQL</strong>, 2 com SQLite, 1 com TimescaleDB, 1 com D1</li>
+      <li><strong>Docker presente em 9 de 10</strong> projetos (piano-man e static)</li>
+      <li><strong>4 provedores de AI</strong>: Claude (4 projetos), Gemini (2), Groq (1), Flux (1)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== QUESTIONS FOR PRESENTATION ========== -->
+<h2>Perguntas Sugeridas para Apresentacao ao Vivo</h2>
+<div class="note-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+  Perguntas incisivas para os 3 finalistas + perguntas para projetos borderline. Foco em: decisoes tecnicas, limitacoes, visao de produto, e uso real de AI.
+</div>
+
+<div class="project-card rank-1" style="padding:1rem 1.25rem;">
+  <h3>&#129351; mother — Miguel Marcondes</h3>
+  <ol style="font-size:0.9rem;margin-left:1.2rem;">
+    <li><strong>Custo de AI:</strong> Claude Sonnet 4 custa ~$126/mes para 100 usuarios. Com o tier Team a $19/dev, voce precisa de 7 usuarios pagantes so para cobrir AI. Qual sua estrategia de unit economics?</li>
+    <li><strong>Diffs grandes:</strong> Voce trunca diffs a 100K chars. Em um monorepo com PR de 300+ arquivos, quanto contexto se perde? Ja testou com PRs reais de grande porte?</li>
+    <li><strong>Anti-alucinacao:</strong> Seus prompts dizem "Never generate URLs from memory". Com que frequencia o modelo ainda alucina? Tem metricas de qualidade de gate gerado?</li>
+    <li><strong>Squadron Meetings:</strong> Usa polling ao inves de WebSockets. Com 10 devs numa sessao simultanea, o polling escala? Por que nao SSE ou WS?</li>
+    <li><strong>Dogfooding:</strong> Voce usou phase gates para documentar o dev do MOTHER. Alguma vez o gate revelou algo que voce nao tinha entendido sobre seu proprio codigo?</li>
+  </ol>
+</div>
+
+<div class="project-card rank-2" style="padding:1rem 1.25rem;">
+  <h3>&#129352; flowxide — Samuel Flores</h3>
+  <ol style="font-size:0.9rem;margin-left:1.2rem;">
+    <li><strong>Sem CLAUDE.md:</strong> Voce tem 442 commits mas nenhum CLAUDE.md. Como voce pilotou a AI sem configuracao de contexto? Usou Copilot ao inves de Claude Code?</li>
+    <li><strong>76 Clippy warnings:</strong> Funcoes nao usadas, clones redundantes, dead code. Isso indica refactoring incompleto? Ou priorizou features sobre cleanup?</li>
+    <li><strong>Canvas performance:</strong> O canvas e SVG-based. Qual o limite pratico de nodes antes do browser travar? Ja testou com 100+ nodes?</li>
+    <li><strong>Leptos/WASM:</strong> Ecossistema muito menor que React. Se um bug no framework bloqueia, qual seu plano? Ja enfrentou limitacoes de Leptos durante o dev?</li>
+    <li><strong>Tool use com Claude:</strong> O loop de tool use roda ate 10 rounds. Qual a media de rounds por requisicao? Ja teve loops infinitos ou respostas degeneradas?</li>
+  </ol>
+</div>
+
+<div class="project-card rank-3" style="padding:1rem 1.25rem;">
+  <h3>&#129353; meritus — Bruno Viveiros</h3>
+  <ol style="font-size:0.9rem;margin-left:1.2rem;">
+    <li><strong>Badge system e inovacao:</strong> Gamificacao corporativa existe ha anos. O que faz meritus diferente de Credly, Badgr, ou um badge system interno simples?</li>
+    <li><strong>AI como feature:</strong> A geracao de imagem e um "nice-to-have" para admins. Se removesse a AI, o produto perderia valor significativo? Ou funcionaria igual?</li>
+    <li><strong>39% rush final:</strong> 113 commits nos ultimos 2 dias. O que ficou para o final? Isso afetou qualidade?</li>
+    <li><strong>AI usage log:</strong> Voce documentou 30+ interacoes com Claude. Qual foi a interacao mais valiosa e qual foi a mais frustrante?</li>
+    <li><strong>Render free tier:</strong> Cold starts e limites de performance. Para uma demo ao vivo, o primeiro request pode levar 30+ segundos. Tem plano para isso?</li>
+  </ol>
+</div>
+
+<div class="project-card" style="padding:1rem 1.25rem;border-left:4px solid var(--orange);">
+  <h3 style="color:var(--orange);">Perguntas para projetos borderline (4o-6o lugar)</h3>
+  <div style="font-size:0.88rem;">
+    <p><strong>fight-club (Gabriel):</strong> AES encryption em cada query de PII — voce mediu o impacto de performance? Com 1000 alunos, cada feedback decripta AES on-the-fly. Tem benchmarks?</p>
+    <p style="margin-top:0.5rem;"><strong>gabaritai (Antonio):</strong> 55% dos commits nos ultimos 2 dias. O que aconteceu nos dias 4-7 de abril (zero commits)? O contexto Organization esta incompleto — era parte do escopo original?</p>
+    <p style="margin-top:0.5rem;"><strong>sunlight (Jeferson):</strong> O Gemini insight e opt-in e secundario. Se a AI fosse removida, o produto ainda funcionaria 95% igual. Por que nao integrou AI mais profundamente (ex: personalizar momentos com AI)?</p>
+  </div>
+</div>
+
+<div class="project-card disqualified" style="padding:1rem 1.25rem;">
+  <h3 style="color:var(--red);">Perguntas para projetos sem evidencia de AI</h3>
+  <div style="font-size:0.88rem;">
+    <p><strong>piano-man (Felipe):</strong> O challenge exige AI como parceira de desenvolvimento. Voce usou Claude Code, Copilot, ou alguma outra ferramenta AI durante o dev? Se sim, por que nao ha evidencias no repositorio?</p>
+    <p style="margin-top:0.5rem;"><strong>SDR-Radar (Rafael):</strong> Seu diary documenta aprendizado manual ("I have been studying"). Usou AI em algum momento? O projeto usa OpenCode ao inves de Claude Code — foi intencional?</p>
+  </div>
+</div>
+
+<!-- ========== RISK ANALYSIS ========== -->
+<h2>Analise de Riscos de Producao</h2>
+<div class="note-box" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2);">
+  Para cada projeto: o que quebra primeiro se for para producao com usuarios reais? Single point of failure, bottleneck de escala, e dependencia mais fragil.
+</div>
+
+<div style="overflow-x:auto;">
+<table class="ranking-table" style="font-size:0.8rem;">
+  <thead><tr><th>Projeto</th><th>Risco Critico</th><th>Primeiro Ponto de Falha</th><th>Bottleneck 10x</th><th>Dependencia Fragil</th></tr></thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left;font-weight:600">mother</td>
+      <td style="text-align:left">Custo de AI descontrolado ($126/mo p/ 100 users)</td>
+      <td style="text-align:left">Claude API rate limit ou outage</td>
+      <td style="text-align:left">Connection pool Prisma/PG</td>
+      <td style="text-align:left">Anthropic Claude API (sem fallback)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">flowxide</td>
+      <td style="text-align:left;color:var(--red)">EC2 t4g.micro (1GB RAM) — OOM sob carga</td>
+      <td style="text-align:left">Server crash com 5+ usuarios simultaneos</td>
+      <td style="text-align:left">Instancia unica sem auto-scaling</td>
+      <td style="text-align:left">AWS Bedrock (throttling por conta)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">meritus</td>
+      <td style="text-align:left;color:var(--red)">Render free tier DB expira em 90 dias</td>
+      <td style="text-align:left">Database deletado apos 90 dias</td>
+      <td style="text-align:left">Connection limit do free tier (20-50)</td>
+      <td style="text-align:left">Render free tier (sem SLA)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">fight-club</td>
+      <td style="text-align:left">SSE esgota file descriptors sob carga</td>
+      <td style="text-align:left">Limite de conexoes SSE concorrentes</td>
+      <td style="text-align:left">Conexoes SSE abertas por usuario</td>
+      <td style="text-align:left">Valkey (fila de jobs) — se cair, tudo para</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">gabaritai</td>
+      <td style="text-align:left;color:var(--red)">Chromium PDF + 512MB RAM = OOM garantido</td>
+      <td style="text-align:left">Primeiro PDF concorrente causa OOM-kill</td>
+      <td style="text-align:left">RAM (falha em 2x, nao 10x)</td>
+      <td style="text-align:left">Grover/Chromium (fragil cross-platform)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">sunlight</td>
+      <td style="text-align:left">D1 imaturidade (single-writer, jovem)</td>
+      <td style="text-align:left">Write contention ou sync conflicts</td>
+      <td style="text-align:left">D1 write throughput (single-writer)</td>
+      <td style="text-align:left">Cloudflare D1 (base de dados inteira)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">piano-man</td>
+      <td style="text-align:left;color:var(--red)">localStorage = zero durabilidade de dados</td>
+      <td style="text-align:left">Usuario limpa dados do browser</td>
+      <td style="text-align:left">N/A (client-only)</td>
+      <td style="text-align:left">Browser (localStorage, WebGL)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">lenu</td>
+      <td style="text-align:left">Per-user SQLite: backup impossivel em escala</td>
+      <td style="text-align:left">File descriptor exhaustion</td>
+      <td style="text-align:left">FDs para centenas de DBs abertos</td>
+      <td style="text-align:left">RubyLLM (gem pequena, sem garantia)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">SDR-Radar</td>
+      <td style="text-align:left;color:var(--red)">Dependencia de hardware USB fisico</td>
+      <td style="text-align:left">Hardware desconectado = app morta</td>
+      <td style="text-align:left">Hardware (1 dongle = 1 feed fixo)</td>
+      <td style="text-align:left">RTL-SDR + libusb + N-API (3 camadas)</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;font-weight:600">compound</td>
+      <td style="text-align:left;color:var(--red)">Groq free tier: 30 req/min, 14.4K/dia</td>
+      <td style="text-align:left">API quota esgotada em horas</td>
+      <td style="text-align:left">Rate limit Groq (falha em 2x)</td>
+      <td style="text-align:left">Groq free tier (sem SLA, sem contrato)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="details-grid" style="margin-top:1rem;">
+  <div class="detail-box box-strong">
+    <div class="box-label">Mais prontos para producao</div>
+    <ul>
+      <li><strong>mother</strong>: Riscos sao de escala/custo, nao de arquitetura. Adicionar spend caps resolve o principal.</li>
+      <li><strong>fight-club</strong>: Arquitetura solida. SSE e o unico bottleneck — migrar para WS resolveria.</li>
+      <li><strong>sunlight</strong>: Cloudflare edge e inerentemente escalavel. D1 e o unico risco real.</li>
+    </ul>
+  </div>
+  <div class="detail-box box-weak">
+    <div class="box-label">Maior risco de producao</div>
+    <ul>
+      <li><strong style="color:var(--red)">gabaritai</strong>: Chromium + 512MB RAM e bomba-relogio. Primeiro PDF concorrente mata o processo.</li>
+      <li><strong style="color:var(--red)">compound</strong>: Groq free tier esgota quota em horas com poucos usuarios. Sem plano pago.</li>
+      <li><strong style="color:var(--red)">piano-man</strong>: Sem backend = sem durabilidade. Um clear do browser apaga tudo.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="curiosidade"><strong>Paradoxo de risco:</strong> flowxide tem a infraestrutura mais sofisticada (OpenTofu + AWS) mas roda em t4g.micro (1GB RAM) — a instancia mais fraca possivel. meritus tem 384 testes mas o banco de dados expira em 90 dias. O projeto mais testado e o mais proximo de perder todos os dados por inacao.</div>
+
+<!-- ========== FINALISTS ========== -->
+<h2>Recomendacao dos 3 Finalistas</h2>
+
+<div class="finalist-card">
+  <div><span class="medal">&#129351;</span><span class="name">mother</span> — Media 9.50 &bull; Senior/Staff</div>
+  <div class="reason">O projeto mais completo e coerente do challenge. AI nao e um add-on — e o core do produto, resolvendo um problema emergente real e quantificado (59% dos devs usam codigo AI sem entender). 91% de test coverage, 24 ADRs, Stripe billing funcional, e compliance GDPR mostram maturidade de produto. O dogfooding do proprio produto (phase gates para documentar o dev) e genial. Demonstra o melhor exemplo de "AI como parceira" — tanto no desenvolvimento quanto no produto final. Developer Senior/Staff com disciplina excepcional.</div>
+</div>
+
+<div class="finalist-card">
+  <div><span class="medal">&#129352;</span><span class="name">flowxide</span> — Media 8.17 &bull; Senior</div>
+  <div class="reason">O projeto com maior escopo e ambicao tecnica: 442 commits de Rust/WASM full-stack com canvas SVG interativo, executor de workflows com Rhai, AI via Claude Haiku com tool use (5 ferramentas), e infraestrutura AWS completa com OpenTofu. A escolha de Rust para todo o stack e a mais ousada do challenge. AI com conversacao stateful, deteccao off-topic, e compliance legal mostram maturidade. Merece a final pela combinacao unica de ambicao tecnica, execucao, e potencial de mercado (workflow automation e mercado de bilhoes).</div>
+</div>
+
+<div class="finalist-card">
+  <div><span class="medal">&#129353;</span><span class="name">meritus</span> — Media 6.83 &bull; Staff</div>
+  <div class="reason">O projeto com melhor disciplina de engenharia pura: 384 testes (maior suite), 287 commits atomicos, 13 ADRs, TDD evidenciado em commits, deploy live funcional, e AI usage log documentando cada interacao. Bruno demonstra nivel Staff — nao apenas coda, mas instrumenta logging, otimiza CI/CD, e gerencia escopo com master plan priorizado. Apesar do conceito menos inovador (badge system), a execucao impecavel e exatamente o que separa prototipos de produtos. Deploy live permite ao juri testar imediatamente.</div>
+</div>
+
+<!-- ========== DISQUALIFIED ========== -->
+<h2>Projetos em Risco de Desclassificacao</h2>
+
+<div class="disq-card">
+  <div class="name">piano-man (Felipe)</div>
+  <div class="reason">
+    <strong>Motivo:</strong> Nenhuma evidencia de uso de AI em 87 commits, README, codigo-fonte, ou configuracoes. Sem .claude/ directory, sem mencoes a Claude/Copilot/GPT. O challenge exige "AI como parceira de desenvolvimento". O projeto e tecnicamente excelente (DDD exemplar, TypeScript strict, 10 ADRs) e o mais criativo do grupo, mas nao atende ao requisito central. <strong>Recomendacao:</strong> Solicitar ao participante que demonstre evidencias de uso de AI na apresentacao. Se confirmar uso (ex: sessoes Copilot nao rastreadas), reconsiderar. Caso contrario, desclassificar.
+  </div>
+</div>
+
+<div class="disq-card">
+  <div class="name">SDR-Radar-Chanllenge (Rafael Martins)</div>
+  <div class="reason">
+    <strong>Motivo:</strong> Nenhuma evidencia de uso de AI. Sem CLAUDE.md, .claude/, PLAN.md. O diary de desenvolvimento documenta explicitamente aprendizado manual ("I have been studying"). Commits grandes sem artefatos de workflow AI. O projeto e uma proeza tecnica impressionante (C nativo, signal processing, multi-arch Docker), mas o conjunto de evidencias aponta fortemente para desenvolvimento sem AI. <strong>Recomendacao:</strong> Mesma abordagem — dar oportunidade de demonstrar evidencias. Porem, o diary pessoal torna mais dificil justificar uso de AI.
+  </div>
+</div>
+
+<!-- ========== ADDITIONAL INSIGHTS ========== -->
+<h2>Insights Adicionais do Juri</h2>
+
+<div class="chart-container">
+  <h3 style="margin-bottom:1rem;color:var(--accent-light);">Premios por Categoria</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Melhor uso de AI no produto</strong><br>mother — 4 use cases de Claude como core feature
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Maior ambicao tecnica</strong><br>flowxide — Rust/WASM full-stack com 442 commits
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Melhor suite de testes</strong><br>meritus — 384 testes com TDD evidenciado
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Projeto mais criativo</strong><br>piano-man — Jogo de ritmo com narrativa e economia
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Melhor documentacao</strong><br>mother — 24 ADRs + 15 phase gates + 4 master docs
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Melhor transparencia de processo AI</strong><br>meritus — AI usage log com 30+ interacoes datadas
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Proeza tecnica mais impressionante</strong><br>SDR-Radar — C nativo + ADS-B decoder + multi-arch ARM
+    </div>
+    <div style="padding:0.7rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;font-size:0.88rem;">
+      <strong style="color:var(--green);">Melhor arquitetura DDD</strong><br>piano-man / lenu — Domain layers exemplares
+    </div>
+  </div>
+</div>
+
+<div class="note-box" style="margin-top:2rem;">
+  <strong>Nota metodologica:</strong> Esta avaliacao foi conduzida por analise automatizada de: estrutura de arquivos, README, CLAUDE.md, historico git completo (commits, autores, mensagens, frequencia, tamanho), codigo-fonte, testes, Dockerfiles, configuracoes de deploy, e buscas por mencoes a AI em todo o repositorio. Nivel do desenvolvedor foi inferido a partir de: disciplina de commits, complexidade arquitetural, escolhas de dependencias, presenca de testes, e artefatos de workflow. As notas sao relativas entre os 10 projetos. A ausencia de evidencia de AI nao prova que AI nao foi usada — recomenda-se confirmar durante as apresentacoes.
+</div>
+
+<div style="text-align:center;color:var(--text-muted);margin-top:3rem;padding:1rem;border-top:1px solid var(--card-border);font-size:0.85rem;">
+  AI Dev Challenge — Relatorio gerado em 14 de Abril de 2026<br>
+  Avaliacao tecnica automatizada por Claude (Anthropic)
+</div>
+
+</body>
+</html>
