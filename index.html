@@ -433,10 +433,23 @@
   .insight.green { background: linear-gradient(135deg, rgba(34,197,94,0.10), rgba(0,0,0,0)); border-color: rgba(34,197,94,0.35); }
 
   .insight .icon {
-    font-size: 2rem;
     margin-bottom: 0.8rem;
     line-height: 1;
+    color: var(--text-muted);
   }
+  .insight .icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  .insight.gold .icon { color: var(--gold); }
+  .insight.cyan .icon { color: var(--cyan); }
+  .insight.pink .icon { color: var(--pink); }
+  .insight.green .icon { color: var(--green); }
   .insight .title {
     font-size: 1.1rem;
     font-weight: 800;
@@ -846,17 +859,17 @@
 
     <div class="insightGrid">
       <div class="insight gold reveal delay-1">
-        <div class="icon">🥇</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 6 9 6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 15 6 15 6"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H4"/><path d="M14 22V8a4 4 0 0 1 4-4h2"/><path d="M12 6v4"/></svg></div>
         <div class="title">Maratonista do challenge</div>
         <div class="body"><strong>helo</strong> entregou 589 commits no main com <strong>10/12 dias ativos</strong> — 70% deles co-authored com Claude. <strong>flowxide</strong> vem logo atrás com 401 commits e <strong>12/12 dias ativos</strong> — nenhum dia parado.</div>
       </div>
       <div class="insight pink reveal delay-2">
-        <div class="icon">🌪️</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M7 8h10M7 12h4m-4 4h10"/><circle cx="18" cy="12" r="3"/></svg></div>
         <div class="title">Quem mais usou branches</div>
         <div class="body"><strong>meritus</strong> abriu <strong>71 branches</strong>, <strong>helo</strong> abriu <strong>64</strong> e <strong>mother</strong> abriu <strong>33</strong> — os três trabalharam PR-driven, não comitam direto no main.</div>
       </div>
       <div class="insight cyan reveal delay-3">
-        <div class="icon">🐢</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
         <div class="title">Tartaruga zen</div>
         <div class="body"><strong>lenu</strong> fechou com 34 commits no main — o menor número, mas com <strong>56% de proporção teste/produção</strong> e zero merge tumultuado.</div>
       </div>
@@ -1004,17 +1017,17 @@
 
     <div class="insightGrid">
       <div class="insight green reveal delay-1">
-        <div class="icon">📈</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <div class="title">Consistente</div>
         <div class="body"><strong>fight-club</strong> — único com 8 dias ativos e nenhum pico acima de 25% do total. Cadência espalhada, sem buracos longos.</div>
       </div>
       <div class="insight gold reveal delay-2">
-        <div class="icon">🏁</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></div>
         <div class="title">Sprint Final</div>
         <div class="body"><strong>helo</strong> (47% no fim), <strong>gabaritai</strong> (60%), <strong>SDR-Radar</strong>, <strong>compound</strong>, <strong>piano-man</strong>, <strong>sunlight</strong> — aceleraram nos últimos 3 dias.</div>
       </div>
       <div class="insight pink reveal delay-3">
-        <div class="icon">💥</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div class="title">Explosivo no início</div>
         <div class="body"><strong>mother</strong> (77% nos 3 primeiros), <strong>lenu</strong> (61%), <strong>flowxide</strong> (40%), <strong>alexandria</strong> (42%) — chegaram com tudo no D1.</div>
       </div>
@@ -1149,17 +1162,17 @@
 
     <div class="insightGrid">
       <div class="insight pink reveal delay-1">
-        <div class="icon">🪨</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></div>
         <div class="title">SQL raw vs ORM</div>
         <div class="body">Apenas <strong>SDR-Radar</strong> usa SQL com mais frequência — pelo lado do TimescaleDB e Drizzle como query builder. Todo o resto usa ORMs maduros (<strong>Prisma</strong>, <strong>Active Record</strong>, <strong>Drizzle</strong>, <strong>SQLx</strong>).</div>
       </div>
       <div class="insight cyan reveal delay-2">
-        <div class="icon">🧪</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 2h6"/><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/></svg></div>
         <div class="title">E2E e Playwright</div>
         <div class="body"><strong>fight-club, meritus, piano-man, sunlight</strong> e o frontend de <strong>SDR-Radar</strong> rodam Playwright. piano-man tem mais E2E que muitos backends têm de unitários.</div>
       </div>
       <div class="insight gold reveal delay-3">
-        <div class="icon">🚀</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
         <div class="title">Pra onde foi deployado</div>
         <div class="body"><strong>6 destinos diferentes</strong> em 12 projetos: <strong>Vercel</strong> (mother), <strong>Cloudflare Workers</strong> (sunlight), <strong>Railway</strong> (SDR-Radar), <strong>Render</strong> (meritus, fight-club), <strong>Kamal</strong> (compound, lenu, gabaritai, helo) e <strong>AWS via Terraform</strong> (flowxide). Quase ninguém repetiu.</div>
       </div>
@@ -1277,32 +1290,32 @@
 
     <div class="insightGrid" style="margin-top: 3rem;">
       <div class="insight gold reveal delay-1">
-        <div class="icon">🧠</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4 4.002 4.002 0 0 1-1.032 2.686A4 4 0 0 1 16 12a4 4 0 0 1-2 3.465V20a2 2 0 0 1-4 0v-4.535A4 4 0 0 1 8 12a4 4 0 0 1 1.032-2.686A4 4 0 0 1 12 2z"/></svg></div>
         <div class="title">Pra que serviu a AI</div>
         <div class="body">8 categorias em 11 projetos: <strong>classificação</strong> (alexandria), <strong>recomendação</strong> (gabaritai, fight-club, compound, sunlight), <strong>compreensão de código</strong> (mother), <strong>ideação</strong> (lenu), <strong>assistente conversacional</strong> (helo — 21 tools, 3 personas), <strong>geração de workflow</strong> (flowxide), <strong>geração de imagem</strong> (meritus), <strong>transcrição de áudio</strong> (piano-man).</div>
       </div>
       <div class="insight cyan reveal delay-2">
-        <div class="icon">⚡</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div class="title">Modelos rápidos venceram</div>
         <div class="body">6 dos 11 foram de modelos <strong>lite/fast</strong>: <strong>Haiku 4.5</strong> (alexandria, flowxide, lenu) e <strong>Gemini Flash</strong> (gabaritai, sunlight, helo). Os outros 3 LLMs foram mid-tier: <strong>Sonnet</strong> (fight-club, mother) e <strong>Llama 70B via Groq</strong> (compound). Ninguém usou Opus ou GPT-4 no produto.</div>
       </div>
       <div class="insight pink reveal delay-3">
-        <div class="icon">🤔</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
         <div class="title">OpenAI sumiu da festa</div>
         <div class="body"><strong>Nenhum projeto</strong> integrou GPT-4 ou OpenAI direto. Anthropic (5), Google (3 — gabaritai, sunlight, helo), Groq+Llama (1), Flux via OpenRouter (1) e Spotify ML (1) cobriram tudo. meritus usa endpoint OpenAI-compatible, mas o modelo é <strong>Flux</strong>, não GPT.</div>
       </div>
       <div class="insight green reveal delay-1">
-        <div class="icon">🔌</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 7V2"/><path d="M15 7V2"/><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4z"/></svg></div>
         <div class="title">Como conectaram com a AI</div>
         <div class="body"><strong>SDK direto</strong>: 6 projetos. <strong>Via proxy</strong> (Bedrock, OpenRouter): 2 (flowxide, meritus). <strong>Abstração custom</strong>: 3 (lenu e helo via ruby_llm, compound via adapter OpenAI-compatible). <strong>mother</strong> é o único com interface <em>swappable</em> de provider. <strong>helo</strong> usa activeagent (framework de agentes Rails).</div>
       </div>
       <div class="insight gold reveal delay-2">
-        <div class="icon">🎨</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><path d="M16 6.5c3 0 5 2 5 6s-2 6-5 6"/></svg></div>
         <div class="title">AI como criadora de conteúdo</div>
         <div class="body">A maioria usa AI pra <strong>assistir ou recomendar</strong>. Apenas 2 usam AI pra <strong>gerar o conteúdo do produto</strong>: <strong>meritus</strong> cria a arte das medalhas (Flux) e <strong>piano-man</strong> cria as músicas jogáveis (basic-pitch). AI no centro, não no rodapé.</div>
       </div>
       <div class="insight cyan reveal delay-3">
-        <div class="icon">👁️</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <div class="title">Texto domina, mas não só</div>
         <div class="body"><strong>Texto</strong>: 9 projetos. <strong>Imagem</strong>: 3 — alexandria (Claude Vision, input), gabaritai (Gemini Vision, input de folhas de prova e PDFs) e meritus (Flux, output). <strong>Áudio</strong>: 1 (piano-man, input). Multimodal real: <strong>alexandria</strong> e <strong>gabaritai</strong>.</div>
       </div>
@@ -1369,52 +1382,52 @@
 
     <div class="insightGrid" style="margin-top: 3rem;">
       <div class="insight gold reveal delay-1">
-        <div class="icon">🌅</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="4"/><path d="M2 18h20"/><path d="M2 22h20"/><path d="M12 2v2"/></svg></div>
         <div class="title">Quem comitou de madrugada?</div>
         <div class="body"><strong>fight-club</strong> teve <strong>23 commits entre 00h e 02h</strong> nos dias 04 e 05/04 (sábado e domingo). flowxide também teve <strong>30+ commits noturnos</strong>. piano-man, alexandria e SDR-Radar dormiram cedo — zero madrugada.</div>
       </div>
       <div class="insight cyan reveal delay-2">
-        <div class="icon">📅</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></div>
         <div class="title">O dia mais agitado do challenge</div>
         <div class="body">Foi <strong>7 de abril</strong> (segunda-feira) com <strong>~225 commits</strong> somando todos os projetos — puxado por <strong>helo</strong> (145 commits nesse dia) e <strong>fight-club</strong> (31). O segundo lugar ficou com 1º de abril (181), quando flowxide sozinho fez 88.</div>
       </div>
       <div class="insight pink reveal delay-3">
-        <div class="icon">⏰</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="title">A hora preferida pra commitar</div>
         <div class="body"><strong>15h</strong> foi o pico (112 commits) — pós-almoço da galera. Em segundo, <strong>21h</strong> com 103 commits — o segundo turno informal.</div>
       </div>
       <div class="insight green reveal delay-1">
-        <div class="icon">🏗️</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 18 22 12 18 8 14 12 14 18"/><polyline points="8 18 2 18 2 12 6 8 10 12 10 18"/><line x1="12" x2="12" y1="2" y2="18"/></svg></div>
         <div class="title">O projeto com mais código de produção</div>
         <div class="body"><strong>mother</strong> com <strong>26.730 linhas</strong>, seguido de <strong>helo</strong> (24.902), <strong>fight-club</strong> (21.554) e <strong>flowxide</strong> (17.763 de Rust). helo quebrou o padrão dos Rails — Phlex + 21 AI tools dá volume.</div>
       </div>
       <div class="insight gold reveal delay-2">
-        <div class="icon">🌳</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></div>
         <div class="title">O rei das branches</div>
         <div class="body"><strong>meritus</strong> abriu <strong>71 branches</strong>, <strong>helo</strong> abriu <strong>64</strong>, seguidos por <strong>compound</strong> (45) e <strong>mother</strong> (33). Esses quatro trabalharam PR-driven puro.</div>
       </div>
       <div class="insight cyan reveal delay-3">
-        <div class="icon">📜</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M17 6H3"/><path d="M21 12H8"/><path d="M21 18H8"/><path d="M3 12v6"/><circle cx="3" cy="6" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="5" cy="18" r="1"/></svg></div>
         <div class="title">Os co-authored-by recordistas</div>
         <div class="body"><strong>mother</strong> teve <strong>769 commits "Co-Authored-By: Claude"</strong>, seguido de <strong>helo</strong> com <strong>426</strong> (70% dos commits) e piano-man com 69. É a assinatura do Claude Code rodando full automation.</div>
       </div>
       <div class="insight pink reveal delay-1">
-        <div class="icon">🇧🇷</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
         <div class="title">i18n nativo</div>
         <div class="body"><strong>compound</strong> e <strong>fight-club</strong> shipparam com <strong>i18n PT-BR + EN</strong> de saída — não como afterthought. compound vai além e mantém pt-BR como default.</div>
       </div>
       <div class="insight green reveal delay-2">
-        <div class="icon">🔒</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <div class="title">Quem levou segurança a sério?</div>
         <div class="body"><strong>fight-club</strong> com <strong>AES at-rest, opaque tokens, audit logs e GDPR</strong> completo. <strong>compound</strong> com <strong>WebAuthn/Passkey</strong>. <strong>mother</strong> com Better Auth. Não foi pouca coisa pra 12 dias.</div>
       </div>
       <div class="insight gold reveal delay-3">
-        <div class="icon">📓</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/></svg></div>
         <div class="title">O único com diary</div>
         <div class="body"><strong>SDR-Radar</strong> manteve uma pasta <code>diary/</code> com 3 entradas detalhadas — narrando hardware, debug do tuner R820T/R828D e processamento de sinal. Engenharia documentada como literatura.</div>
       </div>
       <div class="insight pink reveal delay-1">
-        <div class="icon">🎹</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M7 5v9"/><path d="M11 5v9"/><path d="M15 5v9"/><path d="M19 5v9"/><path d="M5 14h2v5H5z"/><path d="M9 14h2v5H9z"/><path d="M13 14h2v5h-2z"/><path d="M17 14h2v5h-2z"/></svg></div>
         <div class="title">O único com AI que não é LLM</div>
         <div class="body"><strong>piano-man</strong> usa o modelo <strong>basic-pitch</strong> da <strong>Spotify</strong> (ML rodando em ONNX) pra transcrever áudio em notas jogáveis — pipeline em Python com librosa pra BPM. Cada música do jogo passou por essa esteira de ML. Único projeto fora do padrão LLM.</div>
       </div>
