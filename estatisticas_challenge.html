@@ -468,22 +468,28 @@
     height: 100%;
     border-radius: 6px;
     width: 0;
+    min-width: 6px;
     transition: width 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 0.7rem;
-    color: #fff;
+  }
+  .lang-row .lang-pct {
+    flex-shrink: 0;
+    margin-left: 0.2rem;
+    color: var(--text);
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    min-width: 170px;
+  }
+  .lang-row .lang-pct small {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 0.4rem;
   }
   .lang-row.ts .lang-fill { background: linear-gradient(90deg, #2563eb, #3178c6); }
   .lang-row.ruby .lang-fill { background: linear-gradient(90deg, #b91c1c, #cc342d); }
   .lang-row.rust .lang-fill { background: linear-gradient(90deg, #92400e, #f97316); }
-  .lang-row.erb .lang-fill { background: linear-gradient(90deg, #7f1d1d, #b45309); }
   .lang-row.c .lang-fill { background: linear-gradient(90deg, #1e3a8a, #475569); }
-  .lang-row.vue .lang-fill { background: linear-gradient(90deg, #15803d, #4ade80); color: #000; }
-  .lang-row.js .lang-fill { background: linear-gradient(90deg, #ca8a04, #fde047); color: #000; }
+  .lang-row.js .lang-fill { background: linear-gradient(90deg, #ca8a04, #fde047); }
   .lang-row.py .lang-fill { background: linear-gradient(90deg, #1e40af, #60a5fa); }
 
   /* ---------- BOLD STACKS CARDS ---------- */
@@ -554,6 +560,7 @@
   .pill-groq { background: rgba(236,72,153,0.15); color: var(--pink); }
   .pill-openai { background: rgba(139,92,246,0.15); color: var(--violet); }
   .pill-bedrock { background: rgba(217,119,6,0.15); color: var(--bronze); }
+  .pill-ml { background: rgba(249,115,22,0.15); color: var(--orange); }
   .pill-no { background: rgba(107,114,128,0.15); color: var(--text-muted); }
 
   /* ---------- DIVIDER ---------- */
@@ -650,7 +657,7 @@
       do Challenge.
     </h1>
     <p class="tagline reveal visible">
-      Duas semanas. 11 projetos. Centenas de horas vibradas em commits. Esta é a história — em números.
+      Duas semanas. 11 projetos. Centenas de horas, milhares de commits. Esta é a história — em números.
     </p>
 
     <div class="heroStats">
@@ -685,8 +692,7 @@
     <h2 class="impactPhrase reveal delay-2">commits no main em 12 dias</h2>
     <p class="subline reveal delay-3">
       Somando todas as branches, foram <strong>1.978 commits</strong> — uma média de
-      <strong>138,6 commits por projeto</strong> entregues no main, ou um commit a cada
-      <strong>11 minutos</strong> de janela útil de trabalho.
+      <strong>138,6 commits por projeto</strong> entregues no main.
     </p>
 
     <div class="recapGrid">
@@ -780,51 +786,6 @@
     </div>
   </div>
 </section>
-
-<!-- ========== SCENE 4 — TAMANHO DOS COMMITS ========== -->
-<section class="recap" id="commit-size">
-  <div class="container">
-    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 04 &middot; Diff Size</span>
-    <h2 class="section-title reveal delay-1">Granularidade dos commits</h2>
-    <p class="subline reveal delay-2">
-      Mediana de linhas alteradas por commit — quanto menor, mais granular o trabalho. Acima de 200 linhas/commit começa a ficar difícil de revisar.
-    </p>
-
-    <div class="ranking reveal delay-3" style="margin-top: 2rem;">
-      <div class="rk-row green"><span class="rk-rank">1</span><span class="rk-label">fight-club<small>mediana de 29 linhas</small></span><div class="rk-track"><div class="rk-fill" data-width="10">29</div></div></div>
-      <div class="rk-row green"><span class="rk-rank">2</span><span class="rk-label">compound<small>mediana de 41</small></span><div class="rk-track"><div class="rk-fill" data-width="14">41</div></div></div>
-      <div class="rk-row green"><span class="rk-rank">3</span><span class="rk-label">meritus<small>mediana de 43</small></span><div class="rk-track"><div class="rk-fill" data-width="15">43</div></div></div>
-      <div class="rk-row cyan"><span class="rk-rank">4</span><span class="rk-label">flowxide<small>mediana de 52</small></span><div class="rk-track"><div class="rk-fill" data-width="18">52</div></div></div>
-      <div class="rk-row cyan"><span class="rk-rank">5</span><span class="rk-label">sunlight<small>mediana de 70</small></span><div class="rk-track"><div class="rk-fill" data-width="24">70</div></div></div>
-      <div class="rk-row cyan"><span class="rk-rank">6</span><span class="rk-label">mother<small>mediana de 88</small></span><div class="rk-track"><div class="rk-fill" data-width="30">88</div></div></div>
-      <div class="rk-row"><span class="rk-rank">7</span><span class="rk-label">lenu<small>mediana de 108</small></span><div class="rk-track"><div class="rk-fill" data-width="37">108</div></div></div>
-      <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">gabaritai<small>mediana de 123</small></span><div class="rk-track"><div class="rk-fill" data-width="42">123</div></div></div>
-      <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">piano-man<small>mediana de 130</small></span><div class="rk-track"><div class="rk-fill" data-width="44">130</div></div></div>
-      <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>mediana de 186</small></span><div class="rk-track"><div class="rk-fill" data-width="63">186</div></div></div>
-      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">SDR-Radar<small>mediana de 290</small></span><div class="rk-track"><div class="rk-fill" data-width="100">290</div></div></div>
-    </div>
-
-    <div class="insightGrid" style="margin-top: 3rem;">
-      <div class="insight green reveal delay-1">
-        <div class="icon">✂️</div>
-        <div class="title">Granularidade campeã</div>
-        <div class="body"><strong>fight-club</strong> com mediana de 29 linhas/commit — o que se espera de quem trabalha PR-driven. Bom para code review.</div>
-      </div>
-      <div class="insight gold reveal delay-2">
-        <div class="icon">📦</div>
-        <div class="title">Commits gigantes</div>
-        <div class="body"><strong>SDR-Radar</strong> com mediana de 290 e <strong>média de 4.784 linhas/commit</strong> — sinal de "salvar o dia" em vez de "salvar o passo". Comum quando o foco é hardware/baixo nível.</div>
-      </div>
-      <div class="insight cyan reveal delay-3">
-        <div class="icon">⚖️</div>
-        <div class="title">O equilíbrio do meio</div>
-        <div class="body"><strong>flowxide, sunlight, mother</strong> ficaram entre 50 e 90 linhas/commit — granularidade saudável mesmo com volume alto.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="pageDivider"></div>
 
 <!-- ========== SCENE 5 — VELOCITY HEATMAP ========== -->
 <section class="recap alt tall" id="velocity">
@@ -948,14 +909,12 @@
     <p class="subline reveal delay-2">Ranking por linhas de código (excluindo testes/dependências).</p>
 
     <div class="langBars reveal delay-3" style="margin-top: 3rem;">
-      <div class="lang-row ts"><span class="lang-name">TypeScript</span><div class="lang-track"><div class="lang-fill" data-width="100">70,9% &middot; 7 projetos</div></div></div>
-      <div class="lang-row ruby"><span class="lang-name">Ruby</span><div class="lang-track"><div class="lang-fill" data-width="17">11,9% &middot; 3 projetos</div></div></div>
-      <div class="lang-row rust"><span class="lang-name">Rust</span><div class="lang-track"><div class="lang-fill" data-width="15">10,5% &middot; 1 projeto</div></div></div>
-      <div class="lang-row erb"><span class="lang-name">Ruby (ERB)</span><div class="lang-track"><div class="lang-fill" data-width="4">2,6%</div></div></div>
-      <div class="lang-row c"><span class="lang-name">C</span><div class="lang-track"><div class="lang-fill" data-width="2">1,1% &middot; SDR-Radar</div></div></div>
-      <div class="lang-row vue"><span class="lang-name">Vue</span><div class="lang-track"><div class="lang-fill" data-width="2">1,0% &middot; sunlight</div></div></div>
-      <div class="lang-row js"><span class="lang-name">JavaScript</span><div class="lang-track"><div class="lang-fill" data-width="2">1,0%</div></div></div>
-      <div class="lang-row py"><span class="lang-name">Python</span><div class="lang-track"><div class="lang-fill" data-width="2">0,8% &middot; scripts</div></div></div>
+      <div class="lang-row ts"><span class="lang-name">TypeScript</span><div class="lang-track"><div class="lang-fill" data-width="100"></div></div><span class="lang-pct">70,9%<small>7 projetos</small></span></div>
+      <div class="lang-row ruby"><span class="lang-name">Ruby (+ ERB)</span><div class="lang-track"><div class="lang-fill" data-width="20.6"></div></div><span class="lang-pct">14,6%<small>3 projetos</small></span></div>
+      <div class="lang-row rust"><span class="lang-name">Rust</span><div class="lang-track"><div class="lang-fill" data-width="14.8"></div></div><span class="lang-pct">10,5%<small>1 projeto</small></span></div>
+      <div class="lang-row js"><span class="lang-name">JavaScript</span><div class="lang-track"><div class="lang-fill" data-width="2.8"></div></div><span class="lang-pct">2,0%<small>incl. Vue (sunlight)</small></span></div>
+      <div class="lang-row c"><span class="lang-name">C</span><div class="lang-track"><div class="lang-fill" data-width="1.6"></div></div><span class="lang-pct">1,1%<small>SDR-Radar</small></span></div>
+      <div class="lang-row py"><span class="lang-name">Python</span><div class="lang-track"><div class="lang-fill" data-width="1.1"></div></div><span class="lang-pct">0,8%<small>scripts</small></span></div>
     </div>
 
     <div class="twoCol">
@@ -1077,9 +1036,9 @@
         <div class="body"><strong>fight-club, meritus, piano-man, sunlight</strong> e o frontend de <strong>SDR-Radar</strong> rodam Playwright. piano-man tem mais E2E que muitos backends têm de unitários.</div>
       </div>
       <div class="insight gold reveal delay-3">
-        <div class="icon">🛠️</div>
-        <div class="title">Linters fora da curva</div>
-        <div class="body"><strong>sunlight</strong> usa <strong>oxlint + oxfmt</strong> (linter Rust-based, ~50× mais rápido que ESLint). compound usa <strong>rubocop-rails-omakase + brakeman + bundler-audit</strong> — toolchain de segurança completa.</div>
+        <div class="icon">🚀</div>
+        <div class="title">Pra onde foi deployado</div>
+        <div class="body"><strong>6 destinos diferentes</strong> em 11 projetos: <strong>Vercel</strong> (mother), <strong>Cloudflare Workers</strong> (sunlight), <strong>Railway</strong> (SDR-Radar), <strong>Render</strong> (meritus, fight-club), <strong>Kamal</strong> (compound, lenu, gabaritai) e <strong>AWS via Terraform</strong> (flowxide). Quase ninguém repetiu plataforma.</div>
       </div>
     </div>
   </div>
@@ -1087,107 +1046,101 @@
 
 <div class="pageDivider"></div>
 
-<!-- ========== SCENE 9 — AI PROVIDERS ========== -->
+<!-- ========== SCENE 9 — AI NO PRODUTO ========== -->
 <section class="recap alt" id="ai-providers">
   <div class="container">
-    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 09 &middot; AI · Dev Tools</span>
-    <h2 class="section-title reveal delay-1">Quem usou qual AI pra codar</h2>
+    <span class="eyebrow reveal"><span class="dot"></span>Capítulo 09 &middot; AI no Produto</span>
+    <h2 class="section-title reveal delay-1">Como AI aparece pro usuário final</h2>
 
     <div class="recapGrid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-      <div class="recapStat reveal delay-1"><div class="num cyan-green" data-counter="9">9</div><div class="label">Projetos com Claude Code</div></div>
-      <div class="recapStat reveal delay-2"><div class="num pink-violet" data-counter="2">2</div><div class="label">Com GitHub Copilot</div></div>
-      <div class="recapStat reveal delay-3"><div class="num orange-gold" data-counter="1">1</div><div class="label">Com OpenCode</div></div>
-      <div class="recapStat reveal delay-4"><div class="num green-cyan" data-counter="982">982</div><div class="label">Co-authored-by AI</div></div>
+      <div class="recapStat reveal delay-1"><div class="num cyan-green" data-counter="10">10</div><div class="label">Projetos com AI no produto</div></div>
+      <div class="recapStat reveal delay-2"><div class="num pink-violet" data-counter="5">5</div><div class="label">Providers diferentes</div></div>
+      <div class="recapStat reveal delay-3"><div class="num orange-gold">9+1</div><div class="label">LLM + ML não-LLM</div></div>
+      <div class="recapStat reveal delay-4"><div class="num green-cyan" data-counter="1">1</div><div class="label">Sem AI no produto</div></div>
     </div>
 
     <p class="subline reveal" style="margin-top: 2.5rem;">
-      <strong>Claude Code</strong> dominou: <strong>9 dos 11 projetos</strong> têm CLAUDE.md ou .claude/ no repo,
-      e os modelos mais citados foram <strong>Opus 4.6 (1M context)</strong> e <strong>Sonnet 4.6</strong>.
-      <strong>mother</strong> usou Claude Code <em>e</em> Copilot (31 menções de "copilot" nos commits e
-      <strong>769 co-authored-by</strong>). <strong>flowxide</strong> foi todo Copilot.
-      <strong>SDR-Radar</strong> usou <strong>OpenCode</strong> (.opencode/skills, AGENTS.md por package).
+      10 dos 11 projetos incorporaram alguma forma de AI no produto — sendo <strong>9 com LLM</strong>
+      (Anthropic, Google, Groq, OpenRouter) e <strong>1 com ML não-LLM</strong> (piano-man, via Spotify basic-pitch).
+      Apenas <strong>SDR-Radar</strong> ficou fora.
     </p>
 
-    <div style="margin-top: 3rem;" class="reveal delay-2">
-      <h3 style="font-size:1rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom: 1rem;">AI no produto final</h3>
-    </div>
-
-    <div class="tableWrap reveal delay-3">
+    <div class="tableWrap reveal delay-3" style="margin-top: 2rem;">
       <table class="bigTable">
         <thead>
           <tr>
             <th>Projeto</th>
-            <th>Ferramenta de Dev</th>
-            <th>AI no produto</th>
-            <th>Modelo / Provider</th>
+            <th>Provider</th>
+            <th>Modelo</th>
+            <th>Categoria de uso</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="proj">alexandria</td>
-            <td><span class="pill pill-claude">Claude Code · Sonnet 4.6</span></td>
             <td><span class="pill pill-anthropic">Anthropic</span></td>
             <td>claude-haiku-4-5 (Vision)</td>
+            <td>Classificação de imagem</td>
           </tr>
           <tr>
             <td class="proj">compound</td>
-            <td><span class="pill pill-claude">Claude Code</span></td>
             <td><span class="pill pill-groq">Groq</span></td>
-            <td>llama-3.3-70b-versatile (+ Ollama dev)</td>
+            <td>llama-3.3-70b-versatile (+ Ollama)</td>
+            <td>Recomendação financeira</td>
           </tr>
           <tr>
             <td class="proj">fight-club</td>
-            <td><span class="pill pill-claude">Claude Code · Haiku/Opus/Sonnet 4.6</span></td>
             <td><span class="pill pill-anthropic">Anthropic</span></td>
             <td>claude-sonnet-4-6</td>
+            <td>Dicas de treino personalizadas</td>
           </tr>
           <tr>
             <td class="proj">flowxide</td>
-            <td><span class="pill pill-copilot">GitHub Copilot</span></td>
             <td><span class="pill pill-bedrock">AWS Bedrock</span></td>
             <td>claude-haiku-4-5 (via Bedrock)</td>
+            <td>Geração de workflows</td>
           </tr>
           <tr>
             <td class="proj">gabaritai</td>
-            <td><span class="pill pill-claude">Claude Code</span></td>
             <td><span class="pill pill-gemini">Google</span></td>
             <td>gemini-3.1-flash-lite (+ Ollama)</td>
+            <td>Recomendação de estudo</td>
           </tr>
           <tr>
             <td class="proj">lenu</td>
-            <td><span class="pill pill-claude">Claude Code · Opus 4.6</span></td>
             <td><span class="pill pill-anthropic">Anthropic</span></td>
             <td>via ruby_llm (configurável)</td>
+            <td>Desenvolvimento de ideias</td>
           </tr>
           <tr>
             <td class="proj">meritus</td>
-            <td><span class="pill pill-claude">Claude Code</span></td>
-            <td><span class="pill pill-openai">OpenAI + OpenRouter</span></td>
+            <td><span class="pill pill-openai">OpenRouter</span></td>
             <td>flux-1.1-pro (Black Forest Labs)</td>
+            <td>Geração de imagem</td>
           </tr>
           <tr>
             <td class="proj">mother</td>
-            <td><span class="pill pill-claude">Claude Code · Opus 4.6</span> + <span class="pill pill-copilot">Copilot</span></td>
             <td><span class="pill pill-anthropic">Anthropic</span></td>
-            <td>claude-sonnet-4-20250514 (swappable)</td>
+            <td>claude-sonnet-4 (swappable)</td>
+            <td>Análise de PR / compreensão</td>
           </tr>
           <tr>
             <td class="proj">piano-man</td>
-            <td><span class="pill pill-claude">Claude Code · Opus + Sonnet 4.6</span></td>
-            <td><span class="pill pill-no">— sem AI no produto</span></td>
-            <td>n/a (jogo rítmico)</td>
+            <td><span class="pill pill-ml">Spotify ML</span></td>
+            <td>basic-pitch + librosa (ONNX)</td>
+            <td>Transcrição de áudio → notas</td>
           </tr>
           <tr>
             <td class="proj">SDR-Radar</td>
-            <td><span class="pill pill-opencode">OpenCode</span></td>
-            <td><span class="pill pill-no">— sem AI no produto</span></td>
-            <td>n/a (radar ADS-B)</td>
+            <td><span class="pill pill-no">—</span></td>
+            <td>n/a</td>
+            <td>Sem AI no produto</td>
           </tr>
           <tr>
             <td class="proj">sunlight</td>
-            <td><span class="pill pill-claude">Claude Code · Opus + Sonnet 4.6</span></td>
             <td><span class="pill pill-gemini">Google</span></td>
             <td>gemini-2.5-flash</td>
+            <td>Insights de bem-estar</td>
           </tr>
         </tbody>
       </table>
@@ -1195,19 +1148,34 @@
 
     <div class="insightGrid" style="margin-top: 3rem;">
       <div class="insight gold reveal delay-1">
-        <div class="icon">🤖</div>
-        <div class="title">Anthropic dominou no produto</div>
-        <div class="body"><strong>5 projetos</strong> usaram Claude no produto: alexandria, fight-club, flowxide (via Bedrock), lenu e mother — quase metade da turma.</div>
+        <div class="icon">🧠</div>
+        <div class="title">Pra que serviu a AI</div>
+        <div class="body">7 categorias em 10 projetos: <strong>classificação</strong> (alexandria), <strong>recomendação</strong> (gabaritai, fight-club, compound, sunlight), <strong>compreensão de código</strong> (mother), <strong>ideação</strong> (lenu), <strong>geração de workflow</strong> (flowxide), <strong>geração de imagem</strong> (meritus), <strong>transcrição de áudio</strong> (piano-man). Ninguém repetiu caso de uso.</div>
       </div>
-      <div class="insight green reveal delay-2">
-        <div class="icon">💎</div>
-        <div class="title">Gemini também apareceu</div>
-        <div class="body"><strong>gabaritai</strong> (gemini-3.1-flash-lite, com fallback local via Ollama) e <strong>sunlight</strong> (gemini-2.5-flash, opt-in para insights pessoais).</div>
+      <div class="insight cyan reveal delay-2">
+        <div class="icon">⚡</div>
+        <div class="title">Modelos rápidos venceram</div>
+        <div class="body">Predominância de modelos <strong>lite/fast</strong>: <strong>Haiku 4.5</strong> (alexandria, flowxide), <strong>Gemini Flash</strong> (gabaritai, sunlight), <strong>basic-pitch quantizado</strong> (piano-man). Ninguém usou Opus ou GPT-4 no produto — custo e latência importam mais que capacidade máxima.</div>
       </div>
       <div class="insight pink reveal delay-3">
+        <div class="icon">🤔</div>
+        <div class="title">OpenAI sumiu da festa</div>
+        <div class="body"><strong>Nenhum projeto</strong> integrou GPT-4 ou OpenAI direto. Anthropic (5), Google (2), Groq+Llama (1), Flux via OpenRouter (1) e Spotify ML (1) cobriram tudo. meritus usa endpoint OpenAI-compatible, mas o modelo é <strong>Flux</strong>, não GPT.</div>
+      </div>
+      <div class="insight green reveal delay-1">
+        <div class="icon">🔌</div>
+        <div class="title">Como conectaram com a AI</div>
+        <div class="body"><strong>SDK direto</strong>: 6 projetos. <strong>Via proxy</strong> (Bedrock, OpenRouter): 2 (flowxide, meritus). <strong>Abstração custom</strong>: 2 (lenu via ruby_llm, compound via adapter OpenAI-compatible). <strong>mother</strong> é o único com interface <em>swappable</em> de provider.</div>
+      </div>
+      <div class="insight gold reveal delay-2">
         <div class="icon">🎨</div>
-        <div class="title">O único usando AI pra imagem</div>
-        <div class="body"><strong>meritus</strong> usou <strong>Flux 1.1 Pro</strong> via OpenRouter para gerar a arte das medalhas — única aposta em geração de imagem.</div>
+        <div class="title">AI como criadora de conteúdo</div>
+        <div class="body">A maioria usa AI pra <strong>assistir ou recomendar</strong>. Apenas 2 usam AI pra <strong>gerar o conteúdo do produto</strong>: <strong>meritus</strong> cria a arte das medalhas (Flux) e <strong>piano-man</strong> cria as músicas jogáveis (basic-pitch). AI no centro, não no rodapé.</div>
+      </div>
+      <div class="insight cyan reveal delay-3">
+        <div class="icon">👁️</div>
+        <div class="title">Texto domina, mas não só</div>
+        <div class="body"><strong>Texto</strong>: 9 projetos. <strong>Imagem</strong>: 2 — alexandria (Claude Vision, input) e meritus (Flux, output). <strong>Áudio</strong>: 1 (piano-man, input). Multimodal real — misturando modalidades no mesmo fluxo — só <strong>alexandria</strong>.</div>
       </div>
     </div>
   </div>
@@ -1233,7 +1201,7 @@
       <div class="rk-row"><span class="rk-rank">8</span><span class="rk-label">piano-man<small>2.400 / 6.724</small></span><div class="rk-track"><div class="rk-fill" data-width="42">35,7%</div></div></div>
       <div class="rk-row"><span class="rk-rank">9</span><span class="rk-label">SDR-Radar<small>4.462 / 13.062</small></span><div class="rk-track"><div class="rk-fill" data-width="40">34,2%</div></div></div>
       <div class="rk-row"><span class="rk-rank">10</span><span class="rk-label">alexandria<small>1.281 / 7.481</small></span><div class="rk-track"><div class="rk-fill" data-width="20">17,1%</div></div></div>
-      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">flowxide<small>103 / 20.158</small></span><div class="rk-track"><div class="rk-fill" data-width="1">0,5%</div></div></div>
+      <div class="rk-row"><span class="rk-rank">11</span><span class="rk-label">flowxide<small>2.334 / 17.763</small></span><div class="rk-track"><div class="rk-fill" data-width="15">13,1%</div></div></div>
     </div>
 
     <div class="twoCol">
@@ -1245,7 +1213,7 @@
       <div class="reveal delay-2">
         <h3>Pior proporção</h3>
         <div class="winner pink">flowxide</div>
-        <p class="why"><strong>0,5%</strong>. 103 linhas de teste pra 20.158 de produção. Foi tudo no impulso: 401 commits em Rust em 12 dias, sem freio. Era o trade-off conhecido — velocidade ou cobertura — e o pessoal escolheu velocidade.</p>
+        <p class="why"><strong>13,1%</strong>. 2.334 linhas de teste pra 17.763 de produção. A contagem engana: Rust usa testes inline (<code>#[cfg(test)]</code>), então estão misturados nos mesmos arquivos. São <strong>107 funções de teste</strong> — incluindo 52 testes de integração com banco real via sqlx::test.</p>
       </div>
       <div class="reveal delay-3">
         <h3>Média do grupo</h3>
@@ -1254,8 +1222,8 @@
       </div>
       <div class="reveal delay-4">
         <h3>Total de linhas de teste</h3>
-        <div class="winner green">63.303</div>
-        <p class="why">Somando todos os projetos. Equivale a <strong>1.265 linhas de teste por dia</strong> de challenge — bom indicador da seriedade técnica do grupo.</p>
+        <div class="winner green">65.534</div>
+        <p class="why">Somando todos os projetos. Equivale a <strong>1.311 linhas de teste por dia</strong> de challenge — bom indicador da seriedade técnica do grupo.</p>
       </div>
     </div>
   </div>
@@ -1315,6 +1283,11 @@
         <div class="title">O único com diary</div>
         <div class="body"><strong>SDR-Radar</strong> manteve uma pasta <code>diary/</code> com 3 entradas detalhadas — narrando hardware, debug do tuner R820T/R828D e processamento de sinal. Engenharia documentada como literatura.</div>
       </div>
+      <div class="insight pink reveal delay-1">
+        <div class="icon">🎹</div>
+        <div class="title">O único com AI que não é LLM</div>
+        <div class="body"><strong>piano-man</strong> usa o modelo <strong>basic-pitch</strong> da <strong>Spotify</strong> (ML rodando em ONNX) pra transcrever áudio em notas jogáveis — pipeline em Python com librosa pra BPM. Cada música do jogo passou por essa esteira de ML. Único projeto fora do padrão LLM.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1329,7 +1302,7 @@
     <h2 class="impactPhrase reveal delay-2">11 projetos · 12 dias · um único objetivo:<br>provar que dá pra construir grande, com AI ao lado.</h2>
     <p class="subline reveal delay-3">
       Uma turma que escreveu <strong>200.000+ linhas de código</strong>, abriu <strong>225 branches</strong>,
-      criou <strong>63.000+ linhas de teste</strong>, configurou <strong>9 Dockerfiles</strong>,
+      criou <strong>65.000+ linhas de teste</strong>, configurou <strong>9 Dockerfiles</strong>,
       testou em <strong>5 ferramentas E2E</strong>, e provou que duas semanas de challenge
       podem render produto de verdade. Até a próxima edição. 🚀
     </p>
